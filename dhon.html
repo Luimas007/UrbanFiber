@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanFiber | Premium Oversized T-Shirts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        brand: ['Cormorant Garamond', 'serif'],
+                    },
+                    colors: {
+                        uf: { dark: '#0a0a0a', light: '#f2f0eb', accent: '#333333' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth Scrolling & Base Styles */
+        html { scroll-behavior: smooth; }
+        body { -webkit-font-smoothing: antialiased; transition: background-color 0.4s, color 0.4s; }
+        
+        /* Hide scrollbar for cleaner premium look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        
+        /* Stacked Card Scroll Animation */
+        .stacked-wrapper { position: relative; padding-bottom: 10vh; }
+        .stacked-card {
+            position: sticky;
+            top: 15vh;
+            height: 70vh;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: filter 0.3s ease;
+        }
+        /* Create offset for the stack effect */
+        .stacked-card:nth-child(1) { top: 12vh; z-index: 10; transform: scale(0.96); }
+        .stacked-card:nth-child(2) { top: 15vh; z-index: 20; transform: scale(0.98); }
+        .stacked-card:nth-child(3) { top: 18vh; z-index: 30; transform: scale(1); }
+
+        /* View Transitions */
+        .view-section { display: none; opacity: 0; transition: opacity 0.4s ease-in-out; }
+        .view-section.active { display: block; opacity: 1; }
+
+        /* Image Hover FX */
+        .product-card { transform-style: preserve-3d; transition: transform 0.35s ease, filter 0.35s ease; }
+        .product-card:hover { transform: translateY(-6px); filter: drop-shadow(0 14px 12px rgba(0, 0, 0, 0.14)); }
+        .product-img-wrapper { box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 18px 30px rgba(0, 0, 0, 0.12); transition: box-shadow 0.35s ease, transform 0.35s ease; }
+        .product-card:hover .product-img-wrapper { transform: translateZ(8px); box-shadow: 0 10px 0 rgba(0, 0, 0, 0.08), 0 24px 36px rgba(0, 0, 0, 0.18); }
+        .product-img-wrapper img { transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-card:hover .product-img-wrapper img { transform: scale(1.05); }
+        .depth-button { box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), 0 10px 18px rgba(0, 0, 0, 0.12); transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
+        .depth-button:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18), 0 14px 22px rgba(0, 0, 0, 0.16); }
+        .depth-button:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18), 0 5px 10px rgba(0, 0, 0, 0.1); }
+        @media (prefers-reduced-motion: reduce) {
+            .product-card, .product-img-wrapper, .depth-button { transition: none; }
+        }
+    </style>
+</head>
+<body class="bg-uf-light text-gray-900 dark:bg-uf-dark dark:text-white font-sans overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="site-header" class="fixed w-full z-50 top-0 transition-all duration-300 bg-[#f2f0eb]/90 dark:bg-black/70 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
+        <div class="relative max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" onclick="navigate('home')" class="flex items-center gap-3 group">
+                    <img src="uf.jpg" alt="UrbanFiber Logo" class="h-8 w-8 rounded-full object-cover border border-gray-300 dark:border-gray-700 group-hover:scale-105 transition-transform">
+                    <span class="font-brand font-semibold text-2xl leading-none tracking-[0.18em] uppercase">UrbanFiber</span>
+                </a>
+            </div>
+            <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 text-sm font-medium tracking-wide">
+                    <a href="#" onclick="navigate('home')" class="hover:text-gray-500 transition-colors">Home</a>
+                    <a href="#" onclick="navigate('shop')" class="hover:text-gray-500 transition-colors">All Products</a>
+                    <a href="#about" class="hover:text-gray-500 transition-colors">Story</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors">
+                    <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                <button onclick="openCart()" aria-label="Open shopping cart" class="depth-button relative flex items-center gap-2 rounded-full border border-gray-300 dark:border-white/20 px-3 py-2 hover:bg-gray-200 dark:hover:bg-white/10 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span class="hidden sm:inline text-xs font-medium uppercase tracking-widest">Cart</span>
+                    <span id="cart-count" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-semibold text-white dark:bg-white dark:text-black">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME VIEW -->
+    <main id="view-home" class="view-section active">
+        <!-- Hero Section -->
+        <section class="group relative h-screen w-full flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 w-full h-full">
+                <img src="brand.png" alt="UrbanFiber Hero" class="w-full h-full object-cover object-center">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-uf-dark dark:to-uf-dark"></div>
+            </div>
+            <div class="absolute z-10 bottom-[18%] left-1/2 -translate-x-1/2 text-center px-4">
+                <button onclick="navigate('shop')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
+                    Explore Collection
+                </button>
+            </div>
+        </section>
+
+        <!-- Stacked Card Storytelling Section -->
+        <section class="max-w-5xl mx-auto px-6 py-24">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-5xl font-bold uppercase tracking-wide">The Fabric of the City</h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 max-w-xl mx-auto">Discover the architecture of our garments. Not meant to be bought here, but meant to be felt.</p>
+            </div>
+            
+            <div class="stacked-wrapper">
+                <!-- Card 1 -->
+                <div class="stacked-card bg-gray-100 dark:bg-neutral-900 flex flex-col md:flex-row items-center relative border border-gray-200 dark:border-white/10">
+                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('p1.jpg')] bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700"></div>
+                    <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
+                        <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">01 / Silhouette</span>
+                        <h3 class="font-display text-4xl mb-4">The Perfect Drape</h3>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Our signature drop-shoulder cut is mathematically designed to complement the natural lines of the body while providing unrestricted movement.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="stacked-card bg-gray-200 dark:bg-neutral-800 flex flex-col md:flex-row-reverse items-center relative border border-gray-300 dark:border-white/10">
+                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('p2.jpg')] bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700"></div>
+                    <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
+                        <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">02 / Material</span>
+                        <h3 class="font-display text-4xl mb-4">Lycra Infusion</h3>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Heavyweight cotton bonded with premium Lycra creates a structural garment that stretches dynamically without ever losing its shape.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products (Clickable) -->
+        <section class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-200 dark:border-white/10">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="font-display text-3xl font-bold uppercase tracking-wide">Featured Drops</h2>
+                    <p class="text-gray-500 dark:text-gray-400 mt-2">The latest additions to the UrbanFiber core collection.</p>
+                </div>
+                <button onclick="navigate('shop')" class="hidden md:block border-b border-black dark:border-white pb-1 font-medium hover:text-gray-500 transition-colors">View All</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Onyx Heavyweight Tee', 55, 'p1.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
+                        <img src="p1.jpg" alt="Product 1" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-display font-medium text-lg">Onyx Heavyweight Tee</h4>
+                    <p class="text-gray-500 dark:text-gray-400">$55.00</p>
+                    <button onclick="event.stopPropagation(); addToCart('Onyx Heavyweight Tee', 55, 'p1.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Concrete Drop-Shoulder', 60, 'p2.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
+                        <img src="p2.jpg" alt="Product 2" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-display font-medium text-lg">Concrete Drop-Shoulder</h4>
+                    <p class="text-gray-500 dark:text-gray-400">$60.00</p>
+                    <button onclick="event.stopPropagation(); addToCart('Concrete Drop-Shoulder', 60, 'p2.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Void Boxy Fit', 50, 'p3.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
+                        <img src="p3.jpg" alt="Product 3" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-display font-medium text-lg">Void Boxy Fit</h4>
+                    <p class="text-gray-500 dark:text-gray-400">$50.00</p>
+                    <button onclick="event.stopPropagation(); addToCart('Void Boxy Fit', 50, 'p3.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Ivory Signature Stretch', 65, 'p4.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
+                        <img src="p4.jpg" alt="Product 4" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-display font-medium text-lg">Ivory Signature Stretch</h4>
+                    <p class="text-gray-500 dark:text-gray-400">$65.00</p>
+                    <button onclick="event.stopPropagation(); addToCart('Ivory Signature Stretch', 65, 'p4.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SHOP / ALL PRODUCTS VIEW -->
+    <main id="view-shop" class="view-section pt-32 pb-24 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+            <h1 class="font-display text-4xl md:text-6xl font-bold uppercase tracking-wider border-b border-gray-200 dark:border-white/10 pb-8 mb-8">All Products</h1>
+            
+            <!-- Filters -->
+            <div class="flex flex-wrap gap-4 mb-12">
+                <select class="bg-transparent border border-gray-300 dark:border-gray-700 rounded-full px-6 py-2 outline-none focus:border-black dark:focus:border-white cursor-pointer">
+                    <option class="dark:bg-black">All Categories</option>
+                    <option class="dark:bg-black">Oversized</option>
+                    <option class="dark:bg-black">Boxy Fit</option>
+                </select>
+                <select class="bg-transparent border border-gray-300 dark:border-gray-700 rounded-full px-6 py-2 outline-none focus:border-black dark:focus:border-white cursor-pointer">
+                    <option class="dark:bg-black">Sort: Newest</option>
+                    <option class="dark:bg-black">Price: Low to High</option>
+                    <option class="dark:bg-black">Price: High to Low</option>
+                </select>
+            </div>
+
+            <!-- Grid (Reusing products for demonstration) -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+                <!-- Grid Items mapped by JS to reduce HTML bloat, but hardcoded here for clarity -->
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Onyx Heavyweight Tee', 55, 'p1.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="p1.jpg" class="w-full h-full object-cover"></div>
+                    <h4 class="font-display font-medium text-sm md:text-lg">Onyx Heavyweight Tee</h4>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$55.00</p>
+                </div>
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Concrete Drop-Shoulder', 60, 'p2.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="p2.jpg" class="w-full h-full object-cover"></div>
+                    <h4 class="font-display font-medium text-sm md:text-lg">Concrete Drop-Shoulder</h4>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$60.00</p>
+                </div>
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Void Boxy Fit', 50, 'p3.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="p3.jpg" class="w-full h-full object-cover"></div>
+                    <h4 class="font-display font-medium text-sm md:text-lg">Void Boxy Fit</h4>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$50.00</p>
+                </div>
+                <div class="product-card cursor-pointer group" onclick="viewProduct('Ivory Signature Stretch', 65, 'p4.jpg')">
+                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="p4.jpg" class="w-full h-full object-cover"></div>
+                    <h4 class="font-display font-medium text-sm md:text-lg">Ivory Signature Stretch</h4>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$65.00</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PRODUCT DETAIL VIEW -->
+    <main id="view-product" class="view-section pt-32 pb-24 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+            <button onclick="navigate('shop')" class="flex items-center gap-2 text-gray-500 hover:text-black dark:hover:text-white mb-8 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                Back to Shop
+            </button>
+            
+            <div class="flex flex-col md:flex-row gap-12 lg:gap-24">
+                <!-- Product Images -->
+                <div class="w-full md:w-1/2 flex flex-col gap-4">
+                    <div class="bg-gray-100 dark:bg-neutral-900 rounded-2xl overflow-hidden aspect-[4/5]">
+                        <img id="detail-img" src="p1.jpg" alt="Product Detail" class="w-full h-full object-cover cursor-zoom-in">
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="w-full md:w-1/2 flex flex-col justify-center">
+                    <h1 id="detail-title" class="font-display text-4xl md:text-5xl font-bold uppercase tracking-wide mb-2">Product Name</h1>
+                    <p id="detail-price" class="text-2xl text-gray-600 dark:text-gray-300 mb-8">$0.00</p>
+                    
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                        Crafted from our signature heavy-weight cotton and Lycra blend. Designed with a severe drop shoulder, exaggerated body width, and cropped hem for the ultimate architectural streetwear silhouette.
+                    </p>
+
+                    <!-- Colors -->
+                    <div class="mb-8">
+                        <span class="block text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">Color</span>
+                        <div class="flex gap-4">
+                            <button class="w-8 h-8 rounded-full bg-black border-2 border-transparent ring-2 ring-gray-300 dark:ring-gray-600 focus:ring-black dark:focus:ring-white transition-all"></button>
+                            <button class="w-8 h-8 rounded-full bg-gray-400 border-2 border-transparent hover:ring-2 hover:ring-gray-300 transition-all"></button>
+                            <button class="w-8 h-8 rounded-full bg-[#E5E0D8] border-2 border-transparent hover:ring-2 hover:ring-gray-300 transition-all"></button>
+                        </div>
+                    </div>
+
+                    <!-- Sizes -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm font-medium uppercase tracking-widest text-gray-500">Size</span>
+                            <button class="text-sm border-b border-gray-400 hover:text-black dark:hover:text-white transition-colors">Size Chart</button>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3">
+                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all">S</button>
+                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all">M</button>
+                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all">L</button>
+                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all opacity-50 cursor-not-allowed">XL</button>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <div class="flex gap-4">
+                        <div class="w-1/3 border border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-between px-4">
+                            <button onclick="adjustDetailQuantity(-1)" class="text-xl hover:text-gray-500">-</button>
+                            <span id="detail-quantity">1</span>
+                            <button onclick="adjustDetailQuantity(1)" class="text-xl hover:text-gray-500">+</button>
+                        </div>
+                        <button onclick="addCurrentProduct()" class="w-2/3 bg-black dark:bg-white text-white dark:text-black font-medium uppercase tracking-wider py-4 rounded-lg hover:opacity-80 transition-opacity">
+                            Add To Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="cart-overlay" onclick="closeCart()" class="fixed inset-0 z-[60] hidden bg-black/40 opacity-0 transition-opacity duration-300"></div>
+    <aside id="cart-drawer" aria-label="Shopping cart" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-[#f8f6f2] text-gray-900 shadow-2xl transition-transform duration-300 dark:bg-neutral-950 dark:text-white">
+        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-white/10">
+            <div>
+                <p class="text-xs font-medium uppercase tracking-[0.2em] text-gray-500">Your selection</p>
+                <h2 class="font-brand text-3xl font-semibold">Shopping Cart</h2>
+            </div>
+            <button onclick="closeCart()" aria-label="Close shopping cart" class="rounded-full p-2 text-2xl leading-none hover:bg-gray-100 dark:hover:bg-white/10">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-6"></div>
+        <div class="border-t border-gray-200 px-6 py-6 dark:border-white/10">
+            <div class="mb-5 flex items-center justify-between text-lg">
+                <span class="text-gray-500">Subtotal</span>
+                <span id="cart-subtotal" class="font-display font-semibold">$0.00</span>
+            </div>
+            <button onclick="openCheckout()" class="w-full rounded-full bg-black py-4 text-sm font-medium uppercase tracking-[0.18em] text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-black">Checkout</button>
+        </div>
+    </aside>
+
+    <div id="checkout-nudge" class="pointer-events-none fixed bottom-4 left-4 right-4 z-[55] translate-y-6 opacity-0 transition-all duration-500 sm:left-auto sm:right-6 sm:w-96">
+        <div class="pointer-events-auto rounded-2xl border border-gray-200 bg-[#f8f6f2]/95 p-4 shadow-2xl backdrop-blur-md dark:border-white/10 dark:bg-neutral-950/95">
+            <div class="flex items-start gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
+                <div class="min-w-0 flex-1"><p class="font-brand text-2xl leading-none">Your pieces are waiting</p><p class="mt-1 text-sm text-gray-500">Complete your order with Cash on Delivery.</p></div>
+                <button onclick="dismissCheckoutNudge()" aria-label="Dismiss checkout reminder" class="shrink-0 text-xl leading-none text-gray-400 hover:text-black dark:hover:text-white">&times;</button>
+            </div>
+            <button onclick="openCheckout()" class="depth-button mt-4 w-full rounded-full bg-black py-3 text-xs font-medium uppercase tracking-[0.18em] text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-black">Checkout now</button>
+        </div>
+    </div>
+
+    <div id="checkout-overlay" onclick="closeCheckout()" class="fixed inset-0 z-[80] hidden bg-black/50 p-4 opacity-0 transition-opacity duration-300 sm:p-6"></div>
+    <section id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" class="fixed left-1/2 top-1/2 z-[90] hidden max-h-[92vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-[46%] scale-95 overflow-y-auto rounded-2xl bg-[#f8f6f2] text-gray-900 opacity-0 shadow-2xl transition-all duration-300 dark:bg-neutral-950 dark:text-white sm:w-[calc(100%-3rem)]">
+        <div class="flex items-start justify-between border-b border-gray-200 px-6 py-6 dark:border-white/10 sm:px-8">
+            <div>
+                <p class="text-xs font-medium uppercase tracking-[0.2em] text-gray-500">UrbanFiber delivery</p>
+                <h2 id="checkout-title" class="font-brand text-3xl font-semibold sm:text-4xl">Complete your order</h2>
+                <p class="mt-1 text-sm text-gray-500">Cash on Delivery across Bangladesh</p>
+            </div>
+            <button onclick="closeCheckout()" aria-label="Close checkout" class="rounded-full p-2 text-2xl leading-none hover:bg-gray-100 dark:hover:bg-white/10">&times;</button>
+        </div>
+        <form onsubmit="placeOrder(event)" class="space-y-5 px-5 py-5 sm:space-y-6 sm:px-8 sm:py-8">
+            <div class="grid gap-5 sm:grid-cols-2">
+                <label class="block sm:col-span-2"><span class="mb-2 block text-sm font-medium">Full name</span><input required name="name" autocomplete="name" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-base outline-none transition focus:border-black dark:border-white/20 dark:focus:border-white" placeholder="Your name"></label>
+                <label class="block"><span class="mb-2 block text-sm font-medium">Mobile number</span><input required name="phone" type="tel" inputmode="tel" autocomplete="tel" pattern="(\+?880|0)1[3-9][0-9]{8}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-base outline-none transition focus:border-black dark:border-white/20 dark:focus:border-white" placeholder="01XXXXXXXXX" title="Enter a valid Bangladesh mobile number"></label>
+                <label class="block"><span class="mb-2 block text-sm font-medium">District</span><select required name="district" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 outline-none transition focus:border-black dark:border-white/20 dark:bg-neutral-950 dark:focus:border-white"><option value="">Select district</option><option>Dhaka</option><option>Chattogram</option><option>Gazipur</option><option>Narayanganj</option><option>Rajshahi</option><option>Khulna</option><option>Sylhet</option><option>Barishal</option><option>Rangpur</option><option>Mymensingh</option><option>Cumilla</option><option>Cox's Bazar</option></select></label>
+                <label class="block"><span class="mb-2 block text-sm font-medium">Area / Thana</span><input required name="area" autocomplete="address-level3" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 outline-none transition focus:border-black dark:border-white/20 dark:focus:border-white" placeholder="Area or thana"></label>
+                <label class="block"><span class="mb-2 block text-sm font-medium">Post code <span class="font-normal text-gray-400">(optional)</span></span><input name="postcode" inputmode="numeric" pattern="[0-9]{4}" autocomplete="postal-code" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 outline-none transition focus:border-black dark:border-white/20 dark:focus:border-white" placeholder="1207"></label>
+                <label class="block sm:col-span-2"><span class="mb-2 block text-sm font-medium">Full delivery address</span><textarea required name="address" rows="3" autocomplete="street-address" class="w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-3 outline-none transition focus:border-black dark:border-white/20 dark:focus:border-white" placeholder="House, road, building, and nearby landmark"></textarea></label>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-[#efede8] p-4 dark:border-white/10 dark:bg-white/5">
+                <div class="flex items-start gap-3"><span class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full border-4 border-black dark:border-white"></span><div><p class="font-medium">Cash on Delivery</p><p class="mt-1 text-sm text-gray-500">Pay in cash when your order arrives. This test checkout accepts COD only.</p></div></div>
+            </div>
+            <div class="flex items-center justify-between border-t border-gray-200 pt-5 dark:border-white/10"><span class="text-gray-500">Order total</span><strong id="checkout-total" class="font-display text-xl">$0.00</strong></div>
+            <button type="submit" class="depth-button w-full rounded-full bg-black py-4 text-sm font-medium uppercase tracking-[0.18em] text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-black">Place COD Order</button>
+        </form>
+        <div id="order-success" class="hidden px-6 pb-8 text-center sm:px-8"><div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-black text-xl text-white dark:bg-white dark:text-black">&#10003;</div><h3 class="font-brand text-3xl">Order received</h3><p class="mt-2 text-sm text-gray-500">Thank you. We will call to confirm your Cash on Delivery order.</p><button onclick="closeCheckout()" class="mt-6 rounded-full border border-gray-300 px-6 py-3 text-sm font-medium uppercase tracking-widest dark:border-white/20">Continue shopping</button></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-[#050505] border-t border-gray-200 dark:border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-3 mb-6">
+                    <img src="uf.jpg" alt="UrbanFiber Logo" class="h-10 w-10 rounded-full object-cover grayscale">
+                    <span class="font-display font-bold text-2xl tracking-widest uppercase">UrbanFiber</span>
+                </div>
+                <p class="text-gray-500 max-w-sm">Premium oversized silhouettes engineered for the modern aesthetic. Designed in the city, woven for the world.</p>
+            </div>
+            <div>
+                <h5 class="font-bold uppercase tracking-widest mb-4">Shop</h5>
+                <ul class="space-y-3 text-gray-500">
+                    <li><a href="#" onclick="navigate('shop')" class="hover:text-black dark:hover:text-white transition-colors">All Products</a></li>
+                    <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">T-Shirts</a></li>
+                    <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">Heavyweight</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold uppercase tracking-widest mb-4">Support</h5>
+                <ul class="space-y-3 text-gray-500">
+                    <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">Shipping & Returns</a></li>
+                    <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">Size Guide</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 border-t border-gray-200 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+            <p>&copy; 2026 UrbanFiber. All rights reserved.</p>
+            <div class="flex gap-4 mt-4 md:mt-0">
+                <a href="#" class="hover:text-black dark:hover:text-white transition-colors">Instagram</a>
+                <a href="#" class="hover:text-black dark:hover:text-white transition-colors">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        let cart = JSON.parse(localStorage.getItem('urbanfiber-cart') || '[]');
+        let currentProduct = { title: 'Product Name', price: 0, imgSrc: 'p1.jpg' };
+        let detailQuantity = 1;
+        let checkoutNudgeTimer;
+        let checkoutNudgeDelay;
+
+        function saveCart() {
+            localStorage.setItem('urbanfiber-cart', JSON.stringify(cart));
+            renderCart();
+            syncCheckoutNudge();
+        }
+
+        function addToCart(title, price, imgSrc, quantity = 1) {
+            const existingItem = cart.find(item => item.title === title);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ title, price, imgSrc, quantity });
+            }
+            saveCart();
+            openCart();
+        }
+
+        function addCurrentProduct() {
+            addToCart(currentProduct.title, currentProduct.price, currentProduct.imgSrc, detailQuantity);
+        }
+
+        function adjustDetailQuantity(change) {
+            detailQuantity = Math.max(1, detailQuantity + change);
+            document.getElementById('detail-quantity').innerText = detailQuantity;
+        }
+
+        function updateCartQuantity(index, change) {
+            cart[index].quantity = Math.max(0, cart[index].quantity + change);
+            if (cart[index].quantity === 0) cart.splice(index, 1);
+            saveCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+        }
+
+        function renderCart() {
+            const itemsContainer = document.getElementById('cart-items');
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+            document.getElementById('cart-count').innerText = count;
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+
+            if (!cart.length) {
+                itemsContainer.innerHTML = '<div class="flex h-full flex-col items-center justify-center text-center"><div class="mb-5 rounded-full border border-gray-200 p-5 dark:border-white/10"><svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div><p class="font-brand text-2xl">Your cart is empty</p><p class="mt-2 text-sm text-gray-500">Add a piece from the collection to begin.</p></div>';
+                return;
+            }
+
+            itemsContainer.innerHTML = cart.map((item, index) => `
+                <div class="mb-5 flex gap-4 border-b border-gray-200 pb-5 dark:border-white/10">
+                    <img src="${item.imgSrc}" alt="${item.title}" class="h-24 w-20 rounded-lg object-cover">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex justify-between gap-3">
+                            <h3 class="font-display font-medium">${item.title}</h3>
+                            <button onclick="removeFromCart(${index})" aria-label="Remove ${item.title}" class="text-xs text-gray-400 hover:text-black dark:hover:text-white">Remove</button>
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">$${item.price.toFixed(2)}</p>
+                        <div class="mt-3 flex w-fit items-center gap-4 rounded-full border border-gray-200 px-3 py-1 text-sm dark:border-white/20">
+                            <button onclick="updateCartQuantity(${index}, -1)" aria-label="Decrease quantity">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateCartQuantity(${index}, 1)" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function openCart() {
+            dismissCheckoutNudge();
+            renderCart();
+            document.getElementById('cart-overlay').classList.remove('hidden');
+            requestAnimationFrame(() => {
+                document.getElementById('cart-overlay').classList.remove('opacity-0');
+                document.getElementById('cart-drawer').classList.remove('translate-x-full');
+            });
+        }
+
+        function closeCart() {
+            document.getElementById('cart-overlay').classList.add('opacity-0');
+            document.getElementById('cart-drawer').classList.add('translate-x-full');
+            setTimeout(() => document.getElementById('cart-overlay').classList.add('hidden'), 300);
+        }
+
+        function syncCheckoutNudge() {
+            clearInterval(checkoutNudgeTimer);
+            clearTimeout(checkoutNudgeDelay);
+            dismissCheckoutNudge();
+            if (!cart.length) return;
+            checkoutNudgeDelay = setTimeout(showCheckoutNudge, 12000);
+            checkoutNudgeTimer = setInterval(showCheckoutNudge, 30000);
+        }
+
+        function showCheckoutNudge() {
+            if (!cart.length || !document.getElementById('checkout-modal').classList.contains('hidden')) return;
+            const nudge = document.getElementById('checkout-nudge');
+            nudge.classList.remove('translate-y-6', 'opacity-0');
+        }
+
+        function dismissCheckoutNudge() {
+            document.getElementById('checkout-nudge').classList.add('translate-y-6', 'opacity-0');
+        }
+
+        function openCheckout() {
+            if (!cart.length) return;
+            dismissCheckoutNudge();
+            const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+            document.getElementById('checkout-total').innerText = `$${subtotal.toFixed(2)}`;
+            closeCart();
+            document.getElementById('checkout-overlay').classList.remove('hidden');
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            requestAnimationFrame(() => {
+                document.getElementById('checkout-overlay').classList.remove('opacity-0');
+                document.getElementById('checkout-modal').classList.remove('opacity-0', 'scale-95');
+            });
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-overlay').classList.add('opacity-0');
+            document.getElementById('checkout-modal').classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                document.getElementById('checkout-overlay').classList.add('hidden');
+                document.getElementById('checkout-modal').classList.add('hidden');
+                document.querySelector('#checkout-modal form').classList.remove('hidden');
+                document.getElementById('order-success').classList.add('hidden');
+            }, 300);
+        }
+
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const header = document.getElementById('site-header');
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                header.classList.add('-translate-y-full');
+            } else {
+                header.classList.remove('-translate-y-full');
+            }
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+
+        function placeOrder(event) {
+            event.preventDefault();
+            cart = [];
+            saveCart();
+            document.querySelector('#checkout-modal form').classList.add('hidden');
+            document.getElementById('order-success').classList.remove('hidden');
+        }
+
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                // Switch to Moon Icon (Dark Mode request)
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            } else {
+                html.classList.add('dark');
+                // Switch to Sun Icon (Light Mode request)
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            }
+        }
+
+        // --- Single Page Routing Logic ---
+        function navigate(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+                setTimeout(() => section.style.display = 'none', 400); // Wait for fade out
+            });
+
+            // Show requested view
+            setTimeout(() => {
+                const activeView = document.getElementById(`view-${viewId}`);
+                activeView.style.display = 'block';
+                // Trigger reflow
+                void activeView.offsetWidth; 
+                activeView.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 400);
+        }
+
+        // --- Dynamic Product View ---
+        function viewProduct(title, price, imgSrc) {
+            currentProduct = { title, price, imgSrc };
+            detailQuantity = 1;
+            document.getElementById('detail-title').innerText = title;
+            document.getElementById('detail-price').innerText = `$${price.toFixed(2)}`;
+            document.getElementById('detail-img').src = imgSrc;
+            document.getElementById('detail-quantity').innerText = detailQuantity;
+            
+            navigate('product');
+        }
+
+        renderCart();
+        syncCheckoutNudge();
+    </script>
+</body>
+</html>
