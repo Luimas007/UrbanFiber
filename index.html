@@ -72,8 +72,9 @@
         }
         @media (max-width: 767px) {
             .hero-section { margin-top: 4.25rem; height: auto; min-height: 0; padding-bottom: 5.25rem; background: #0a0a0a; }
-            .hero-section > div:first-child { position: relative; height: auto; }
-            .hero-image { display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
+            .hero-section > div:first-child { position: relative; height: auto; isolation: isolate; overflow: hidden; }
+            .hero-section > div:first-child::before { content: ''; position: absolute; inset: -1.5rem; z-index: -1; background: url('brand.png') center / cover no-repeat; filter: blur(1.25rem); opacity: 0.32; transform: scale(1.08); }
+            .hero-image { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
             .hero-content { bottom: 1.5rem; }
             .stacked-wrapper { padding-bottom: 2rem; }
             .stacked-card,
