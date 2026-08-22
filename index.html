@@ -44,6 +44,8 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             transition: filter 0.3s ease;
         }
+        .hero-section { margin-top: 4.5rem; height: calc(100vh - 4.5rem); }
+        .featured-track { perspective: 1000px; }
         /* Create offset for the stack effect */
         .stacked-card:nth-child(1) { top: 12vh; z-index: 10; transform: scale(0.96); }
         .stacked-card:nth-child(2) { top: 15vh; z-index: 20; transform: scale(0.98); }
@@ -67,7 +69,7 @@
             .product-card, .product-img-wrapper, .depth-button { transition: none; }
         }
         @media (max-width: 767px) {
-            .hero-section { height: 100svh; min-height: 38rem; }
+            .hero-section { margin-top: 4.25rem; height: calc(100svh - 4.25rem); min-height: 34rem; }
             .hero-image { object-position: 50% center; }
             .hero-content { bottom: 9%; }
             .stacked-wrapper { padding-bottom: 2rem; }
@@ -75,11 +77,10 @@
             .stacked-card:nth-child(1),
             .stacked-card:nth-child(2),
             .stacked-card:nth-child(3) {
-                position: relative;
-                top: auto;
-                height: auto;
-                min-height: 0;
-                transform: none;
+                position: sticky;
+                top: 5.5rem;
+                height: 72svh;
+                min-height: 32rem;
             }
             .stacked-card > div { width: 100%; }
             .stacked-card > div:first-child { height: 16rem; }
@@ -89,12 +90,21 @@
             .product-card:hover .product-img-wrapper { transform: none; }
             .product-img-wrapper { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08), 0 12px 20px rgba(0, 0, 0, 0.1); }
             .hero-content { width: 100%; }
+            .featured-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 1rem; margin-right: -1.5rem; padding-right: 1.5rem; padding-bottom: 1.5rem; scrollbar-width: none; }
+            .featured-track::-webkit-scrollbar { display: none; }
+            .featured-track .product-card { flex: 0 0 82vw; scroll-snap-align: center; }
+            .featured-track .product-card.is-rotating { animation: dice-rotate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
             #view-shop .grid { grid-template-columns: minmax(0, 1fr); }
             #view-shop .grid > .product-card { min-width: 0; }
             #view-product .flex.md\:flex-row { gap: 2rem; }
             #site-header > div { padding-left: 1rem; padding-right: 1rem; }
             #site-header .font-brand { font-size: 1.35rem; letter-spacing: 0.12em; }
             #site-header .flex.items-center.gap-3 { gap: 0.5rem; }
+        }
+        @keyframes dice-rotate {
+            0% { transform: rotateX(0deg) translateY(0); }
+            45% { transform: rotateX(-18deg) translateY(-8px); }
+            100% { transform: rotateX(0deg) translateY(0); }
         }
         @media (hover: none) {
             .hero-content button { opacity: 1; pointer-events: auto; }
@@ -184,7 +194,7 @@
                 <button onclick="navigate('shop')" class="hidden md:block border-b border-black dark:border-white pb-1 font-medium hover:text-gray-500 transition-colors">View All</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div id="featured-track" class="featured-track grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Product 1 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Onyx Heavyweight Tee', 55, 'p1.jpg')">
                     <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
@@ -631,6 +641,22 @@
             
             navigate('product');
         }
+
+        let featuredIndex = 0;
+        function rotateFeaturedProduct() {
+            if (window.innerWidth >= 768) return;
+            const track = document.getElementById('featured-track');
+            const cards = track.querySelectorAll('.product-card');
+            if (!cards.length) return;
+            cards[featuredIndex]?.classList.remove('is-rotating');
+            featuredIndex = (featuredIndex + 1) % cards.length;
+            const nextCard = cards[featuredIndex];
+            nextCard.classList.add('is-rotating');
+            nextCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            setTimeout(() => nextCard.classList.remove('is-rotating'), 750);
+        }
+
+        setInterval(rotateFeaturedProduct, 4500);
 
         renderCart();
         syncCheckoutNudge();
