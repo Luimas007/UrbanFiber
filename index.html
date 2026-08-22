@@ -70,17 +70,20 @@
         }
         @media (max-width: 767px) {
             .hero-section { margin-top: 4.25rem; height: calc(100svh - 4.25rem); min-height: 34rem; }
-            .hero-image { object-position: 50% center; }
+            .hero-section { background: #0a0a0a; }
+            .hero-image { object-fit: contain; object-position: 50% center; }
             .hero-content { bottom: 9%; }
             .stacked-wrapper { padding-bottom: 2rem; }
             .stacked-card,
             .stacked-card:nth-child(1),
             .stacked-card:nth-child(2),
             .stacked-card:nth-child(3) {
-                position: sticky;
-                top: 5.5rem;
-                height: 72svh;
-                min-height: 32rem;
+                position: relative;
+                top: auto;
+                height: auto;
+                min-height: 0;
+                transform: none;
+                margin-bottom: 1.25rem;
             }
             .stacked-card > div { width: 100%; }
             .stacked-card > div:first-child { height: 16rem; }
