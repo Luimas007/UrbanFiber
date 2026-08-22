@@ -71,11 +71,11 @@
             .product-card, .product-img-wrapper, .depth-button { transition: none; }
         }
         @media (max-width: 767px) {
-            .hero-section { margin-top: 4.25rem; height: auto; min-height: 0; padding-bottom: 4.5rem; background: #0a0a0a; }
+            .hero-section { margin-top: 4.25rem; height: auto; min-height: 0; padding-bottom: 1.25rem; background: #0a0a0a; }
             .hero-section > div:first-child { position: relative; height: auto; isolation: isolate; overflow: hidden; }
             .hero-section > div:first-child::before { content: ''; position: absolute; inset: -1.5rem; z-index: -1; background: url('brand.png') center / cover no-repeat; filter: blur(1.25rem); opacity: 0.32; transform: scale(1.08); }
             .hero-image { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
-            .hero-content { bottom: 3rem; }
+            .hero-content { position: relative; left: auto; bottom: auto; width: 100%; margin-top: 1.25rem; transform: none; }
             .stacked-wrapper { padding-bottom: 2rem; }
             .stacked-card,
             .stacked-card:nth-child(1),
@@ -96,7 +96,6 @@
             .product-card:hover { transform: none; filter: none; }
             .product-card:hover .product-img-wrapper { transform: none; }
             .product-img-wrapper { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08), 0 12px 20px rgba(0, 0, 0, 0.1); }
-            .hero-content { width: 100%; }
             .featured-track { display: flex !important; flex-wrap: nowrap; grid-template-columns: none !important; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; touch-action: auto; gap: 1rem; margin-right: -1.5rem; padding-right: 1.5rem; padding-bottom: 1.5rem; scrollbar-width: none; }
             .featured-track::-webkit-scrollbar { display: none; }
             .featured-track .product-card { flex: 0 0 min(82vw, 22rem); min-width: min(82vw, 22rem); scroll-snap-align: center; scroll-snap-stop: always; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
