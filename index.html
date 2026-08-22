@@ -75,8 +75,8 @@
             .hero-section > div:first-child { position: relative; inset: auto !important; width: 100%; height: auto !important; isolation: isolate; overflow: hidden; }
             .hero-section > div:first-child::before { content: ''; position: absolute; inset: -1.5rem; z-index: -1; background: url('brand.png') center / cover no-repeat; filter: blur(1.25rem); opacity: 0.32; transform: scale(1.08); }
             .hero-image { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
-            .hero-content { position: relative !important; left: auto; right: auto; bottom: auto; order: 2; width: 100%; margin-top: 0; padding: 0.75rem 1rem 1rem; transform: none !important; }
-            .hero-content button { display: inline-block; }
+            .hero-content { position: relative !important; left: auto !important; right: auto !important; bottom: auto !important; order: 2; align-self: center; width: 100% !important; margin: 0; padding: 0.75rem 1rem 1rem; text-align: center !important; transform: none !important; }
+            .hero-content button { display: block; width: fit-content; margin: 0 auto; }
             .stacked-wrapper { padding-bottom: 2rem; }
             .stacked-card,
             .stacked-card:nth-child(1),
