@@ -66,6 +66,39 @@
         @media (prefers-reduced-motion: reduce) {
             .product-card, .product-img-wrapper, .depth-button { transition: none; }
         }
+        @media (max-width: 767px) {
+            .hero-section { height: 100svh; min-height: 38rem; }
+            .hero-image { object-position: 50% center; }
+            .hero-content { bottom: 9%; }
+            .stacked-wrapper { padding-bottom: 2rem; }
+            .stacked-card,
+            .stacked-card:nth-child(1),
+            .stacked-card:nth-child(2),
+            .stacked-card:nth-child(3) {
+                position: relative;
+                top: auto;
+                height: auto;
+                min-height: 0;
+                transform: none;
+            }
+            .stacked-card > div { width: 100%; }
+            .stacked-card > div:first-child { height: 16rem; }
+            .stacked-card > div:last-child { height: auto; padding: 2rem 1.5rem; }
+            .stacked-card h3 { font-size: 2rem; line-height: 1.1; }
+            .product-card:hover { transform: none; filter: none; }
+            .product-card:hover .product-img-wrapper { transform: none; }
+            .product-img-wrapper { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08), 0 12px 20px rgba(0, 0, 0, 0.1); }
+            .hero-content { width: 100%; }
+            #view-shop .grid { grid-template-columns: minmax(0, 1fr); }
+            #view-shop .grid > .product-card { min-width: 0; }
+            #view-product .flex.md\:flex-row { gap: 2rem; }
+            #site-header > div { padding-left: 1rem; padding-right: 1rem; }
+            #site-header .font-brand { font-size: 1.35rem; letter-spacing: 0.12em; }
+            #site-header .flex.items-center.gap-3 { gap: 0.5rem; }
+        }
+        @media (hover: none) {
+            .hero-content button { opacity: 1; pointer-events: auto; }
+        }
     </style>
 </head>
 <body class="bg-uf-light text-gray-900 dark:bg-uf-dark dark:text-white font-sans overflow-x-hidden">
@@ -100,12 +133,12 @@
     <!-- HOME VIEW -->
     <main id="view-home" class="view-section active">
         <!-- Hero Section -->
-        <section class="group relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <section class="hero-section group relative h-screen w-full flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 w-full h-full">
-                <img src="brand.png" alt="UrbanFiber Hero" class="w-full h-full object-cover object-center">
+            <img src="brand.png" alt="UrbanFiber Hero" class="hero-image w-full h-full object-cover object-center">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-uf-dark dark:to-uf-dark"></div>
             </div>
-            <div class="absolute z-10 bottom-[18%] left-1/2 -translate-x-1/2 text-center px-4">
+            <div class="hero-content absolute z-10 bottom-[18%] left-1/2 -translate-x-1/2 text-center px-4">
                 <button onclick="navigate('shop')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
                     Explore Collection
                 </button>
