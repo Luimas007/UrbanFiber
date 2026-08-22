@@ -69,10 +69,10 @@
             .product-card, .product-img-wrapper, .depth-button { transition: none; }
         }
         @media (max-width: 767px) {
-            .hero-section { margin-top: 4.25rem; height: calc(100svh - 4.25rem); min-height: 34rem; }
-            .hero-section { background: #0a0a0a; }
-            .hero-image { width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain !important; object-position: 50% center; }
-            .hero-content { bottom: 9%; }
+            .hero-section { margin-top: 4.25rem; height: auto; min-height: 0; padding-bottom: 6.5rem; background: #0a0a0a; }
+            .hero-section > div:first-child { position: relative; height: auto; }
+            .hero-image { display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
+            .hero-content { bottom: 1.5rem; }
             .stacked-wrapper { padding-bottom: 2rem; }
             .stacked-card,
             .stacked-card:nth-child(1),
@@ -94,9 +94,10 @@
             .product-card:hover .product-img-wrapper { transform: none; }
             .product-img-wrapper { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08), 0 12px 20px rgba(0, 0, 0, 0.1); }
             .hero-content { width: 100%; }
-            .featured-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 1rem; margin-right: -1.5rem; padding-right: 1.5rem; padding-bottom: 1.5rem; scrollbar-width: none; }
+            .featured-track { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; gap: 1rem; margin-right: -1.5rem; padding-right: 1.5rem; padding-bottom: 1.5rem; scrollbar-width: none; }
             .featured-track::-webkit-scrollbar { display: none; }
-            .featured-track .product-card { flex: 0 0 82vw; scroll-snap-align: center; }
+            .featured-track .product-card { flex: 0 0 82vw; scroll-snap-align: center; scroll-snap-stop: always; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
+            .featured-track .product-card:active { transform: scale(0.98); }
             #view-shop .grid { grid-template-columns: minmax(0, 1fr); }
             #view-shop .grid > .product-card { min-width: 0; }
             #view-product .flex.md\:flex-row { gap: 2rem; }
@@ -171,7 +172,7 @@
             <div class="stacked-wrapper">
                 <!-- Card 1 -->
                 <div class="stacked-card bg-gray-100 dark:bg-neutral-900 flex flex-col md:flex-row items-center relative border border-gray-200 dark:border-white/10">
-                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('p1.jpg')] bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700"></div>
+                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('p1.jpg')] bg-cover bg-center"></div>
                     <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
                         <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">01 / Silhouette</span>
                         <h3 class="font-display text-4xl mb-4">The Perfect Drape</h3>
@@ -180,7 +181,7 @@
                 </div>
                 <!-- Card 2 -->
                 <div class="stacked-card bg-gray-200 dark:bg-neutral-800 flex flex-col md:flex-row-reverse items-center relative border border-gray-300 dark:border-white/10">
-                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('p2.jpg')] bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700"></div>
+                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('p2.jpg')] bg-cover bg-center"></div>
                     <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
                         <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">02 / Material</span>
                         <h3 class="font-display text-4xl mb-4">Lycra Infusion</h3>
