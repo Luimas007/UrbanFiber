@@ -71,7 +71,7 @@
             .product-card, .product-img-wrapper, .depth-button { transition: none; }
         }
         @media (max-width: 767px) {
-            .hero-section { margin-top: 4.25rem; height: auto; min-height: 0; padding-bottom: 5.25rem; background: #0a0a0a; }
+            .hero-section { margin-top: 4.25rem; height: auto; min-height: 0; padding-bottom: 4.5rem; background: #0a0a0a; }
             .hero-section > div:first-child { position: relative; height: auto; isolation: isolate; overflow: hidden; }
             .hero-section > div:first-child::before { content: ''; position: absolute; inset: -1.5rem; z-index: -1; background: url('brand.png') center / cover no-repeat; filter: blur(1.25rem); opacity: 0.32; transform: scale(1.08); }
             .hero-image { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
@@ -81,16 +81,16 @@
             .stacked-card:nth-child(1),
             .stacked-card:nth-child(2),
             .stacked-card:nth-child(3) {
-                position: relative;
-                top: auto;
-                height: auto;
-                min-height: 0;
+                position: sticky;
+                top: 5.5rem;
+                height: min(36rem, calc(100svh - 7rem));
+                min-height: 31rem;
                 transform: none;
-                margin-bottom: 1.25rem;
+                margin-bottom: 1.5rem;
             }
             .stacked-card > div { width: 100%; }
-            .stacked-card > div:first-child { height: 16rem; }
-            .stacked-card > div:last-child { height: auto; padding: 2rem 1.5rem; }
+            .stacked-card > div:first-child { height: 42%; }
+            .stacked-card > div:last-child { height: 58%; padding: 2rem 1.5rem; }
             .stacked-card h3 { font-size: 2rem; line-height: 1.1; }
             .stacked-card p { font-size: 0.95rem; }
             .product-card:hover { transform: none; filter: none; }
