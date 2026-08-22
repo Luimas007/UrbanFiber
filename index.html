@@ -98,6 +98,7 @@
             .featured-track::-webkit-scrollbar { display: none; }
             .featured-track .product-card { flex: 0 0 min(82vw, 22rem); min-width: min(82vw, 22rem); scroll-snap-align: center; scroll-snap-stop: always; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
             .featured-track .product-card:active { transform: scale(0.98); }
+            .featured-track .product-card button { position: relative; z-index: 2; min-height: 2.75rem; padding: 0.65rem 0.25rem; touch-action: manipulation; }
             #view-shop .grid { grid-template-columns: minmax(0, 1fr); }
             #view-shop .grid > .product-card { min-width: 0; }
             #view-product .flex.md\:flex-row { gap: 2rem; }
@@ -209,7 +210,7 @@
                     </div>
                     <h4 class="font-display font-medium text-lg">Onyx Heavyweight Tee</h4>
                     <p class="text-gray-500 dark:text-gray-400">$55.00</p>
-                    <button onclick="event.stopPropagation(); addToCart('Onyx Heavyweight Tee', 55, 'p1.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                    <button type="button" onclick="event.stopPropagation(); addToCart('Onyx Heavyweight Tee', 55, 'p1.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
                 </div>
                 <!-- Product 2 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Concrete Drop-Shoulder', 60, 'p2.jpg')">
@@ -218,7 +219,7 @@
                     </div>
                     <h4 class="font-display font-medium text-lg">Concrete Drop-Shoulder</h4>
                     <p class="text-gray-500 dark:text-gray-400">$60.00</p>
-                    <button onclick="event.stopPropagation(); addToCart('Concrete Drop-Shoulder', 60, 'p2.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                    <button type="button" onclick="event.stopPropagation(); addToCart('Concrete Drop-Shoulder', 60, 'p2.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
                 </div>
                 <!-- Product 3 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Void Boxy Fit', 50, 'p3.jpg')">
@@ -227,7 +228,7 @@
                     </div>
                     <h4 class="font-display font-medium text-lg">Void Boxy Fit</h4>
                     <p class="text-gray-500 dark:text-gray-400">$50.00</p>
-                    <button onclick="event.stopPropagation(); addToCart('Void Boxy Fit', 50, 'p3.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                    <button type="button" onclick="event.stopPropagation(); addToCart('Void Boxy Fit', 50, 'p3.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
                 </div>
                 <!-- Product 4 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Ivory Signature Stretch', 65, 'p4.jpg')">
@@ -236,7 +237,7 @@
                     </div>
                     <h4 class="font-display font-medium text-lg">Ivory Signature Stretch</h4>
                     <p class="text-gray-500 dark:text-gray-400">$65.00</p>
-                    <button onclick="event.stopPropagation(); addToCart('Ivory Signature Stretch', 65, 'p4.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
+                    <button type="button" onclick="event.stopPropagation(); addToCart('Ivory Signature Stretch', 65, 'p4.jpg')" class="mt-3 text-xs font-medium uppercase tracking-widest border-b border-gray-400 pb-1 hover:border-black dark:hover:border-white transition-colors">Quick Add</button>
                 </div>
             </div>
         </section>
