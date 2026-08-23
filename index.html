@@ -1538,19 +1538,12 @@
 
         function startStoryAutoplay() {
             clearInterval(storyAutoplayTimer);
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             storyAutoplayTimer = setInterval(() => {
                 switchStoryDetail(activeStoryDetail === 'silhouette' ? 'material' : 'silhouette');
             }, 4500);
         }
 
         const storyCard = document.getElementById('story-card');
-        storyCard.addEventListener('mouseenter', () => clearInterval(storyAutoplayTimer));
-        storyCard.addEventListener('mouseleave', startStoryAutoplay);
-        storyCard.addEventListener('focusin', () => clearInterval(storyAutoplayTimer));
-        storyCard.addEventListener('focusout', startStoryAutoplay);
-        storyCard.addEventListener('touchstart', () => clearInterval(storyAutoplayTimer), { passive: true });
-        storyCard.addEventListener('touchend', startStoryAutoplay, { passive: true });
         startStoryAutoplay();
 
         window.addEventListener('popstate', event => {
