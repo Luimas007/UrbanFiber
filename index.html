@@ -68,6 +68,7 @@
         .product-img-wrapper { box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 18px 30px rgba(0, 0, 0, 0.12); transition: box-shadow 0.35s ease, transform 0.35s ease; }
         .product-card:hover .product-img-wrapper { transform: translateZ(8px); box-shadow: 0 10px 0 rgba(0, 0, 0, 0.08), 0 24px 36px rgba(0, 0, 0, 0.18); }
         .product-img-wrapper img { transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-img-wrapper img.variant-preview { transition: opacity 0.18s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         .product-card:hover .product-img-wrapper img { transform: scale(1.05); }
         .depth-button { box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), 0 10px 18px rgba(0, 0, 0, 0.12); transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
         .depth-button:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18), 0 14px 22px rgba(0, 0, 0, 0.16); }
@@ -867,6 +868,45 @@
             }, 1600);
         }
 
+        function initializeVariantPreviews() {
+            const variantsByImage = {
+                'Materials/stronger_black.jpeg': ['Materials/stronger_black.jpeg', 'Materials/stronger_white.jpeg'],
+                'Materials/urban_black.jpeg': ['Materials/urban_black.jpeg', 'Materials/urban_ash.jpeg'],
+                'Materials/vibes_black.jpeg': ['Materials/vibes_black.jpeg', 'Materials/vibes_white.jpeg'],
+                'Materials/time_black.jpeg': ['Materials/time_black.jpeg', 'Materials/time_white.jpeg']
+            };
+            document.querySelectorAll('.product-card').forEach(card => {
+                const image = card.querySelector('.product-img-wrapper img');
+                const variants = variantsByImage[image?.getAttribute('src')];
+                if (!image || !variants || variants.length < 2) return;
+                let previewTimer;
+                let previewIndex = 0;
+                const stopPreview = () => {
+                    clearInterval(previewTimer);
+                    previewIndex = 0;
+                    image.src = variants[0];
+                    image.classList.remove('variant-preview');
+                };
+                const startPreview = () => {
+                    if (!window.matchMedia('(hover: hover)').matches) return;
+                    clearInterval(previewTimer);
+                    image.classList.add('variant-preview');
+                    previewTimer = setInterval(() => {
+                        previewIndex = (previewIndex + 1) % variants.length;
+                        image.style.opacity = '0.35';
+                        setTimeout(() => {
+                            image.src = variants[previewIndex];
+                            image.style.opacity = '1';
+                        }, 90);
+                    }, 650);
+                };
+                card.addEventListener('mouseenter', startPreview);
+                card.addEventListener('mouseleave', stopPreview);
+                card.addEventListener('focusin', startPreview);
+                card.addEventListener('focusout', stopPreview);
+            });
+        }
+
         // --- Dynamic Product View ---
         function viewProduct(title, price, imgSrc, variants = {}) {
             currentProduct = { title, price, imgSrc, variants, color: Object.keys(variants)[0] || 'black' };
@@ -901,6 +941,7 @@
         renderCart();
         syncCheckoutNudge();
         startFeaturedShowcase();
+        initializeVariantPreviews();
     </script>
 </body>
 </html>
