@@ -1550,6 +1550,67 @@
             });
         }
 
+        function startFeaturedTour() {
+            const tourKey = 'urbanfiber-featured-tour-seen';
+            if (localStorage.getItem(tourKey) || window.location.hash !== '#home') return;
+            localStorage.setItem(tourKey, 'true');
+
+            const track = document.getElementById('featured-track');
+            const featured = document.getElementById('featured-drops');
+            const cards = [...track.querySelectorAll('.product-card')];
+            const variantsByImage = {
+                'Materials/stronger_black.jpeg': 'Materials/stronger_white.jpeg',
+                'Materials/urban_black.jpeg': 'Materials/urban_ash.jpeg',
+                'Materials/vibes_black.jpeg': 'Materials/vibes_white.jpeg',
+                'Materials/time_black.jpeg': 'Materials/time_white.jpeg'
+            };
+            let tourTimer;
+            let step = 0;
+            let cancelled = false;
+
+            const cancelTour = () => {
+                cancelled = true;
+                clearTimeout(tourTimer);
+            };
+            const showNextColor = card => {
+                const image = card.querySelector('.product-img-wrapper img');
+                const alternate = variantsByImage[image?.getAttribute('src')];
+                if (!image || !alternate) return;
+                const original = image.getAttribute('src');
+                image.classList.add('variant-preview');
+                image.style.opacity = '0.35';
+                setTimeout(() => {
+                    if (!cancelled) {
+                        image.src = alternate;
+                        image.style.opacity = '1';
+                    }
+                }, 100);
+                setTimeout(() => {
+                    if (!cancelled) {
+                        image.src = original;
+                        image.classList.remove('variant-preview');
+                    }
+                }, 850);
+            };
+            const tourStep = () => {
+                if (cancelled || step >= cards.length) return;
+                const card = cards[step];
+                track.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+                showNextColor(card);
+                step += 1;
+                tourTimer = setTimeout(tourStep, 1250);
+            };
+
+            ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => {
+                window.addEventListener(eventName, cancelTour, { once: true, passive: true });
+            });
+            tourTimer = setTimeout(() => {
+                if (cancelled) return;
+                featured.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                tourTimer = setTimeout(tourStep, 800);
+            }, 1400);
+        }
+
         // --- Dynamic Product View ---
         function viewProduct(title, price, imgSrc, variants = {}) {
             const catalogProduct = getProductByName(title);
@@ -1602,6 +1663,7 @@
         renderCart();
         syncCheckoutNudge();
         initializeVariantPreviews();
+        startFeaturedTour();
     </script>
 </body>
 </html>
