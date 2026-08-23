@@ -36,21 +36,23 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 
-        /* Stacked Card Scroll Animation */
-        .stacked-wrapper { position: relative; padding-bottom: 10vh; }
-        .stacked-card {
-            position: sticky;
-            top: 15vh;
-            height: 70vh;
+        /* Story feature card */
+        .story-card {
+            min-height: 30rem;
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: 0 18px 35px -18px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(255, 255, 255, 0.06) inset;
             transition: filter 0.3s ease, box-shadow 0.3s ease;
         }
-        .stacked-card:hover { box-shadow: 0 24px 42px -18px rgba(0, 0, 0, 0.65), 0 2px 0 rgba(255, 255, 255, 0.08) inset; }
-        .stacked-card > div:first-child { background-size: cover; background-position: center; }
-        .stacked-card > div:last-child { padding: clamp(2rem, 5vw, 4rem); }
-        .stacked-card h3 { line-height: 1; letter-spacing: -0.02em; }
+        .story-card:hover { box-shadow: 0 24px 42px -18px rgba(0, 0, 0, 0.65), 0 2px 0 rgba(255, 255, 255, 0.08) inset; }
+        .story-card-image { background-size: cover; background-position: center; transition: opacity .35s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+        .story-card.is-switching .story-card-image { opacity: .35; transform: scale(1.025); }
+        .story-card-copy { transition: opacity .2s ease, transform .35s cubic-bezier(.22,1,.36,1); }
+        .story-card.is-switching .story-card-copy { opacity: 0; transform: translateY(8px); }
+        .story-tab[aria-selected="true"] { background: #000; color: #fff; border-color: #000; }
+        .dark .story-tab[aria-selected="true"] { background: #fff; color: #000; border-color: #fff; }
+        .story-autoplay-note { opacity: .55; transition: opacity .2s ease; }
+        .story-card:hover + .story-autoplay-note { opacity: 1; }
         .hero-section { margin-top: 4.5rem; height: calc(100vh - 4.5rem); }
         .featured-track {
             display: flex !important;
@@ -475,23 +477,11 @@
             .hero-image { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
             .hero-content { position: relative !important; left: auto !important; right: auto !important; bottom: auto !important; order: 2; align-self: center; width: 100% !important; margin: 0; padding: 1.5rem 1rem 1.25rem; text-align: center !important; transform: none !important; }
             .hero-content button { display: block; width: 100%; max-width: 22rem; margin: 0 auto; }
-            .stacked-wrapper { padding-bottom: 2rem; }
-            .stacked-card,
-            .stacked-card:nth-child(1),
-            .stacked-card:nth-child(2),
-            .stacked-card:nth-child(3) {
-                position: relative;
-                top: auto;
-                height: auto;
-                min-height: 0;
-                transform: none;
-                margin-bottom: 1.25rem;
-            }
-            .stacked-card > div { width: 100%; }
-            .stacked-card > div:first-child { height: 14rem; }
-            .stacked-card > div:last-child { height: auto; padding: 1.75rem 1.5rem 2rem; }
-            .stacked-card h3 { font-size: 2rem; line-height: 1.1; }
-            .stacked-card p { font-size: 0.95rem; }
+            .story-card { min-height: 0; }
+            .story-card-image { min-height: 14rem; }
+            .story-card-copy { padding: 1.75rem 1.5rem 2rem; }
+            .story-card-copy h3 { font-size: 2rem; line-height: 1.1; }
+            .story-card-copy p { font-size: 0.95rem; }
             .product-card:hover { transform: none; filter: none; }
             .product-card:hover .product-img-wrapper { transform: none; }
             .product-img-wrapper { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08), 0 12px 20px rgba(0, 0, 0, 0.1); }
@@ -613,26 +603,20 @@
                 <p class="text-gray-500 dark:text-gray-400 mt-4 max-w-xl mx-auto">Discover the architecture of our garments. Built around fit, weight, movement, and the way a garment sits on the body.</p>
             </div>
 
-            <div class="stacked-wrapper">
-                <!-- Card 1 -->
-                <div class="stacked-card bg-gray-100 dark:bg-neutral-900 flex flex-col md:flex-row items-center relative border border-gray-200 dark:border-white/10">
-                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('Materials/specs_1.jpg')] bg-cover bg-center"></div>
-                    <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
-                        <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">01 / Silhouette</span>
-                        <h3 class="font-display text-4xl mb-4">The Perfect Drape</h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Our signature drop-shoulder cut is mathematically designed to complement the natural lines of the body while providing unrestricted movement.</p>
-                    </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="stacked-card bg-gray-200 dark:bg-neutral-800 flex flex-col md:flex-row-reverse items-center relative border border-gray-300 dark:border-white/10">
-                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('Materials/specs_2.jpg')] bg-cover bg-center"></div>
-                    <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
-                        <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">02 / Material</span>
-                        <h3 class="font-display text-4xl mb-4">Lycra Infusion</h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Heavyweight cotton bonded with premium Lycra creates a structural garment that stretches dynamically without ever losing its shape.</p>
-                    </div>
+            <div class="mb-6 flex flex-wrap justify-center gap-2" role="tablist" aria-label="UrbanFiber construction details">
+                <button type="button" class="story-tab rounded-full border border-gray-300 px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors dark:border-white/20" role="tab" aria-selected="true" aria-controls="story-card" data-story="silhouette">Silhouette</button>
+                <button type="button" class="story-tab rounded-full border border-gray-300 px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors dark:border-white/20" role="tab" aria-selected="false" aria-controls="story-card" data-story="material">Material</button>
+            </div>
+
+            <div id="story-card" class="story-card bg-gray-100 dark:bg-neutral-900 flex flex-col md:flex-row items-stretch relative border border-gray-200 dark:border-white/10" role="tabpanel">
+                <div id="story-card-image" class="story-card-image w-full md:w-1/2 min-h-64 md:min-h-0 bg-[url('Materials/specs_1.jpg')] bg-cover bg-center"></div>
+                <div class="story-card-copy w-full md:w-1/2 p-12 flex flex-col justify-center">
+                    <span id="story-card-label" class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">01 / Silhouette</span>
+                    <h3 id="story-card-title" class="font-display text-4xl mb-4">The Perfect Drape</h3>
+                    <p id="story-card-description" class="text-gray-600 dark:text-gray-300 leading-relaxed">Our signature drop-shoulder cut is mathematically designed to complement the natural lines of the body while providing unrestricted movement.</p>
                 </div>
             </div>
+            <p class="story-autoplay-note mt-4 text-center text-[10px] font-medium uppercase tracking-[0.18em] text-gray-500">Rotating details</p>
         </section>
 
         <section class="exhibition-stage mx-6 overflow-hidden rounded-2xl px-6 py-16 text-white md:mx-auto md:max-w-7xl md:px-12">
@@ -1069,6 +1053,8 @@
         let exhibitionTimer;
         let exhibitionPaused = false;
         let exhibitionAutoplay = true;
+        let storyAutoplayTimer;
+        let activeStoryDetail = 'silhouette';
 
         const COLOR_STYLES = {
             black: 'bg-black',
@@ -1507,6 +1493,65 @@
             }
             return false;
         }
+
+        const storyDetails = {
+            silhouette: {
+                label: '01 / Silhouette',
+                title: 'The Perfect Drape',
+                description: 'Our signature drop-shoulder cut is mathematically designed to complement the natural lines of the body while providing unrestricted movement.',
+                image: "url('Materials/specs_1.jpg')"
+            },
+            material: {
+                label: '02 / Material',
+                title: 'Lycra Infusion',
+                description: 'Heavyweight cotton bonded with premium Lycra creates a structural garment that stretches dynamically without ever losing its shape.',
+                image: "url('Materials/specs_2.jpg')"
+            }
+        };
+
+        function switchStoryDetail(detailKey) {
+            const detail = storyDetails[detailKey];
+            const card = document.getElementById('story-card');
+            if (!detail || !card) return;
+            activeStoryDetail = detailKey;
+            const image = document.getElementById('story-card-image');
+            const copy = card.querySelector('.story-card-copy');
+            card.classList.add('is-switching');
+            setTimeout(() => {
+                image.style.backgroundImage = detail.image;
+                document.getElementById('story-card-label').textContent = detail.label;
+                document.getElementById('story-card-title').textContent = detail.title;
+                document.getElementById('story-card-description').textContent = detail.description;
+                document.querySelectorAll('.story-tab').forEach(tab => {
+                    tab.setAttribute('aria-selected', tab.dataset.story === detailKey ? 'true' : 'false');
+                });
+                card.classList.remove('is-switching');
+            }, 180);
+        }
+
+        document.querySelectorAll('.story-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchStoryDetail(tab.dataset.story);
+                startStoryAutoplay();
+            });
+        });
+
+        function startStoryAutoplay() {
+            clearInterval(storyAutoplayTimer);
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            storyAutoplayTimer = setInterval(() => {
+                switchStoryDetail(activeStoryDetail === 'silhouette' ? 'material' : 'silhouette');
+            }, 4500);
+        }
+
+        const storyCard = document.getElementById('story-card');
+        storyCard.addEventListener('mouseenter', () => clearInterval(storyAutoplayTimer));
+        storyCard.addEventListener('mouseleave', startStoryAutoplay);
+        storyCard.addEventListener('focusin', () => clearInterval(storyAutoplayTimer));
+        storyCard.addEventListener('focusout', startStoryAutoplay);
+        storyCard.addEventListener('touchstart', () => clearInterval(storyAutoplayTimer), { passive: true });
+        storyCard.addEventListener('touchend', startStoryAutoplay, { passive: true });
+        startStoryAutoplay();
 
         window.addEventListener('popstate', event => {
             const viewId = event.state?.viewId || window.location.hash.slice(1) || 'home';
