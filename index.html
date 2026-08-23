@@ -500,6 +500,7 @@
             .featured-track .product-card { flex: 0 0 min(82vw, 22rem); min-width: min(82vw, 22rem); scroll-snap-align: center; scroll-snap-stop: always; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
             .featured-track .product-card:active { transform: scale(0.98); }
             .featured-track .product-card button { position: relative; z-index: 2; min-height: 2.75rem; padding: 0.65rem 0.25rem; touch-action: manipulation; }
+            .featured-collection-link { width: 100%; margin-top: 1.5rem; min-height: 3.25rem; }
             .exhibition-stage { margin-left: 1rem; margin-right: 1rem; padding: 3rem 1rem; }
             .exhibition-stage h2 { font-size: 2.25rem; line-height: 1; }
             .exhibition-rail { gap: 0.75rem; }
@@ -599,7 +600,7 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-uf-dark dark:to-uf-dark"></div>
             </div>
             <div class="hero-content absolute z-10 bottom-[18%] left-1/2 -translate-x-1/2 text-center px-4">
-                <button onclick="navigate('home')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
+                <button onclick="navigate('shop')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
                     Shop the collection
                 </button>
             </div>
@@ -695,6 +696,11 @@
                     </div>
                     <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Time Tee</h4><p class="text-gray-500 dark:text-gray-400">$65.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Time Tee', 65, 'Materials/time_black.jpeg', 1, { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
                 </div>
+            </div>
+            <div class="mt-10 flex justify-center md:hidden">
+                <button onclick="navigate('shop')" class="featured-collection-link button-primary bg-black px-6 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white dark:bg-white dark:text-black">
+                    View all products
+                </button>
             </div>
         </section>
     </main>
