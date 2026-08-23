@@ -288,7 +288,7 @@
         </section>
 
         <!-- Featured Products (Clickable) -->
-        <section class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-200 dark:border-white/10">
+        <section id="featured-drops" class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-200 dark:border-white/10">
             <div class="flex justify-between items-end mb-12">
                 <div>
                     <h2 class="font-display text-3xl font-bold uppercase tracking-wide">Featured Drops</h2>
@@ -846,6 +846,27 @@
             navigate(viewId, false);
         });
 
+        function startFeaturedShowcase() {
+            if (window.location.hash && window.location.hash !== '#home') return;
+            let cancelled = false;
+            const cancel = () => { cancelled = true; };
+            ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => {
+                window.addEventListener(eventName, cancel, { once: true, passive: true });
+            });
+            setTimeout(() => {
+                if (cancelled || window.scrollY > 20) return;
+                const featuredDrops = document.getElementById('featured-drops');
+                const track = document.getElementById('featured-track');
+                featuredDrops.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (window.matchMedia('(max-width: 767px)').matches) {
+                    setTimeout(() => {
+                        if (cancelled) return;
+                        track.scrollBy({ left: Math.min(track.clientWidth * 0.58, 200), behavior: 'smooth' });
+                    }, 900);
+                }
+            }, 1600);
+        }
+
         // --- Dynamic Product View ---
         function viewProduct(title, price, imgSrc, variants = {}) {
             currentProduct = { title, price, imgSrc, variants, color: Object.keys(variants)[0] || 'black' };
@@ -879,6 +900,7 @@
         if (initialView !== 'home') navigate(initialView, false);
         renderCart();
         syncCheckoutNudge();
+        startFeaturedShowcase();
     </script>
 </body>
 </html>
