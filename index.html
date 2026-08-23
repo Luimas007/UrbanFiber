@@ -81,6 +81,8 @@
         .button-secondary { min-height: 2.75rem; border: 1px solid rgba(107, 114, 128, 0.45); border-radius: 9999px; padding: 0.65rem 1rem; transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease; }
         .button-secondary:hover { background: rgba(107, 114, 128, 0.1); border-color: currentColor; transform: translateY(-1px); }
         .button-icon { min-height: 2.75rem; min-width: 2.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; }
+        .filter-select { min-height: 2.75rem; appearance: none; border: 1px solid rgba(107, 114, 128, 0.38); border-radius: 9999px; padding: 0.65rem 2.75rem 0.65rem 1rem; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 1.15rem) 1.15rem, calc(100% - 0.85rem) 1.15rem; background-size: 0.3rem 0.3rem, 0.3rem 0.3rem; background-repeat: no-repeat; color: inherit; outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        .filter-select:focus { border-color: currentColor; box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.16); }
         .cart-item { border-color: rgba(107, 114, 128, 0.22); }
         .cart-quantity-control button { min-width: 2.75rem; min-height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; }
         .cart-quantity-control button:hover { background: rgba(107, 114, 128, 0.12); }
@@ -180,14 +182,14 @@
     <nav id="site-header" class="fixed w-full z-50 top-0 transition-all duration-300 bg-[#ededeb]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
         <div class="relative max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <a href="#" onclick="navigate('home')" class="flex items-center gap-3 group">
+                <a href="#home" onclick="return navigate('home')" class="flex items-center gap-3 group">
                     <img src="Materials/uf.jpg" alt="UrbanFiber Logo" class="h-8 w-8 rounded-full object-cover border border-gray-300 dark:border-gray-700 group-hover:scale-105 transition-transform">
                     <span class="brand-wordmark font-brand font-semibold text-2xl leading-none uppercase"><span class="brand-initial">U</span>RBAN<span class="brand-initial">F</span>IBER</span>
                 </a>
             </div>
             <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 text-sm font-medium tracking-wide">
-                    <a href="#" onclick="navigate('home')" class="hover:text-gray-500 transition-colors">Home</a>
-                    <a href="#" onclick="navigate('shop')" class="hover:text-gray-500 transition-colors">All Products</a>
+                    <a href="#home" onclick="return navigate('home')" class="hover:text-gray-500 transition-colors">Home</a>
+                    <a href="#shop" onclick="return navigate('shop')" class="hover:text-gray-500 transition-colors">All Products</a>
                     <a href="#about" class="hover:text-gray-500 transition-colors">Story</a>
             </div>
             <div class="flex items-center gap-3">
@@ -228,7 +230,7 @@
             <div class="stacked-wrapper">
                 <!-- Card 1 -->
                 <div class="stacked-card bg-gray-100 dark:bg-neutral-900 flex flex-col md:flex-row items-center relative border border-gray-200 dark:border-white/10">
-                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('Materials/m1.jpeg')] bg-cover bg-center"></div>
+                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('Materials/specs_1.jpg')] bg-cover bg-center"></div>
                     <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
                         <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">01 / Silhouette</span>
                         <h3 class="font-display text-4xl mb-4">The Perfect Drape</h3>
@@ -237,7 +239,7 @@
                 </div>
                 <!-- Card 2 -->
                 <div class="stacked-card bg-gray-200 dark:bg-neutral-800 flex flex-col md:flex-row-reverse items-center relative border border-gray-300 dark:border-white/10">
-                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('Materials/m7.jpg')] bg-cover bg-center"></div>
+                    <div class="w-full md:w-1/2 h-64 md:h-full bg-[url('Materials/specs_2.jpg')] bg-cover bg-center"></div>
                     <div class="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
                         <span class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-2">02 / Material</span>
                         <h3 class="font-display text-4xl mb-4">Lycra Infusion</h3>
@@ -280,36 +282,28 @@
                     <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
                         <img src="Materials/stronger_black.jpeg" alt="Stronger black T-shirt" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="font-display font-medium text-lg">Stronger Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400">$55.00</p>
-                    <button type="button" onclick="event.stopPropagation(); addToCart('Stronger Tee', 55, 'Materials/stronger_black.jpeg', 1, { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' })" class="button-secondary mt-3 text-xs font-medium uppercase tracking-widest">Quick Add</button>
+                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Stronger Tee</h4><p class="text-gray-500 dark:text-gray-400">$55.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Stronger Tee', 55, 'Materials/stronger_black.jpeg', 1, { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
                 </div>
                 <!-- Product 2 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Urban Tee', 60, 'Materials/urban_black.jpeg', { black: 'Materials/urban_black.jpeg', ash: 'Materials/urban_ash.jpeg' })">
                     <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
                         <img src="Materials/urban_black.jpeg" alt="Urban black T-shirt" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="font-display font-medium text-lg">Urban Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400">$60.00</p>
-                    <button type="button" onclick="event.stopPropagation(); addToCart('Urban Tee', 60, 'Materials/urban_black.jpeg', 1, { black: 'Materials/urban_black.jpeg', ash: 'Materials/urban_ash.jpeg' })" class="button-secondary mt-3 text-xs font-medium uppercase tracking-widest">Quick Add</button>
+                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Urban Tee</h4><p class="text-gray-500 dark:text-gray-400">$60.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Urban Tee', 60, 'Materials/urban_black.jpeg', 1, { black: 'Materials/urban_black.jpeg', ash: 'Materials/urban_ash.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
                 </div>
                 <!-- Product 3 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Vibes Tee', 50, 'Materials/vibes_black.jpeg', { black: 'Materials/vibes_black.jpeg', white: 'Materials/vibes_white.jpeg' })">
                     <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
                         <img src="Materials/vibes_black.jpeg" alt="Vibes black T-shirt" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="font-display font-medium text-lg">Vibes Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400">$50.00</p>
-                    <button type="button" onclick="event.stopPropagation(); addToCart('Vibes Tee', 50, 'Materials/vibes_black.jpeg', 1, { black: 'Materials/vibes_black.jpeg', white: 'Materials/vibes_white.jpeg' })" class="button-secondary mt-3 text-xs font-medium uppercase tracking-widest">Quick Add</button>
+                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Vibes Tee</h4><p class="text-gray-500 dark:text-gray-400">$50.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Vibes Tee', 50, 'Materials/vibes_black.jpeg', 1, { black: 'Materials/vibes_black.jpeg', white: 'Materials/vibes_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
                 </div>
                 <!-- Product 4 -->
                 <div class="product-card cursor-pointer group" onclick="viewProduct('Time Tee', 65, 'Materials/time_black.jpeg', { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })">
                     <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
                         <img src="Materials/time_black.jpeg" alt="Time black T-shirt" class="w-full h-full object-cover">
                     </div>
-                    <h4 class="font-display font-medium text-lg">Time Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400">$65.00</p>
-                    <button type="button" onclick="event.stopPropagation(); addToCart('Time Tee', 65, 'Materials/time_black.jpeg', 1, { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })" class="button-secondary mt-3 text-xs font-medium uppercase tracking-widest">Quick Add</button>
+                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Time Tee</h4><p class="text-gray-500 dark:text-gray-400">$65.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Time Tee', 65, 'Materials/time_black.jpeg', 1, { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
                 </div>
             </div>
         </section>
@@ -322,12 +316,12 @@
             
             <!-- Filters -->
             <div class="flex flex-wrap gap-4 mb-12">
-                <select class="bg-transparent border border-gray-300 dark:border-gray-700 rounded-full px-6 py-2 outline-none focus:border-black dark:focus:border-white cursor-pointer">
+                <select aria-label="Filter by category" class="filter-select bg-transparent dark:bg-[#121212] cursor-pointer">
                     <option class="dark:bg-black">All Categories</option>
                     <option class="dark:bg-black">Oversized</option>
                     <option class="dark:bg-black">Boxy Fit</option>
                 </select>
-                <select class="bg-transparent border border-gray-300 dark:border-gray-700 rounded-full px-6 py-2 outline-none focus:border-black dark:focus:border-white cursor-pointer">
+                <select aria-label="Sort products" class="filter-select bg-transparent dark:bg-[#121212] cursor-pointer">
                     <option class="dark:bg-black">Sort: Newest</option>
                     <option class="dark:bg-black">Price: Low to High</option>
                     <option class="dark:bg-black">Price: High to Low</option>
@@ -497,7 +491,7 @@
             <div>
                 <h5 class="font-bold uppercase tracking-widest mb-4">Shop</h5>
                 <ul class="space-y-3 text-gray-500">
-                    <li><a href="#" onclick="navigate('shop')" class="hover:text-black dark:hover:text-white transition-colors">All Products</a></li>
+                    <li><a href="#shop" onclick="return navigate('shop')" class="hover:text-black dark:hover:text-white transition-colors">All Products</a></li>
                     <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">T-Shirts</a></li>
                     <li><a href="#" class="hover:text-black dark:hover:text-white transition-colors">Heavyweight</a></li>
                 </ul>
@@ -756,7 +750,8 @@
         }
 
         // --- Single Page Routing Logic ---
-        function navigate(viewId) {
+        function navigate(viewId, updateHistory = true) {
+            if (updateHistory) history.pushState({ viewId }, '', `#${viewId}`);
             // Hide all views
             document.querySelectorAll('.view-section').forEach(section => {
                 section.classList.remove('active');
@@ -772,7 +767,13 @@
                 activeView.classList.add('active');
                 window.scrollTo({ top: 0, behavior: 'auto' });
             }, 400);
+            return false;
         }
+
+        window.addEventListener('popstate', event => {
+            const viewId = event.state?.viewId || window.location.hash.slice(1) || 'home';
+            navigate(viewId, false);
+        });
 
         // --- Dynamic Product View ---
         function viewProduct(title, price, imgSrc, variants = {}) {
@@ -787,6 +788,10 @@
         }
 
         let featuredIndex = 0;
+        const requestedView = window.location.hash.slice(1);
+        const initialView = ['home', 'shop', 'product'].includes(requestedView) ? requestedView : 'home';
+        history.replaceState({ viewId: initialView }, '', `#${initialView}`);
+        if (initialView !== 'home') navigate(initialView, false);
         renderCart();
         syncCheckoutNudge();
     </script>
