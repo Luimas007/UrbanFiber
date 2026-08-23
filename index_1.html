@@ -2,9 +2,12 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#121212">
     <title>UrbanFiber | Premium Oversized T-Shirts</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -25,14 +28,14 @@
     </script>
     <style>
         /* Smooth Scrolling & Base Styles */
-        html { scroll-behavior: auto; }
+        html { scroll-behavior: smooth; }
         body { -webkit-font-smoothing: antialiased; transition: background-color 0.4s, color 0.4s; }
-        
+
         /* Hide scrollbar for cleaner premium look */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        
+
         /* Stacked Card Scroll Animation */
         .stacked-wrapper { position: relative; padding-bottom: 10vh; }
         .stacked-card {
@@ -75,11 +78,12 @@
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
         button { cursor: pointer; font-family: inherit; }
         button:disabled { cursor: not-allowed; }
-        .button-primary { min-height: 2.75rem; border-radius: 9999px; box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), 0 10px 18px rgba(0, 0, 0, 0.12); transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
+        .button-primary { min-height: 3rem; border-radius: 9999px; box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), 0 10px 18px rgba(0, 0, 0, 0.12); transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
         .button-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18), 0 14px 22px rgba(0, 0, 0, 0.16); }
         .button-primary:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18), 0 5px 10px rgba(0, 0, 0, 0.1); }
         .button-secondary { min-height: 2.75rem; border: 1px solid rgba(107, 114, 128, 0.45); border-radius: 9999px; padding: 0.65rem 1rem; transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease; }
         .button-secondary:hover { background: rgba(107, 114, 128, 0.1); border-color: currentColor; transform: translateY(-1px); }
+        .button-secondary:active { transform: translateY(0); }
         .button-icon { min-height: 2.75rem; min-width: 2.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; }
         .filter-select { min-height: 2.75rem; appearance: none; border: 1px solid rgba(107, 114, 128, 0.38); border-radius: 9999px; padding: 0.65rem 2.75rem 0.65rem 1rem; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 1.15rem) 1.15rem, calc(100% - 0.85rem) 1.15rem; background-size: 0.3rem 0.3rem, 0.3rem 0.3rem; background-repeat: no-repeat; color: inherit; outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
         .filter-select:focus { border-color: currentColor; box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.16); }
@@ -97,7 +101,18 @@
         .exhibition-rail { scrollbar-width: none; scroll-behavior: smooth; }
         .exhibition-rail::-webkit-scrollbar { display: none; }
         .exhibition-rail .model-frame { flex: 0 0 100%; min-width: 100%; }
+
+        /* Size button selected state (real selection, not focus) */
+        .size-btn { min-height: 3rem; }
+        .size-btn[aria-pressed="true"] { background: #000; color: #fff; border-color: #000; }
+        .dark .size-btn[aria-pressed="true"] { background: #fff; color: #000; border-color: #fff; }
+
+        /* Color swatch selected state */
+        .color-swatch[aria-pressed="true"] { border-color: currentColor; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000; }
+        .dark .color-swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px #121212, 0 0 0 4px #fff; }
+
         @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
             .product-card, .product-img-wrapper, .depth-button { transition: none; }
         }
         @media (max-width: 767px) {
@@ -105,8 +120,8 @@
             .hero-section > div:first-child { position: relative; inset: auto !important; width: 100%; height: auto !important; isolation: isolate; overflow: hidden; }
             .hero-section > div:first-child::before { content: ''; position: absolute; inset: -1.5rem; z-index: -1; background: url('brand.png') center / cover no-repeat; filter: blur(1.25rem); opacity: 0.32; transform: scale(1.08); }
             .hero-image { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-width: 100%; max-height: none; object-fit: contain !important; object-position: 50% center; }
-            .hero-content { position: relative !important; left: auto !important; right: auto !important; bottom: auto !important; order: 2; align-self: center; width: 100% !important; margin: 0; padding: 0.75rem 1rem 1rem; text-align: center !important; transform: none !important; }
-            .hero-content button { display: block; width: fit-content; margin: 0 auto; }
+            .hero-content { position: relative !important; left: auto !important; right: auto !important; bottom: auto !important; order: 2; align-self: center; width: 100% !important; margin: 0; padding: 1.5rem 1rem 1.25rem; text-align: center !important; transform: none !important; }
+            .hero-content button { display: block; width: 100%; max-width: 22rem; margin: 0 auto; }
             .stacked-wrapper { padding-bottom: 2rem; }
             .stacked-card,
             .stacked-card:nth-child(1),
@@ -163,7 +178,8 @@
             #view-home > section:nth-child(2) > div:first-child p { font-size: 0.9rem; line-height: 1.5; }
             .mobile-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: repeat(3, 1fr); padding: 0.5rem 1rem max(0.5rem, env(safe-area-inset-bottom)); border-top: 1px solid rgba(128, 128, 128, 0.2); background: rgba(237, 237, 235, 0.94); backdrop-filter: blur(16px); }
             .dark .mobile-nav { background: rgba(18, 18, 18, 0.94); }
-            .mobile-nav button { min-height: 2.75rem; color: #6b7280; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+            .mobile-nav button { min-height: 3rem; color: #6b7280; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s ease, transform 0.15s ease; }
+            .mobile-nav button[aria-current="page"] { color: currentColor; }
             .mobile-nav button:active { color: currentColor; transform: scale(0.96); }
             #cart-drawer > div:first-child { padding-left: 1.25rem; padding-right: 1.25rem; }
             #cart-items { padding-left: 1.25rem; padding-right: 1.25rem; }
@@ -171,10 +187,10 @@
             .cart-item { gap: 0.75rem; }
             .cart-item img { height: 5rem; width: 4rem; }
         }
-        @media (hover: none) {
-            .hero-content button { opacity: 1; pointer-events: auto; }
-        }
     </style>
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body class="bg-uf-light text-gray-900 dark:bg-uf-dark dark:text-white font-sans overflow-x-hidden">
 
@@ -214,7 +230,7 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-uf-dark dark:to-uf-dark"></div>
             </div>
             <div class="hero-content absolute z-10 bottom-[18%] left-1/2 -translate-x-1/2 text-center px-4">
-                <button onclick="navigate('shop')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
+                <button onclick="navigate('shop')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
                     Explore Collection
                 </button>
             </div>
@@ -226,7 +242,7 @@
                 <h2 class="font-display text-3xl md:text-5xl font-bold uppercase tracking-wide">The Fabric of the City</h2>
                 <p class="text-gray-500 dark:text-gray-400 mt-4 max-w-xl mx-auto">Discover the architecture of our garments. Not meant to be bought here, but meant to be felt.</p>
             </div>
-            
+
             <div class="stacked-wrapper">
                 <!-- Card 1 -->
                 <div class="stacked-card bg-gray-100 dark:bg-neutral-900 flex flex-col md:flex-row items-center relative border border-gray-200 dark:border-white/10">
@@ -252,7 +268,12 @@
         <section class="exhibition-stage mx-6 overflow-hidden rounded-2xl px-6 py-16 text-white md:mx-auto md:max-w-7xl md:px-12">
             <div class="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                 <div><p class="text-xs font-medium uppercase tracking-[0.25em] text-white/50">The model edit</p><h2 class="font-brand text-4xl font-semibold md:text-5xl">Worn in the city</h2></div>
-                <p class="max-w-sm text-sm leading-relaxed text-white/60">Front and back views, captured in the natural rhythm of the collection.</p>
+                <div class="flex items-center gap-3">
+                    <p class="max-w-sm text-sm leading-relaxed text-white/60">Front and back views, captured in the natural rhythm of the collection.</p>
+                    <button type="button" id="exhibition-play" onclick="toggleExhibitionAutoplay()" aria-label="Pause auto-scroll" aria-pressed="true" class="button-icon shrink-0 border border-white/25 text-white hover:bg-white/10 transition-colors">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+                    </button>
+                </div>
             </div>
             <div id="exhibition-rail" class="exhibition-rail flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
                 <div class="model-frame h-[30rem] min-w-[17rem] snap-center md:min-w-[22rem]"><img src="Materials/m1.jpeg" alt="Stronger black T-shirt model front and back"></div>
@@ -267,13 +288,13 @@
         </section>
 
         <!-- Featured Products (Clickable) -->
-        <section id="featured-drops" class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-200 dark:border-white/10">
+        <section class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-200 dark:border-white/10">
             <div class="flex justify-between items-end mb-12">
                 <div>
                     <h2 class="font-display text-3xl font-bold uppercase tracking-wide">Featured Drops</h2>
                     <p class="text-gray-500 dark:text-gray-400 mt-2">The latest additions to the UrbanFiber core collection.</p>
                 </div>
-                <button onclick="navigate('shop')" class="button-secondary hidden md:block font-medium">View All</button>
+                <button onclick="navigate('shop')" class="button-secondary hidden md:inline-flex font-medium">View All</button>
             </div>
 
             <div id="featured-track" class="featured-track grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -313,7 +334,7 @@
     <main id="view-shop" class="view-section pt-32 pb-24 min-h-screen">
         <div class="max-w-7xl mx-auto px-6">
             <h1 class="font-display text-4xl md:text-6xl font-bold uppercase tracking-wider border-b border-gray-200 dark:border-white/10 pb-8 mb-8">All Products</h1>
-            
+
             <!-- Filters -->
             <div class="flex flex-wrap gap-4 mb-12">
                 <select aria-label="Filter by category" class="filter-select bg-transparent dark:bg-[#121212] cursor-pointer">
@@ -358,11 +379,11 @@
     <!-- PRODUCT DETAIL VIEW -->
     <main id="view-product" class="view-section pt-32 pb-24 min-h-screen">
         <div class="max-w-7xl mx-auto px-6">
-            <button onclick="navigate('shop')" class="button-secondary flex items-center gap-2 text-gray-500 mb-8">
+            <button onclick="navigate('shop')" class="button-secondary inline-flex items-center gap-2 text-gray-500 mb-8">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 Back to Shop
             </button>
-            
+
             <div class="flex flex-col md:flex-row gap-12 lg:gap-24">
                 <!-- Product Images -->
                 <div class="w-full md:w-1/2 flex flex-col gap-4">
@@ -375,7 +396,7 @@
                 <div class="w-full md:w-1/2 flex flex-col justify-center">
                     <h1 id="detail-title" class="font-display text-4xl md:text-5xl font-bold uppercase tracking-wide mb-2">Product Name</h1>
                     <p id="detail-price" class="text-2xl text-gray-600 dark:text-gray-300 mb-8">$0.00</p>
-                    
+
                     <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
                         Crafted from our signature heavy-weight cotton and Lycra blend. Designed with a severe drop shoulder, exaggerated body width, and cropped hem for the ultimate architectural streetwear silhouette.
                     </p>
@@ -383,24 +404,20 @@
                     <!-- Colors -->
                     <div class="mb-8">
                         <span class="block text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">Color</span>
-                        <div class="color-options flex flex-wrap gap-4">
-                            <button type="button" onclick="selectColor(this, 'black')" aria-label="Black" aria-pressed="true" class="color-swatch w-10 h-10 rounded-full bg-black border-2 border-white ring-2 ring-black dark:ring-white transition-all"></button>
-                            <button type="button" onclick="selectColor(this, 'white')" aria-label="White" aria-pressed="false" class="color-swatch w-10 h-10 rounded-full bg-white border-2 border-transparent hover:ring-2 hover:ring-gray-300 transition-all"></button>
-                            <button type="button" onclick="selectColor(this, 'ash')" aria-label="Ash" aria-pressed="false" class="color-swatch w-10 h-10 rounded-full bg-[#B9B6B0] border-2 border-transparent hover:ring-2 hover:ring-gray-300 transition-all"></button>
-                        </div>
+                        <div id="detail-colors" class="color-options flex flex-wrap gap-4"></div>
                     </div>
 
                     <!-- Sizes -->
                     <div class="mb-8">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-sm font-medium uppercase tracking-widest text-gray-500">Size</span>
-                            <button class="text-sm border-b border-gray-400 hover:text-black dark:hover:text-white transition-colors">Size Chart</button>
+                            <button type="button" class="text-sm border-b border-gray-400 hover:text-black dark:hover:text-white transition-colors">Size Chart</button>
                         </div>
-                        <div class="grid grid-cols-4 gap-3">
-                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all">S</button>
-                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all">M</button>
-                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all">L</button>
-                            <button class="py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black transition-all opacity-50 cursor-not-allowed">XL</button>
+                        <div id="size-grid" class="grid grid-cols-4 gap-3">
+                            <button type="button" class="size-btn py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white transition-all" data-size="S">S</button>
+                            <button type="button" class="size-btn py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white transition-all" data-size="M">M</button>
+                            <button type="button" class="size-btn py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white transition-all" data-size="L">L</button>
+                            <button type="button" class="size-btn py-3 border border-gray-300 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed" data-size="XL" disabled>XL</button>
                         </div>
                     </div>
 
@@ -444,7 +461,7 @@
             <div class="flex items-start gap-3">
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
                 <div class="min-w-0 flex-1"><p class="font-brand text-2xl leading-none">Your pieces are waiting</p><p class="mt-1 text-sm text-gray-500">Complete your order with Cash on Delivery.</p></div>
-                <button onclick="dismissCheckoutNudge()" aria-label="Dismiss checkout reminder" class="shrink-0 text-xl leading-none text-gray-400 hover:text-black dark:hover:text-white">&times;</button>
+                <button onclick="dismissCheckoutNudge()" aria-label="Dismiss checkout reminder" class="button-icon shrink-0 text-xl leading-none text-gray-400 hover:text-black dark:hover:text-white">&times;</button>
             </div>
             <button onclick="openCheckout()" class="button-primary mt-4 w-full bg-black py-3 text-xs font-medium uppercase tracking-[0.18em] text-white hover:opacity-80 dark:bg-white dark:text-black">Checkout now</button>
         </div>
@@ -515,21 +532,28 @@
     </footer>
 
     <nav class="mobile-nav md:hidden" aria-label="Mobile navigation">
-        <button type="button" onclick="navigate('home')">Home</button>
-        <button type="button" onclick="navigate('shop')">Shop</button>
+        <button type="button" data-nav="home" onclick="navigate('home')">Home</button>
+        <button type="button" data-nav="shop" onclick="navigate('shop')">Shop</button>
         <button type="button" onclick="openCart()">Cart <span id="mobile-cart-count">0</span></button>
     </nav>
 
     <!-- Interactive JavaScript -->
     <script>
         let cart = JSON.parse(localStorage.getItem('urbanfiber-cart') || '[]');
-        let currentProduct = { title: 'Stronger Tee', price: 55, imgSrc: 'Materials/stronger_black.jpeg', variants: { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' } };
+        let currentProduct = { title: 'Stronger Tee', price: 55, imgSrc: 'Materials/stronger_black.jpeg', variants: { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' }, color: 'black' };
         let detailQuantity = 1;
+        let selectedSize = null;
         let checkoutNudgeTimer;
         let checkoutNudgeDelay;
-        let introShowcaseCancelled = false;
         let exhibitionTimer;
         let exhibitionPaused = false;
+        let exhibitionAutoplay = true;
+
+        const COLOR_STYLES = {
+            black: 'bg-black',
+            white: 'bg-white border-gray-300',
+            ash: 'bg-[#B9B6B0]'
+        };
 
         function saveCart() {
             localStorage.setItem('urbanfiber-cart', JSON.stringify(cart));
@@ -549,7 +573,7 @@
         }
 
         function addCurrentProduct() {
-            addToCart(currentProduct.title, currentProduct.price, currentProduct.imgSrc, detailQuantity, currentProduct.variants, currentProduct.color);
+            addToCart(currentProduct.title, currentProduct.price, currentProduct.imgSrc, detailQuantity, currentProduct.variants, currentProduct.color || 'black');
         }
 
         function adjustDetailQuantity(change) {
@@ -557,14 +581,23 @@
             document.getElementById('detail-quantity').innerText = detailQuantity;
         }
 
+        function buildColorSwatches(container, variants, selectedKey, onSelect) {
+            container.innerHTML = '';
+            Object.keys(variants).forEach(colorKey => {
+                const swatch = document.createElement('button');
+                swatch.type = 'button';
+                swatch.className = `color-swatch w-11 h-11 rounded-full border-2 ${COLOR_STYLES[colorKey] || 'bg-gray-400'} transition-all`;
+                swatch.setAttribute('aria-label', colorKey);
+                swatch.setAttribute('aria-pressed', colorKey === selectedKey ? 'true' : 'false');
+                swatch.onclick = () => onSelect(swatch, colorKey);
+                container.appendChild(swatch);
+            });
+        }
+
         function selectColor(selectedSwatch, colorKey) {
-            document.querySelectorAll('.color-swatch').forEach(swatch => {
-                swatch.classList.remove('border-white', 'ring-2', 'ring-black', 'dark:ring-white');
-                swatch.classList.add('border-transparent');
+            document.querySelectorAll('#detail-colors .color-swatch').forEach(swatch => {
                 swatch.setAttribute('aria-pressed', 'false');
             });
-            selectedSwatch.classList.remove('border-transparent');
-            selectedSwatch.classList.add('border-white', 'ring-2', 'ring-black', 'dark:ring-white');
             selectedSwatch.setAttribute('aria-pressed', 'true');
             if (currentProduct.variants && currentProduct.variants[colorKey]) {
                 currentProduct.color = colorKey;
@@ -614,7 +647,7 @@
                             <button onclick="removeFromCart(${index})" aria-label="Remove ${item.title}" class="cart-remove text-xs text-gray-400 hover:text-black dark:hover:text-white">Remove</button>
                         </div>
                         <p class="mt-1 text-sm text-gray-500">$${item.price.toFixed(2)}</p>
-                        <div class="mt-3 flex items-center gap-2" aria-label="Choose ${item.title} color">${Object.keys(item.variants || {}).map(color => `<button type="button" onclick="updateCartColor(${index}, '${color}')" aria-label="${color}" class="h-5 w-5 rounded-full border-2 ${item.color === color ? 'border-black ring-1 ring-black dark:border-white dark:ring-white' : 'border-transparent'} ${color === 'black' ? 'bg-black' : color === 'white' ? 'bg-white' : 'bg-[#B9B6B0]'}"></button>`).join('')}</div>
+                        <div class="mt-3 flex items-center gap-2" aria-label="Choose ${item.title} color">${Object.keys(item.variants || {}).map(color => `<button type="button" onclick="updateCartColor(${index}, '${color}')" aria-label="${color}" aria-pressed="${item.color === color ? 'true' : 'false'}" class="h-8 w-8 rounded-full border-2 ${item.color === color ? 'border-black ring-1 ring-black dark:border-white dark:ring-white' : 'border-transparent'} ${COLOR_STYLES[color] || 'bg-gray-400'}"></button>`).join('')}</div>
                         <div class="cart-quantity-control mt-3 flex w-fit items-center gap-1 rounded-full border border-gray-200 px-1 py-1 text-sm dark:border-white/20">
                             <button type="button" onclick="updateCartQuantity(${index}, -1)" aria-label="Decrease quantity of ${item.title}">-</button>
                             <span>${item.quantity}</span>
@@ -646,7 +679,7 @@
             dismissCheckoutNudge();
             if (!cart.length) return;
             checkoutNudgeDelay = setTimeout(showCheckoutNudge, 12000);
-            checkoutNudgeTimer = setInterval(showCheckoutNudge, 30000);
+            checkoutNudgeTimer = setInterval(showCheckoutNudge, 45000);
         }
 
         function showCheckoutNudge() {
@@ -677,9 +710,22 @@
 
         function startExhibition() {
             clearInterval(exhibitionTimer);
+            if (!exhibitionAutoplay) return;
             exhibitionTimer = setInterval(() => {
                 if (!exhibitionPaused) moveExhibition(1);
-            }, 2400);
+            }, 4000);
+        }
+
+        function toggleExhibitionAutoplay() {
+            exhibitionAutoplay = !exhibitionAutoplay;
+            const btn = document.getElementById('exhibition-play');
+            btn.setAttribute('aria-pressed', exhibitionAutoplay ? 'true' : 'false');
+            btn.setAttribute('aria-label', exhibitionAutoplay ? 'Pause auto-scroll' : 'Play auto-scroll');
+            btn.innerHTML = exhibitionAutoplay
+                ? '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'
+                : '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            if (exhibitionAutoplay) startExhibition();
+            else clearInterval(exhibitionTimer);
         }
 
         const exhibitionRail = document.getElementById('exhibition-rail');
@@ -734,40 +780,52 @@
             document.getElementById('order-success').classList.remove('hidden');
         }
 
-        // --- Theme Toggle Logic ---
-        function toggleTheme() {
-            const html = document.documentElement;
+        // --- Theme Toggle Logic (persists choice) ---
+        function applyThemeIcon(isDark) {
             const icon = document.getElementById('theme-icon');
-            
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                // Switch to Moon Icon (Dark Mode request)
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
-            } else {
-                html.classList.add('dark');
-                // Switch to Sun Icon (Light Mode request)
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
-            }
+            icon.innerHTML = isDark
+                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>'
+                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
         }
 
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('urbanfiber-theme', isDark ? 'dark' : 'light');
+            applyThemeIcon(isDark);
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ededeb');
+        }
+
+        (function initTheme() {
+            const saved = localStorage.getItem('urbanfiber-theme');
+            const html = document.documentElement;
+            if (saved === 'light') html.classList.remove('dark');
+            else if (saved === 'dark') html.classList.add('dark');
+            applyThemeIcon(html.classList.contains('dark'));
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', html.classList.contains('dark') ? '#121212' : '#ededeb');
+        })();
+
         // --- Single Page Routing Logic ---
+        function syncMobileNav(viewId) {
+            document.querySelectorAll('.mobile-nav button[data-nav]').forEach(btn => {
+                if (btn.dataset.nav === viewId) btn.setAttribute('aria-current', 'page');
+                else btn.removeAttribute('aria-current');
+            });
+        }
+
         function navigate(viewId, updateHistory = true) {
             if (updateHistory) history.pushState({ viewId }, '', `#${viewId}`);
-            // Hide all views
+            const target = document.getElementById(`view-${viewId}`);
             document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.remove('active');
-                setTimeout(() => section.style.display = 'none', 400); // Wait for fade out
+                if (section !== target) {
+                    section.classList.remove('active');
+                }
             });
-
-            // Show requested view
-            setTimeout(() => {
-                const activeView = document.getElementById(`view-${viewId}`);
-                activeView.style.display = 'block';
-                // Trigger reflow
-                void activeView.offsetWidth; 
-                activeView.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'auto' });
-            }, 400);
+            target.style.display = 'block';
+            void target.offsetWidth;
+            target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'auto' });
+            syncMobileNav(viewId);
             return false;
         }
 
@@ -775,10 +833,10 @@
             const story = document.getElementById('story');
             history.pushState({ viewId: 'home' }, '', '#story');
             if (document.getElementById('view-home').classList.contains('active')) {
-                story.scrollIntoView({ behavior: 'auto', block: 'start' });
+                story.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
                 navigate('home', false);
-                setTimeout(() => story.scrollIntoView({ behavior: 'auto', block: 'start' }), 450);
+                setTimeout(() => story.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
             }
             return false;
         }
@@ -788,44 +846,39 @@
             navigate(viewId, false);
         });
 
-        function startIntroShowcase() {
-            if (window.location.hash && window.location.hash !== '#home') return;
-            const cancelShowcase = () => { introShowcaseCancelled = true; };
-            ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => window.addEventListener(eventName, cancelShowcase, { once: true, passive: true }));
-            setTimeout(() => {
-                if (introShowcaseCancelled || window.scrollY > 20) return;
-                const featuredDrops = document.getElementById('featured-drops');
-                featuredDrops.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                if (window.matchMedia('(max-width: 767px)').matches) {
-                    setTimeout(() => {
-                        if (introShowcaseCancelled) return;
-                        const track = document.getElementById('featured-track');
-                        track.scrollBy({ left: Math.min(track.clientWidth * 0.62, 220), behavior: 'smooth' });
-                    }, 850);
-                }
-            }, 1800);
-        }
-
         // --- Dynamic Product View ---
         function viewProduct(title, price, imgSrc, variants = {}) {
-            currentProduct = { title, price, imgSrc, variants, color: 'black' };
+            currentProduct = { title, price, imgSrc, variants, color: Object.keys(variants)[0] || 'black' };
             detailQuantity = 1;
+            selectedSize = null;
             document.getElementById('detail-title').innerText = title;
             document.getElementById('detail-price').innerText = `$${price.toFixed(2)}`;
             document.getElementById('detail-img').src = imgSrc;
+            document.getElementById('detail-img').alt = title;
             document.getElementById('detail-quantity').innerText = detailQuantity;
-            
+            buildColorSwatches(document.getElementById('detail-colors'), variants, currentProduct.color, selectColor);
+            document.querySelectorAll('#size-grid .size-btn').forEach(btn => {
+                btn.setAttribute('aria-pressed', 'false');
+            });
             navigate('product');
         }
 
-        let featuredIndex = 0;
+        // Size selection (real toggle, not focus)
+        document.getElementById('size-grid').addEventListener('click', event => {
+            const btn = event.target.closest('.size-btn');
+            if (!btn || btn.disabled) return;
+            document.querySelectorAll('#size-grid .size-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
+            btn.setAttribute('aria-pressed', 'true');
+            selectedSize = btn.dataset.size;
+        });
+
         const requestedView = window.location.hash.slice(1);
         const initialView = ['home', 'shop', 'product'].includes(requestedView) ? requestedView : 'home';
         history.replaceState({ viewId: initialView }, '', `#${initialView}`);
+        syncMobileNav(initialView);
         if (initialView !== 'home') navigate(initialView, false);
         renderCart();
         syncCheckoutNudge();
-        startIntroShowcase();
     </script>
 </body>
 </html>
