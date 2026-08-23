@@ -52,7 +52,27 @@
         .stacked-card > div:last-child { padding: clamp(2rem, 5vw, 4rem); }
         .stacked-card h3 { line-height: 1; letter-spacing: -0.02em; }
         .hero-section { margin-top: 4.5rem; height: calc(100vh - 4.5rem); }
-        .featured-track { perspective: 1000px; }
+        .featured-track {
+            display: flex !important;
+            flex-wrap: nowrap;
+            grid-template-columns: none !important;
+            gap: 2rem;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            padding-bottom: 1.5rem;
+            perspective: 1000px;
+        }
+
+        .featured-track .product-card {
+            flex: 0 0 clamp(17rem, 25vw, 21rem);
+            min-width: clamp(17rem, 25vw, 21rem);
+            scroll-snap-align: start;
+        }
+
+        .featured-track::-webkit-scrollbar { height: 5px; }
+        .featured-track::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, .55); }
         #featured-drops { scroll-margin-top: 5rem; }
         /* Create offset for the stack effect */
         .stacked-card:nth-child(1) { top: 12vh; z-index: 10; transform: scale(0.96); }
@@ -518,9 +538,16 @@
             #cart-items { padding-left: 1.25rem; padding-right: 1.25rem; }
             #cart-drawer > div:last-child { padding-left: 1.25rem; padding-right: 1.25rem; }
             .cart-item { gap: 0.75rem; }
-            .cart-item-layout { grid-template-columns: 4rem minmax(0, 1fr) auto; gap: .65rem; }
+            .cart-item-layout { grid-template-columns: 4rem minmax(0, 1fr) 2.25rem; gap: .5rem; }
             .cart-item img { height: 5rem; width: 4rem; }
-            .cart-item-options { gap: .35rem; font-size: .65rem; }
+            .cart-item-options { gap: .15rem; font-size: .52rem; letter-spacing: .06em; overflow: visible; }
+            .cart-item-options > span:first-child { flex: 0 0 auto; }
+            .cart-item-options > span:nth-child(3) { flex: 0 0 auto; }
+            .cart-item-options > span:nth-child(2) { gap: .15rem; }
+            .cart-item-options > span:nth-child(2) button { width: 1.6rem; height: 1.6rem; min-width: 1.6rem; min-height: 1.6rem; }
+            .cart-item-options .cart-quantity-control { gap: 0; padding: .05rem; }
+            .cart-item-options .cart-quantity-control button { width: 1.6rem; height: 1.6rem; min-width: 1.6rem; min-height: 1.6rem; }
+            .cart-item-options .cart-quantity-control span { min-width: 1rem; }
         }
     </style>
   <meta name="description" content="UrbanFiber — premium oversized silhouettes engineered for the modern city. Shop the core collection with Cash on Delivery across Bangladesh.">
@@ -572,7 +599,7 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-uf-dark dark:to-uf-dark"></div>
             </div>
             <div class="hero-content absolute z-10 bottom-[18%] left-1/2 -translate-x-1/2 text-center px-4">
-                <button onclick="navigate('shop')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
+                <button onclick="navigate('home')" class="depth-button bg-transparent text-white border border-white/70 px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/10 hover:border-white hover:scale-105 transition-all duration-300">
                     Shop the collection
                 </button>
             </div>
