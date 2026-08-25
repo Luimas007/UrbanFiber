@@ -6,6 +6,15 @@
     <meta name="theme-color" content="#121212">
     <title>UrbanFiber | Premium Oversized T-Shirts</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Safe to expose in the browser: this is the Supabase publishable key.
+        // NEVER replace it with a service-role/secret key.
+        window.__URBANFIBER_CONFIG__ = {
+            supabaseUrl: "https://trmbifurircmdgyfbcyd.supabase.co",
+            supabasePublishableKey: "sb_publishable_tJZewP60zmo8-YJDskLTJw_-NGHJnke"
+        };
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -652,34 +661,7 @@
             </div>
 
             <div id="featured-track" class="featured-track grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Stronger Tee', 55, 'Materials/stronger_black.jpeg', { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
-                        <img src="Materials/stronger_black.jpeg" alt="Stronger black T-shirt" loading="lazy" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Stronger Tee</h4><p class="text-gray-500 dark:text-gray-400">$55.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Stronger Tee', 55, 'Materials/stronger_black.jpeg', 1, { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
-                </div>
-                <!-- Product 2 -->
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Urban Tee', 60, 'Materials/urban_black.jpeg', { black: 'Materials/urban_black.jpeg', ash: 'Materials/urban_ash.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
-                        <img src="Materials/urban_black.jpeg" alt="Urban black T-shirt" loading="lazy" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Urban Tee</h4><p class="text-gray-500 dark:text-gray-400">$60.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Urban Tee', 60, 'Materials/urban_black.jpeg', 1, { black: 'Materials/urban_black.jpeg', ash: 'Materials/urban_ash.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
-                </div>
-                <!-- Product 3 -->
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Vibes Tee', 50, 'Materials/vibes_black.jpeg', { black: 'Materials/vibes_black.jpeg', white: 'Materials/vibes_white.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
-                        <img src="Materials/vibes_black.jpeg" alt="Vibes black T-shirt" loading="lazy" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Vibes Tee</h4><p class="text-gray-500 dark:text-gray-400">$50.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Vibes Tee', 50, 'Materials/vibes_black.jpeg', 1, { black: 'Materials/vibes_black.jpeg', white: 'Materials/vibes_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
-                </div>
-                <!-- Product 4 -->
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Time Tee', 65, 'Materials/time_black.jpeg', { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
-                        <img src="Materials/time_black.jpeg" alt="Time black T-shirt" loading="lazy" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex items-end justify-between gap-3"><div><h4 class="font-display font-medium text-lg">Time Tee</h4><p class="text-gray-500 dark:text-gray-400">$65.00</p></div><button type="button" onclick="event.stopPropagation(); addToCart('Time Tee', 65, 'Materials/time_black.jpeg', 1, { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })" class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button></div>
-                </div>
+                <div class="col-span-full py-16 text-center text-sm opacity-50" data-product-loading>Loading products…</div>
             </div>
             <div class="mt-10 flex justify-center md:hidden">
                 <button onclick="navigate('shop')" class="featured-collection-link button-primary bg-black px-6 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white dark:bg-white dark:text-black">
@@ -708,29 +690,9 @@
                 </select>
             </div>
 
-            <!-- Grid (Reusing products for demonstration) -->
+            <!-- Products are loaded from Supabase -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
-                <!-- Grid Items mapped by JS to reduce HTML bloat, but hardcoded here for clarity -->
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Stronger Tee', 55, 'Materials/stronger_black.jpeg', { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="Materials/stronger_black.jpeg" alt="Stronger black T-shirt" loading="lazy" class="w-full h-full object-cover"></div>
-                    <h4 class="font-display font-medium text-sm md:text-lg">Stronger Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$55.00</p>
-                </div>
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Urban Tee', 60, 'Materials/urban_black.jpeg', { black: 'Materials/urban_black.jpeg', ash: 'Materials/urban_ash.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="Materials/urban_black.jpeg" alt="Urban black T-shirt" loading="lazy" class="w-full h-full object-cover"></div>
-                    <h4 class="font-display font-medium text-sm md:text-lg">Urban Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$60.00</p>
-                </div>
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Vibes Tee', 50, 'Materials/vibes_black.jpeg', { black: 'Materials/vibes_black.jpeg', white: 'Materials/vibes_white.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="Materials/vibes_black.jpeg" alt="Vibes black T-shirt" loading="lazy" class="w-full h-full object-cover"></div>
-                    <h4 class="font-display font-medium text-sm md:text-lg">Vibes Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$50.00</p>
-                </div>
-                <div class="product-card cursor-pointer group" onclick="viewProduct('Time Tee', 65, 'Materials/time_black.jpeg', { black: 'Materials/time_black.jpeg', white: 'Materials/time_white.jpeg' })">
-                    <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4"><img src="Materials/time_black.jpeg" alt="Time black T-shirt" loading="lazy" class="w-full h-full object-cover"></div>
-                    <h4 class="font-display font-medium text-sm md:text-lg">Time Tee</h4>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base">$65.00</p>
-                </div>
+                <div class="col-span-full py-16 text-center text-sm opacity-50" data-shop-product-loading>Loading products…</div>
             </div>
         </div>
     </main>
@@ -747,14 +709,14 @@
                 <!-- Product Images -->
                 <div class="w-full md:w-1/2 flex flex-col gap-4">
                     <div class="bg-gray-100 dark:bg-neutral-900 rounded-2xl overflow-hidden aspect-[4/5]">
-                        <img id="detail-img" src="Materials/stronger_black.jpeg" alt="Stronger black T-shirt" class="w-full h-full object-cover cursor-zoom-in">
+                        <img id="detail-img" src="" alt="Product image" class="w-full h-full object-cover cursor-zoom-in">
                     </div>
                 </div>
 
                 <!-- Product Info -->
                 <div class="w-full md:w-1/2 flex flex-col justify-center">
                     <h1 id="detail-title" class="font-display text-4xl md:text-5xl font-bold uppercase tracking-wide mb-2">Product Name</h1>
-                    <p id="detail-price" class="text-2xl text-gray-600 dark:text-gray-300 mb-8">$0.00</p>
+                    <p id="detail-price" class="text-2xl text-gray-600 dark:text-gray-300 mb-8">৳0.00</p>
 
                     <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
                         Crafted from our signature heavy-weight cotton and Lycra blend. Designed with a severe drop shoulder, exaggerated body width, and cropped hem for the ultimate architectural streetwear silhouette.
@@ -800,7 +762,7 @@
         <div class="flex items-center gap-3">
             <div class="min-w-0 flex-1">
                 <p id="mobile-product-cta-title" class="truncate font-display text-sm font-semibold uppercase">Stronger Tee</p>
-                <p id="mobile-product-cta-price" class="text-sm text-gray-500">$55.00</p>
+                <p id="mobile-product-cta-price" class="text-sm text-gray-500">৳1,650.00</p>
             </div>
             <button type="button" onclick="addCurrentProduct()" class="button-primary shrink-0 bg-black px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white dark:bg-white dark:text-black">Add</button>
         </div>
@@ -821,7 +783,7 @@
         <div class="border-t border-gray-200 px-6 py-6 dark:border-white/10">
             <div class="mb-5 flex items-center justify-between text-lg">
                 <span class="text-gray-500">Subtotal</span>
-                <span id="cart-subtotal" class="font-display font-semibold">$0.00</span>
+                <span id="cart-subtotal" class="font-display font-semibold">৳0.00</span>
             </div>
             <button id="cart-checkout-button" onclick="openCheckout()" class="button-primary w-full bg-black py-4 text-sm font-medium uppercase tracking-[0.18em] text-white hover:opacity-80 dark:bg-white dark:text-black">Checkout</button>
                         <p class="mt-3 flex items-center justify-center gap-2 text-center text-[10px] uppercase tracking-[.14em] text-gray-400">
@@ -870,7 +832,7 @@
             </div>
             <div class="space-y-3 border-t border-gray-200 pt-5 dark:border-white/10">
                 <div class="flex items-center justify-between text-sm"><span class="text-gray-500">Delivery charge</span><strong id="checkout-delivery" class="font-medium">Select district</strong></div>
-                <div class="flex items-center justify-between"><span class="text-gray-500">Order total</span><strong id="checkout-total" class="font-display text-xl">$0.00</strong></div>
+                <div class="flex items-center justify-between"><span class="text-gray-500">Order total</span><strong id="checkout-total" class="font-display text-xl">৳0.00</strong></div>
             </div>
             <button type="submit" class="button-primary w-full bg-black py-4 text-sm font-medium uppercase tracking-[0.18em] text-white hover:opacity-80 dark:bg-white dark:text-black">Place COD Order</button>
         </form>
@@ -935,62 +897,28 @@
            server-side before creating an order.
         ============================================================ */
         const APP_CONFIG = {
-            currency: '$',
+            currency: '৳',
+            currencyCode: 'BDT',
             storageKey: 'urbanfiber-cart',
             themeKey: 'urbanfiber-theme',
             checkoutNudgeKey: 'urbanfiber-checkout-nudge-disabled',
             supabase: {
-                enabled: false,
-                url: '',
-                anonKey: ''
-            }
+                url: window.__URBANFIBER_CONFIG__?.supabaseUrl || '',
+                publishableKey: window.__URBANFIBER_CONFIG__?.supabasePublishableKey || ''
+            },
+            logo: 'Materials/uf.jpg'
         };
 
-        const PRODUCT_CATALOG = {
-            'Stronger Tee': {
-                id: 'stronger-tee',
-                category: 'Oversized',
-                price: 55,
-                image: 'Materials/stronger_black.jpeg',
-                variants: {
-                    black: 'Materials/stronger_black.jpeg',
-                    white: 'Materials/stronger_white.jpeg'
-                }
-            },
-            'Urban Tee': {
-                id: 'urban-tee',
-                category: 'Boxy Fit',
-                price: 60,
-                image: 'Materials/urban_black.jpeg',
-                variants: {
-                    black: 'Materials/urban_black.jpeg',
-                    ash: 'Materials/urban_ash.jpeg'
-                }
-            },
-            'Vibes Tee': {
-                id: 'vibes-tee',
-                category: 'Oversized',
-                price: 50,
-                image: 'Materials/vibes_black.jpeg',
-                variants: {
-                    black: 'Materials/vibes_black.jpeg',
-                    white: 'Materials/vibes_white.jpeg'
-                }
-            },
-            'Time Tee': {
-                id: 'time-tee',
-                category: 'Oversized',
-                price: 65,
-                image: 'Materials/time_black.jpeg',
-                variants: {
-                    black: 'Materials/time_black.jpeg',
-                    white: 'Materials/time_white.jpeg'
-                }
-            }
-        };
+        const SUPABASE_READY = Boolean(APP_CONFIG.supabase.url && APP_CONFIG.supabase.publishableKey && window.supabase?.createClient);
+        const supabaseClient = SUPABASE_READY ? window.supabase.createClient(APP_CONFIG.supabase.url, APP_CONFIG.supabase.publishableKey, {
+            auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true },
+            global: { headers: { 'x-urbanfiber-client': 'storefront' } }
+        }) : null;
 
-        const formatMoney = value =>
-            `${APP_CONFIG.currency}${Number(value || 0).toFixed(2)}`;
+        // Products are loaded exclusively from Supabase. There is intentionally no storefront fallback catalog.
+        const PRODUCT_CATALOG = {};
+
+        const formatMoney = value => new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', maximumFractionDigits: 2 }).format(Number(value || 0));
 
         const escapeHtml = value => String(value ?? '')
             .replaceAll('&', '&amp;')
@@ -1045,7 +973,7 @@
 
         let cart = JSON.parse(localStorage.getItem(APP_CONFIG.storageKey) || '[]');
 
-        let currentProduct = { productId: 'stronger-tee', title: 'Stronger Tee', price: 55, imgSrc: 'Materials/stronger_black.jpeg', variants: { black: 'Materials/stronger_black.jpeg', white: 'Materials/stronger_white.jpeg' }, color: 'black' };
+        let currentProduct = { productId: null, title: '', price: 0, imgSrc: '', variants: {}, sizes: ['S','M','L','XL'], color: 'black' };
         let detailQuantity = 1;
         let selectedSize = null;
         let checkoutNudgeTimer;
@@ -1361,17 +1289,11 @@
 
         async function placeOrder(event) {
             event.preventDefault();
-
             const form = event.currentTarget;
             const submitButton = form.querySelector('button[type="submit"]');
             const formData = new FormData(form);
-
-            if (!cart.length) {
-                showToast('Your cart is empty', 'warning');
-                closeCheckout();
-                return;
-            }
-
+            if (!cart.length) { showToast('Your cart is empty', 'warning'); closeCheckout(); return; }
+            if (!SUPABASE_READY) { showToast('Store backend is not configured yet.', 'warning'); return; }
             const orderDraft = {
                 customer: {
                     name: String(formData.get('name') || '').trim(),
@@ -1382,55 +1304,17 @@
                     address: String(formData.get('address') || '').trim()
                 },
                 payment_method: 'cod',
-                delivery_charge: getDeliveryCharge(String(formData.get('district') || '').trim()),
-                items: cart.map(item => ({
-                    product_id: item.productId,
-                    color: item.color,
-                    size: item.size,
-                    quantity: Number(item.quantity)
-                }))
+                items: cart.map(item => ({ product_id: item.productId, color: item.color, size: item.size, quantity: Math.max(1, Math.min(20, Number(item.quantity) || 1)) }))
             };
-
-            /*
-              Supabase-ready flow:
-              1. Send ONLY product IDs/variants/quantities + customer data.
-              2. Edge Function / RPC re-reads products and inventory.
-              3. Server calculates authoritative prices and total.
-              4. Server creates order + order_items atomically.
-              5. Inventory changes only after admin approval / successful delivery,
-                 according to your business rules.
-            */
-            if (!APP_CONFIG.supabase.enabled) {
-                showToast('Checkout is ready for backend connection.', 'warning');
-                console.info('Order payload ready for Supabase:', orderDraft);
-                return;
-            }
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting…';
-
+            submitButton.disabled = true; submitButton.textContent = 'Submitting…';
             try {
-                // Replace this section with a Supabase Edge Function call.
-                // Never insert client-supplied price/total directly into orders.
-                const response = await fetch('/api/orders', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderDraft)
-                });
-
-                if (!response.ok) throw new Error('Order submission failed');
-
-                cart = [];
-                saveCart();
-                form.classList.add('hidden');
-                document.getElementById('order-success').classList.remove('hidden');
-            } catch (error) {
-                console.error(error);
-                showToast('We could not place the order. Please try again.', 'warning');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Place COD Order';
-            }
+                const { data, error } = await supabaseClient.rpc('create_guest_order', { p_order: orderDraft });
+                if (error) throw error;
+                cart = []; saveCart(); form.classList.add('hidden'); document.getElementById('order-success').classList.remove('hidden');
+                const successText = document.querySelector('#order-success p');
+                if (successText) successText.textContent = `Order ${data.order_number} received. We will call to confirm your Cash on Delivery order.`;
+            } catch (error) { console.error('Order creation failed:', error); showToast('We could not place your order. Please try again.', 'warning'); }
+            finally { submitButton.disabled = false; submitButton.textContent = 'Place COD Order'; }
         }
 
         // --- Theme Toggle Logic (persists choice) ---
@@ -1677,7 +1561,7 @@
         }
 
         // --- Dynamic Product View ---
-        function viewProduct(title, price, imgSrc, variants = {}) {
+        function viewProduct(title, price, imgSrc, variants = {}, sizes = null) {
             const catalogProduct = getProductByName(title);
             currentProduct = {
                 productId: catalogProduct?.id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -1685,6 +1569,7 @@
                 price,
                 imgSrc,
                 variants,
+                sizes: sizes || catalogProduct?.sizes || ['S','M','L','XL'],
                 color: Object.keys(variants)[0] || 'black'
             };
             detailQuantity = 1;
@@ -1697,9 +1582,11 @@
             buildColorSwatches(document.getElementById('detail-colors'), variants, currentProduct.color, selectColor);
             document.getElementById('mobile-product-cta-title').textContent = title;
             document.getElementById('mobile-product-cta-price').textContent = formatMoney(price);
-            document.querySelectorAll('#size-grid .size-btn').forEach(btn => {
-                btn.setAttribute('aria-pressed', 'false');
-            });
+            const sizeGrid = document.getElementById('size-grid');
+            if (sizeGrid) {
+                const availableSizes = currentProduct.sizes || ['S','M','L','XL'];
+                sizeGrid.innerHTML = availableSizes.map(size => `<button type="button" class="size-btn rounded-full border px-4 py-2 text-xs uppercase tracking-widest" data-size="${escapeHtml(size)}" aria-pressed="false">${escapeHtml(size)}</button>`).join('');
+            }
             navigate('product');
         }
 
@@ -1720,6 +1607,97 @@
             else if (!document.getElementById('cart-drawer').classList.contains('translate-x-full')) closeCart();
         });
 
+        let adminState = { user: null, isAdmin: false };
+
+        function adminShell() {
+            if (document.getElementById('admin-panel')) return;
+            const el=document.createElement('div'); el.id='admin-panel'; el.className='fixed inset-0 z-[100] hidden bg-black/70 p-3 sm:p-6 backdrop-blur-sm';
+            el.innerHTML=`<div class="mx-auto h-full max-w-7xl overflow-hidden rounded-2xl bg-[#ededeb] text-black dark:bg-[#121212] dark:text-white shadow-2xl"><div class="flex items-center justify-between border-b border-black/10 dark:border-white/10 px-5 py-4"><div><p class="text-[10px] uppercase tracking-[.25em] opacity-50">UrbanFiber</p><h2 class="font-display text-xl font-bold uppercase">Admin Console</h2></div><div class="flex gap-2"><button id="admin-refresh" class="rounded-full border px-4 py-2 text-xs uppercase tracking-widest">Refresh</button><button id="admin-logout" class="rounded-full bg-black px-4 py-2 text-xs uppercase tracking-widest text-white dark:bg-white dark:text-black">Sign out</button><button id="admin-close" class="rounded-full border px-4 py-2 text-xs">Close</button></div></div><div id="admin-content" class="h-[calc(100%-73px)] overflow-y-auto p-5 sm:p-8"></div></div>`;
+            document.body.appendChild(el); el.querySelector('#admin-close').onclick=()=>el.classList.add('hidden'); el.querySelector('#admin-refresh').onclick=loadAdminDashboard; el.querySelector('#admin-logout').onclick=async()=>{await supabaseClient.auth.signOut();el.classList.add('hidden');};
+        }
+        function addAdminEntryPoint(){const actions=document.querySelector('#site-header .flex.items-center.gap-3');if(!actions||document.getElementById('admin-entry'))return;const b=document.createElement('button');b.id='admin-entry';b.className='button-secondary inline-flex rounded-full px-3 py-2 text-xs uppercase tracking-widest';b.textContent='Admin';b.onclick=handleAdminEntry;actions.appendChild(b);}
+        async function handleAdminEntry(){if(!SUPABASE_READY){showToast('Supabase is not configured.','warning');return;}const {data:{session}}=await supabaseClient.auth.getSession();if(session){await refreshAdminState(session.user);if(adminState.isAdmin){adminShell();document.getElementById('admin-panel').classList.remove('hidden');await loadAdminDashboard();return;}}showAdminLogin();}
+        function showAdminLogin(){adminShell();const panel=document.getElementById('admin-panel');panel.classList.remove('hidden');document.getElementById('admin-content').innerHTML=`<div class="mx-auto max-w-md py-10"><img src="${APP_CONFIG.logo}" class="mx-auto mb-6 h-16 w-16 rounded-full object-cover" alt="UrbanFiber"><h3 class="font-display text-3xl font-bold uppercase text-center">Admin Login</h3><p class="mt-2 mb-8 text-center text-sm opacity-60">Authorized staff only.</p><form id="admin-login-form" class="space-y-4"><input required type="email" autocomplete="username" name="email" placeholder="Admin email" class="w-full rounded-xl border bg-transparent px-4 py-3"><input required type="password" autocomplete="current-password" name="password" placeholder="Password" class="w-full rounded-xl border bg-transparent px-4 py-3"><button class="w-full rounded-xl bg-black px-4 py-4 text-xs font-semibold uppercase tracking-widest text-white dark:bg-white dark:text-black">Sign in</button><p id="admin-login-error" class="text-sm text-red-600"></p></form></div>`;document.getElementById('admin-login-form').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget);const {data,error}=await supabaseClient.auth.signInWithPassword({email:String(f.get('email')).trim(),password:String(f.get('password'))});if(error){document.getElementById('admin-login-error').textContent='Invalid credentials or account unavailable.';return;}await refreshAdminState(data.user);if(!adminState.isAdmin){await supabaseClient.auth.signOut();document.getElementById('admin-login-error').textContent='This account is not authorized as an admin.';return;}await loadAdminDashboard();};}
+        async function refreshAdminState(user){adminState={user,isAdmin:false};if(!user||!SUPABASE_READY)return;const {data,error}=await supabaseClient.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();adminState.isAdmin=!error&&!!data;}
+        async function loadAdminDashboard(){const content=document.getElementById('admin-content');content.innerHTML='<p class="opacity-60">Loading secure admin data…</p>';await refreshAdminState(adminState.user||(await supabaseClient.auth.getUser()).data.user);if(!adminState.isAdmin){content.innerHTML='<p class="text-red-600">Unauthorized.</p>';return;}const [{data:products,error:pErr},{data:orders,error:oErr}]=await Promise.all([supabaseClient.from('products').select('*').order('created_at',{ascending:false}),supabaseClient.from('orders').select('*, order_items(*)').order('created_at',{ascending:false})]);if(pErr||oErr){content.innerHTML='<p class="text-red-600">Could not load admin data.</p>';return;}content.innerHTML=`<div class="grid gap-8 lg:grid-cols-[1fr_1.3fr]"><section><div class="mb-4 flex items-center justify-between"><h3 class="font-display text-2xl font-bold uppercase">Products</h3><button id="new-product" class="rounded-full bg-black px-4 py-2 text-xs uppercase tracking-widest text-white dark:bg-white dark:text-black">Add</button></div><div id="product-admin-list" class="space-y-3"></div></section><section><h3 class="mb-4 font-display text-2xl font-bold uppercase">Orders</h3><div id="order-admin-list" class="space-y-3"></div></section></div>`;document.getElementById('product-admin-list').innerHTML=(products||[]).map(p=>`<div class="rounded-xl border border-black/10 p-4 dark:border-white/10"><div class="flex justify-between gap-3"><strong>${escapeHtml(p.name)}</strong><span>${formatMoney(p.price_bdt)}</span></div><p class="mt-1 text-xs opacity-60">${escapeHtml(p.category||'')} · ${escapeHtml(p.slug)} · ${p.active?'Published':'Hidden'}${p.is_featured?' · Featured':''}</p><button class="mt-3 rounded-full border px-3 py-2 text-[10px] uppercase tracking-widest" onclick='editProduct(${JSON.stringify(p)})'>Edit</button></div>`).join('')||'<p class="opacity-50">No products.</p>';document.getElementById('order-admin-list').innerHTML=(orders||[]).map(o=>`<div class="rounded-xl border border-black/10 p-4 dark:border-white/10"><div class="flex justify-between gap-3"><div><strong>${escapeHtml(o.order_number)}</strong><p class="text-xs opacity-60">${escapeHtml(o.customer_name)} · ${escapeHtml(o.phone)}</p></div><strong>${formatMoney(o.total_bdt)}</strong></div><p class="mt-2 text-xs opacity-60">${escapeHtml(o.district)} · ${escapeHtml(o.address)}</p><div class="mt-3 flex gap-2"><select class="rounded-full border px-3 py-2 text-xs" onchange="updateOrderStatus('${o.id}',this.value)">${['pending','accepted','completed','cancelled'].map(st=>`<option ${o.status===st?'selected':''}>${st}</option>`).join('')}</select><button class="rounded-full border px-3 py-2 text-xs uppercase tracking-widest" onclick="printReceipt('${o.id}')">Receipt</button></div></div>`).join('')||'<p class="opacity-50">No orders.</p>';document.getElementById('new-product').onclick=()=>editProduct(null);}
+        window.editProduct=async function(p){const content=document.getElementById('admin-content');const x=p||{name:'',slug:'',category:'Oversized',price_bdt:0,image_url:'',variants:{},sizes:['S','M','L','XL']};content.innerHTML=`<div class="mx-auto max-w-xl"><button class="mb-6 rounded-full border px-4 py-2 text-xs" onclick="loadAdminDashboard()">← Back</button><h3 class="font-display text-2xl font-bold uppercase mb-6">${p?'Edit':'Add'} Product</h3><form id="product-form" class="space-y-4"><input name="name" required placeholder="Name" value="${escapeHtml(x.name)}" class="w-full rounded-xl border bg-transparent px-4 py-3"><input name="slug" required placeholder="Slug" value="${escapeHtml(x.slug)}" class="w-full rounded-xl border bg-transparent px-4 py-3"><input name="category" placeholder="Category" value="${escapeHtml(x.category||'')}" class="w-full rounded-xl border bg-transparent px-4 py-3"><input name="price_bdt" required type="number" min="0" step="0.01" value="${Number(x.price_bdt||0)}" class="w-full rounded-xl border bg-transparent px-4 py-3"><div><label class="mb-2 block text-xs uppercase tracking-widest opacity-60">Main Product Image</label><input name="image_file" type="file" accept="image/*" class="w-full rounded-xl border bg-transparent px-4 py-3"><input name="image_url" placeholder="Image URL (optional)" value="${escapeHtml(x.image_url||'')}" class="mt-2 w-full rounded-xl border bg-transparent px-4 py-3"><p class="mt-2 text-[11px] opacity-50">Upload an image or provide a public image URL. Uploaded images are stored in Supabase Storage.</p></div><textarea name="variants" rows="5" class="w-full rounded-xl border bg-transparent px-4 py-3">${escapeHtml(JSON.stringify(x.variants||{},null,2))}</textarea><textarea name="sizes" rows="2" class="w-full rounded-xl border bg-transparent px-4 py-3">${escapeHtml(JSON.stringify(x.sizes||['S','M','L','XL']))}</textarea><div class="grid grid-cols-2 gap-3"><label class="flex items-center gap-2 rounded-xl border px-4 py-3 text-xs"><input name="active" type="checkbox" ${x.active!==false?'checked':''}> Published</label><label class="flex items-center gap-2 rounded-xl border px-4 py-3 text-xs"><input name="is_featured" type="checkbox" ${x.is_featured?'checked':''}> Featured</label></div><button class="w-full rounded-xl bg-black py-4 text-xs uppercase tracking-widest text-white dark:bg-white dark:text-black">Save product</button></form></div>`;document.getElementById('product-form').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget);let variants,sizes;try{variants=JSON.parse(f.get('variants'));sizes=JSON.parse(f.get('sizes'));}catch{showToast('Invalid variants/sizes JSON.','warning');return;}let imageUrl=String(f.get('image_url')).trim(); const imageFile=f.get('image_file'); if(imageFile && imageFile.size){ if(imageFile.size>5*1024*1024){showToast('Image must be 5MB or smaller.','warning');return;} if(!String(imageFile.type).startsWith('image/')){showToast('Only image files are allowed.','warning');return;} const safeName=String(imageFile.name).toLowerCase().replace(/[^a-z0-9._-]+/g,'-'); const path=`${crypto.randomUUID()}-${safeName}`; const up=await supabaseClient.storage.from('product-images').upload(path,imageFile,{contentType:imageFile.type,upsert:false}); if(up.error){showToast(`Image upload failed: ${up.error.message}`,'warning');return;} imageUrl=supabaseClient.storage.from('product-images').getPublicUrl(path).data.publicUrl; } if(!imageUrl){showToast('A product image is required.','warning');return;} if(!variants || typeof variants!=='object' || Array.isArray(variants)) { showToast('Variants must be a JSON object.','warning'); return; } if(Object.keys(variants).length===0) variants={black:imageUrl}; const row={name:String(f.get('name')).trim(),slug:String(f.get('slug')).trim().toLowerCase(),category:String(f.get('category')).trim()||'Oversized',price_bdt:Number(f.get('price_bdt')),image_url:imageUrl,variants,sizes,active:f.get('active')==='on',is_featured:f.get('is_featured')==='on'}; if(!row.name||!row.slug||!Number.isFinite(row.price_bdt)||row.price_bdt<0){showToast('Please provide valid product information.','warning');return;} const q=p?supabaseClient.from('products').update(row).eq('id',p.id):supabaseClient.from('products').insert(row);const {error}=await q;if(error){showToast(`Product save failed: ${error.message}`,'warning');return;} showToast('Product published successfully.'); await loadAdminDashboard(); await loadStoreProducts();};};
+        window.updateOrderStatus=async function(id,status){const {error}=await supabaseClient.rpc('admin_set_order_status',{p_order_id:id,p_status:status});if(error){showToast('Status update failed.','warning');return;}loadAdminDashboard();};
+        window.printReceipt=async function(id){const {data:o,error}=await supabaseClient.from('orders').select('*,order_items(*)').eq('id',id).single();if(error)return;const items=(o.order_items||[]).map(i=>`<tr><td>${escapeHtml(i.product_name)}<br><small>${escapeHtml(i.color||'')} / ${escapeHtml(i.size||'')}</small></td><td>${i.quantity}</td><td>${formatMoney(i.unit_price_bdt)}</td><td>${formatMoney(i.line_total_bdt)}</td></tr>`).join('');const w=window.open('','_blank','noopener,noreferrer');if(!w)return;w.document.write(`<html><head><title>Receipt ${escapeHtml(o.order_number)}</title><style>body{font-family:Arial,sans-serif;max-width:760px;margin:30px auto;padding:20px}img{width:64px;height:64px;border-radius:50%}table{width:100%;border-collapse:collapse;margin-top:24px}td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}td:nth-child(n+2),th:nth-child(n+2){text-align:right}</style></head><body><img src="${APP_CONFIG.logo}"><h1>URBANFIBER</h1><p>Receipt: ${escapeHtml(o.order_number)}</p><p>${escapeHtml(o.customer_name)} · ${escapeHtml(o.phone)}<br>${escapeHtml(o.address)}, ${escapeHtml(o.district)}</p><table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${items}</tbody></table><h2 style="text-align:right">Total: ${formatMoney(o.total_bdt)}</h2><p>Payment: Cash on Delivery · Status: ${escapeHtml(o.status)}</p><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();};
+        function productImageUrl(path) {
+            const value = String(path || '').trim();
+            if (!value) return '';
+            if (/^https?:\/\//i.test(value) || value.startsWith('data:') || value.startsWith('blob:')) return value;
+            return value;
+        }
+
+        function renderProductCard(p, compact = false) {
+            const productJson = JSON.stringify({
+                id: p.id,
+                name: p.name,
+                price: Number(p.price_bdt),
+                image: productImageUrl(p.image_url),
+                variants: p.variants || {},
+                sizes: p.sizes || ['S','M','L','XL']
+            }).replaceAll("'", '&#039;');
+            return `<article class="product-card cursor-pointer group" data-product-id="${escapeHtml(p.id)}" onclick='viewProduct(${JSON.stringify(p.name)},${Number(p.price_bdt)},${JSON.stringify(productImageUrl(p.image_url))},${JSON.stringify(p.variants||{})},${JSON.stringify(p.sizes||['S','M','L','XL'])})'>
+                <div class="product-img-wrapper overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
+                    <img src="${escapeHtml(productImageUrl(p.image_url))}" alt="${escapeHtml(p.name)}" loading="lazy" class="w-full h-full object-cover" onerror="this.closest('article').classList.add('image-error');this.style.display='none'">
+                </div>
+                <div class="flex items-end justify-between gap-3">
+                    <div><h4 class="font-display font-medium ${compact?'text-sm md:text-lg':'text-lg'}">${escapeHtml(p.name)}</h4><p class="text-gray-500 dark:text-gray-400">${formatMoney(p.price_bdt)}</p></div>
+                    <button type="button" onclick='event.stopPropagation();addToCart(${JSON.stringify(p.name)},${Number(p.price_bdt)},${JSON.stringify(productImageUrl(p.image_url))},1,${JSON.stringify(p.variants||{})})' class="button-secondary shrink-0 text-xs font-medium uppercase tracking-widest">Quick Add</button>
+                </div>
+            </article>`;
+        }
+
+        function renderProductLoadError(message) {
+            const featured = document.getElementById('featured-track');
+            const shop = document.querySelector('#view-shop .grid.grid-cols-2');
+            const html = `<div class="col-span-full rounded-2xl border border-red-500/30 bg-red-500/5 p-8 text-center"><p class="font-display text-lg font-semibold uppercase">Products could not be loaded</p><p class="mt-2 text-sm opacity-60">${escapeHtml(message)}</p><button type="button" onclick="loadStoreProducts()" class="mt-5 rounded-full border px-5 py-3 text-xs uppercase tracking-widest">Retry</button></div>`;
+            if (featured) featured.innerHTML = html;
+            if (shop) shop.innerHTML = html;
+        }
+
+        async function loadStoreProducts() {
+            if (!SUPABASE_READY) {
+                renderProductLoadError('Supabase is not configured.');
+                return false;
+            }
+            const featured = document.getElementById('featured-track');
+            const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
+            if (featured) featured.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
+            if (shopGrid) shopGrid.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
+            const { data, error } = await supabaseClient.from('products').select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active').eq('active',true).order('created_at',{ascending:false});
+            if (error) {
+                console.error('Supabase product load failed:', error);
+                renderProductLoadError(error.message || 'Database request failed.');
+                return false;
+            }
+            Object.keys(PRODUCT_CATALOG).forEach(k => delete PRODUCT_CATALOG[k]);
+            (data || []).forEach(p => {
+                PRODUCT_CATALOG[p.name] = { id:p.id, category:p.category, price:Number(p.price_bdt), image:productImageUrl(p.image_url), variants:p.variants||{}, sizes:p.sizes||['S','M','L','XL'] };
+            });
+            if (!data?.length) {
+                const empty='<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
+                if(featured) featured.innerHTML=empty;
+                if(shopGrid) shopGrid.innerHTML=empty;
+                return true;
+            }
+            const featuredData = data.filter(p => p.is_featured).slice(0,4);
+            if (featured) featured.innerHTML = (featuredData.length ? featuredData : data.slice(0,4)).map(p=>renderProductCard(p)).join('');
+            if (shopGrid) shopGrid.innerHTML = data.map(p=>renderProductCard(p,true)).join('');
+            return true;
+        }
+
+        async function initializeSupabase(){
+            if(!SUPABASE_READY){ renderProductLoadError('Supabase configuration is missing.'); return; }
+            addAdminEntryPoint();
+            const {data:{session}}=await supabaseClient.auth.getSession();
+            if(session) await refreshAdminState(session.user);
+            supabaseClient.auth.onAuthStateChange((_event,session)=>{ if(session) refreshAdminState(session.user); else adminState={user:null,isAdmin:false}; });
+            await loadStoreProducts();
+        }
+
         const requestedView = window.location.hash.slice(1);
         const initialView = ['home', 'shop', 'product'].includes(requestedView) ? requestedView : 'home';
         history.replaceState({ viewId: initialView }, '', `#${initialView}`);
@@ -1727,6 +1705,7 @@
         if (initialView !== 'home') navigate(initialView, false);
         renderCart();
         syncCheckoutNudge();
+        initializeSupabase().catch(console.error);
         initializeVariantPreviews();
         startFeaturedTour();
     </script>
