@@ -166,7 +166,9 @@
             #checkout-modal { max-height: calc(100svh - 1rem); }
             #checkout-modal input, #checkout-modal select, #checkout-modal textarea { min-height: 3.25rem; }
             #checkout-modal textarea { min-height: 6rem; }
+        @media (min-width: 768px) {
         }
+
 
         /* ============================================================
            Premium interaction layer
@@ -461,7 +463,7 @@
             .featured-track::-webkit-scrollbar { display: none; }
             .featured-track .product-card { flex: 0 0 min(82vw, 22rem); min-width: min(82vw, 22rem); scroll-snap-align: center; scroll-snap-stop: always; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
             .featured-track .product-card:active { transform: scale(0.98); }
-            .featured-track .product-card > [data-product-open] { position: relative; z-index: 2; touch-action: manipulation; }
+            .featured-track .product-card button { position: relative; z-index: 2; min-height: 2.75rem; padding: 0.65rem 0.25rem; touch-action: manipulation; }
             .featured-collection-link { width: 100%; margin-top: 1.5rem; min-height: 3.25rem; }
             .exhibition-stage { margin-left: 1rem; margin-right: 1rem; padding: 3rem 1rem; }
             .exhibition-stage h2 { font-size: 2.25rem; line-height: 1; }
@@ -491,16 +493,14 @@
             #view-home > section:nth-child(2) { padding-top: 2rem; }
             #view-home > section:nth-child(2) > div:first-child { margin-bottom: 2rem; }
             #view-home > section:nth-child(2) > div:first-child p { font-size: 0.9rem; line-height: 1.5; }
-        }
 
         /* Storefront reliability + mobile polish */
         img { max-width: 100%; }
         .product-image-placeholder { position: relative; overflow: hidden; }
         .product-image-placeholder::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.08) 45%, transparent 70%); transform: translateX(-120%); animation: uf-shimmer 1.4s ease-in-out infinite; }
         .product-image-placeholder.is-loaded::after { display:none; }
-        .product-color-picker { display:flex; flex-wrap:wrap; align-items:center; gap:.55rem; width:100%; min-width:0; overflow:visible; padding:.18rem .18rem .22rem; }
-        .product-color-dot { display:block; flex:0 0 1.7rem; width:1.7rem; height:1.7rem; min-width:1.7rem; min-height:1.7rem; padding:0; border-radius:9999px; border:2px solid transparent; box-shadow:0 0 0 1px rgba(128,128,128,.22); transition:transform .2s ease, box-shadow .2s ease; }
-        .product-color-dot:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
+        .product-color-picker { display:flex; flex-wrap:wrap; gap:.4rem; }
+        .product-color-dot { width:1.45rem; height:1.45rem; border-radius:9999px; border:2px solid transparent; box-shadow:0 0 0 1px rgba(128,128,128,.22); transition:transform .2s ease, box-shadow .2s ease; }
         .product-color-dot[aria-pressed="true"] { box-shadow:0 0 0 2px var(--uf-surface), 0 0 0 4px currentColor; transform:scale(1.05); }
         @keyframes uf-shimmer { to { transform: translateX(120%); } }
         @media (max-width: 767px) {
@@ -543,13 +543,7 @@
         .button-primary:active,.button-secondary:active,.button-icon:active{transform:scale(.98)}
         .button-secondary:hover{background:rgba(128,128,128,.07);border-color:currentColor;transform:translateY(-1px)}
         .button-primary:disabled,.button-secondary:disabled{opacity:.45;pointer-events:none}
-        .product-card{border-radius:1.35rem;padding:.35rem;transition:transform .3s var(--uf-ease),filter .3s ease;min-width:0;overflow:visible}
-        .product-card-info{min-width:0;display:flex;flex-direction:column;gap:.65rem;padding:.15rem .15rem 0}
-        .product-card-meta{min-width:0;display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
-        .product-card-copy{min-width:0;flex:1}
-        .product-card-actions{display:flex;align-items:center;gap:.55rem;min-width:0}
-        .product-card-actions .button-secondary{flex:0 0 auto}
-        .product-card-colors{width:100%;min-width:0;display:flex;align-items:center;gap:.5rem;overflow:visible}
+        .product-card{border-radius:1.35rem;padding:.35rem;transition:transform .3s var(--uf-ease),filter .3s ease}
         .product-card:hover{transform:translateY(-5px);filter:drop-shadow(0 18px 24px rgba(0,0,0,.10))}
         .product-card .product-img-wrapper{border-radius:1.1rem!important;box-shadow:none;background:#f0efeb}
         .dark .product-card .product-img-wrapper{background:#1a1a1a}
@@ -572,13 +566,9 @@
             .button-primary,.button-secondary{min-height:3.2rem;padding:.85rem 1rem}
             .button-icon{min-width:3rem;min-height:3rem}
             #view-shop .grid{gap:1rem}
-            #view-shop .product-card{padding:0;overflow:visible}
-            #view-shop .product-card-info{padding-top:.35rem;gap:.6rem}
-            #view-shop .product-card-meta{display:block}
-            #view-shop .product-card-actions{width:100%;display:flex;justify-content:space-between;align-items:center}
-            #view-shop .product-card-actions .button-secondary{flex:1;min-width:0;padding:.7rem .65rem;font-size:9px}
-            #view-shop .product-color-picker{gap:.5rem;padding-left:.1rem}
-            #view-shop .product-color-dot{flex-basis:1.55rem;width:1.55rem;height:1.55rem;min-width:1.55rem;min-height:1.55rem}
+            #view-shop .product-card{padding:0}
+            #view-shop .product-card .flex.items-start{align-items:flex-start}
+            #view-shop .product-card .button-secondary{min-width:5.8rem;padding:.7rem .75rem;font-size:9px}
             #view-product .product-actions{gap:.65rem}
             #view-product .product-actions>div{border-radius:999px!important}
             #view-product .product-actions>button{border-radius:999px!important}
@@ -595,10 +585,6 @@
         @media(prefers-reduced-motion:reduce){
             .button-primary,.button-secondary,.button-icon,.product-card,.product-color-dot,#detail-img{transition:none!important}
         }
-        .product-card .product-image-placeholder{contain:paint;overflow:hidden}
-        .product-card .product-image-placeholder img{display:block;width:100%;height:100%;object-fit:cover}
-        .storefront-refreshing{opacity:.72;transition:opacity .2s ease}
-        @media(max-width:767px){.product-card .product-img-wrapper{aspect-ratio:4/5}.product-card h4{line-height:1.15}.product-card .text-gray-500{font-size:.88rem}}
 
     </style>
   <meta name="description" content="UrbanFiber — premium oversized silhouettes engineered for the modern city. Shop the core collection with Cash on Delivery across Bangladesh.">
@@ -1980,114 +1966,44 @@
                 <button type="button"
                     class="product-color-dot"
                     style="background:${escapeHtml(variantHex(color))}"
-                    data-product-color="${escapeHtml(color)}"
-                    aria-label="${escapeHtml(color.replaceAll('-', ' '))}"
+                    data-color="${escapeHtml(color)}"
+                    aria-label="${escapeHtml(color.replaceAll('-',' '))}"
                     aria-pressed="${color === firstColor ? 'true' : 'false'}"
-                    title="${escapeHtml(color.replaceAll('-', ' '))}">
+                    onclick="event.stopPropagation();selectCardColor(this,'${escapeHtml(p.id)}','${escapeHtml(color)}')">
                 </button>`).join('') : '';
 
             return `<article class="product-card group" data-product-id="${escapeHtml(p.id)}">
-                <button type="button" class="block w-full text-left" data-product-open="true" aria-label="View ${escapeHtml(p.name)}">
+                <button type="button" class="block w-full text-left" onclick="viewProduct('${escapeHtml(p.id)}')">
                     <div class="product-img-wrapper product-image-placeholder overflow-hidden bg-gray-100 dark:bg-neutral-900 aspect-[4/5] rounded-xl mb-4">
-                        <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async" class="w-full h-full object-cover" onload="markImageLoaded(this)" onerror="this.closest('.product-image-placeholder')?.classList.add('is-loaded');this.style.opacity='.35'">
+                        <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async" class="w-full h-full object-cover" onload="markImageLoaded(this)" onerror="this.closest('.product-image-placeholder')?.classList.add('is-loaded');this.style.display='none'">
                     </div>
                 </button>
-                <div class="product-card-info">
-                    <div class="product-card-meta">
-                        <div class="product-card-copy">
-                            <h4 class="font-display font-medium ${compact?'text-sm md:text-lg':'text-lg'} truncate">${escapeHtml(p.name)}</h4>
-                            <p class="text-gray-500 dark:text-gray-400">${formatMoney(p.price_bdt)}</p>
-                        </div>
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <h4 class="font-display font-medium ${compact?'text-sm md:text-lg':'text-lg'}">${escapeHtml(p.name)}</h4>
+                        <p class="text-gray-500 dark:text-gray-400">${formatMoney(p.price_bdt)}</p>
+                        ${colors.length ? `<div class="product-color-picker mt-3" aria-label="Choose color">${colorButtons}</div>` : ''}
                     </div>
-                    ${colors.length ? `<div class="product-card-colors">
-                        <span class="sr-only">Choose color</span>
-                        <div class="product-color-picker" role="group" aria-label="Choose ${escapeHtml(p.name)} color">${colorButtons}</div>
-                    </div>` : ''}
-                    <div class="product-card-actions">
-                        <span class="text-[9px] uppercase tracking-[.16em] text-gray-400">${colors.length ? `${colors.length} ${colors.length === 1 ? 'color' : 'colors'}` : 'Standard'}</span>
-                        <button type="button" data-quick-add="true" class="button-secondary shrink-0 text-[10px] font-medium uppercase tracking-widest">Quick Add</button>
-                    </div>
+                    <button type="button" onclick="openQuickAddById('${escapeHtml(p.id)}')" class="button-secondary shrink-0 text-[10px] font-medium uppercase tracking-widest">Quick Add</button>
                 </div>
             </article>`;
         }
 
-        // Stable delegated interaction: product cards are re-rendered from Supabase/cache,
-        // so handlers must live outside the generated card markup.
-        function handleProductGridInteraction(event) {
-            const colorButton = event.target.closest?.('[data-product-color]');
-            if (colorButton) {
-                event.preventDefault();
-                event.stopPropagation();
-                const card = colorButton.closest('.product-card');
-                const productId = card?.dataset.productId;
-                const colorKey = colorButton.dataset.productColor;
-                if (productId && colorKey) window.selectCardColor(colorButton, productId, colorKey);
-                return;
-            }
-            const quickButton = event.target.closest?.('[data-quick-add]');
-            if (quickButton) {
-                event.preventDefault();
-                event.stopPropagation();
-                const product = productById(quickButton.closest('.product-card')?.dataset.productId);
-                if (product) window.openQuickAdd(product);
-                return;
-            }
-            const openButton = event.target.closest?.('[data-product-open]');
-            if (openButton) {
-                event.preventDefault();
-                const product = productById(openButton.closest('.product-card')?.dataset.productId);
-                if (product) viewProduct(product);
-            }
-        }
-
-        // Bind exactly once to document. This remains alive even when product grids are replaced.
-        if (!document.documentElement.dataset.urbanfiberProductInteractions) {
-            document.addEventListener('click', handleProductGridInteraction, false);
-            document.documentElement.dataset.urbanfiberProductInteractions = 'true';
-        }
-
         window.selectCardColor = function(button, productId, colorKey) {
-            const card = button?.closest('.product-card');
+            const card = button.closest('.product-card');
             const product = productById(productId);
             if (!card || !product) return;
-            const variants = safeVariantMap(product.variants);
-            const url = variantImage(variants, colorKey, product.image_url);
-            if (!url) {
-                showToast('This color image is unavailable.', 'warning');
-                return;
-            }
             card.querySelectorAll('.product-color-dot').forEach(b => b.setAttribute('aria-pressed','false'));
             button.setAttribute('aria-pressed','true');
             const img = card.querySelector('.product-img-wrapper img');
-            if (!img) return;
-            img.style.opacity = '.55';
-            const reveal = () => { img.style.opacity = '1'; markImageLoaded(img); };
-            img.onload = reveal;
-            img.onerror = () => { img.style.opacity = '1'; };
-            img.src = url;
-
-            // Persistence is best-effort; storage must never be allowed to break a UI click.
-            try {
-                const raw = localStorage.getItem('urbanfiber-color-selections');
-                const selections = raw ? (JSON.parse(raw) || {}) : {};
-                selections[String(productId)] = colorKey;
-                localStorage.setItem('urbanfiber-color-selections', JSON.stringify(selections));
-            } catch (_) {}
+            const url = variantImage(product.variants, colorKey, product.image_url);
+            if (img && url) {
+                img.style.opacity = '.35';
+                img.onload = () => { img.style.opacity = '1'; markImageLoaded(img); };
+                img.onerror = () => { img.style.opacity = '1'; };
+                img.src = url;
+            }
         };
-
-        function restoreCardColorSelections(root) {
-            if (!root) return;
-            let selections = {};
-            try { selections = JSON.parse(localStorage.getItem('urbanfiber-color-selections') || '{}') || {}; } catch (_) { return; }
-            root.querySelectorAll('.product-card[data-product-id]').forEach(card => {
-                const productId = card.dataset.productId;
-                const color = selections[String(productId)];
-                if (!color) return;
-                const button = [...card.querySelectorAll('[data-product-color]')].find(b => b.dataset.productColor === color);
-                const product = productById(productId);
-                if (button && product) window.selectCardColor(button, productId, color);
-            });
-        }
 
         function renderProductLoadError(message) {
             const featured = document.getElementById('featured-track');
@@ -2097,146 +2013,83 @@
             if (shop) shop.innerHTML = html;
         }
 
-        const PRODUCT_CACHE_KEY = 'urbanfiber-product-cache-v3';
-        const PRODUCT_CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
-        let productLoadPromise = null;
-
-        function cacheProducts(products) {
-            try {
-                const safe = Array.isArray(products) ? products : [];
-                localStorage.setItem(PRODUCT_CACHE_KEY, JSON.stringify({version:3, savedAt:Date.now(), products:safe}));
-            } catch (error) {
-                console.warn('Product cache write skipped:', error);
+        async function loadStoreProducts() {
+            if (!SUPABASE_READY) {
+                renderProductLoadError('Supabase is not configured.');
+                return false;
             }
-        }
+            const featured = document.getElementById('featured-track');
+            const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
+            if (featured) featured.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
+            if (shopGrid) shopGrid.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
 
-        function readCachedProducts() {
-            try {
-                const raw = localStorage.getItem(PRODUCT_CACHE_KEY);
-                if (!raw) return null;
-                const cached = JSON.parse(raw);
-                if (!cached || !Array.isArray(cached.products)) return null;
-                const products = cached.products.filter(isUsableStoreProduct);
-                if (!products.length) return null;
-                return {products, fresh: Date.now() - Number(cached.savedAt || 0) < PRODUCT_CACHE_MAX_AGE};
-            } catch (error) {
-                try { localStorage.removeItem(PRODUCT_CACHE_KEY); } catch (_) {}
-                return null;
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active,created_at')
+                .eq('active', true)
+                .order('created_at', { ascending:false });
+
+            if (error) {
+                console.error('Supabase product load failed:', error);
+                renderProductLoadError(error.message || 'Database request failed.');
+                return false;
             }
-        }
 
-        function isUsableStoreProduct(p) {
-            return Boolean(p && p.id && p.name && p.slug && p.active !== false && Number.isFinite(Number(p.price_bdt)));
-        }
-
-        function setStoreProducts(data) {
-            const products = (Array.isArray(data) ? data : []).filter(isUsableStoreProduct);
-            window.__URBANFIBER_PRODUCTS__ = products;
+            window.__URBANFIBER_PRODUCTS__ = data || [];
             Object.keys(PRODUCT_CATALOG).forEach(k => delete PRODUCT_CATALOG[k]);
-            products.forEach(p => {
+            window.__URBANFIBER_PRODUCTS__.forEach(p => {
                 PRODUCT_CATALOG[p.name] = {
-                    id:String(p.id), title:p.name, category:p.category, price:Number(p.price_bdt),
+                    id:p.id, title:p.name, category:p.category, price:Number(p.price_bdt),
                     image:productImageUrl(p.image_url), variants:safeVariantMap(p.variants),
                     sizes:Array.isArray(p.sizes) && p.sizes.length ? p.sizes : ['S','M','L','XL']
                 };
             });
+
             normalizeCart();
-        }
 
-        function renderStoreProducts(data, {instant=false} = {}) {
-            const featured = document.getElementById('featured-track');
-            const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
-            const products = Array.isArray(data) ? data.filter(isUsableStoreProduct) : [];
-            const safeRender = p => {
-                try { return renderProductCard(p); }
-                catch (e) { console.error('Product card render failed:', p, e); return ''; }
-            };
-            const safeCompactRender = p => {
-                try { return renderProductCard(p,true); }
-                catch (e) { console.error('Product card render failed:', p, e); return ''; }
-            };
-            if (featured) {
-                featured.classList.toggle('storefront-refreshing', !instant);
-                const featuredData = products.filter(p => p.is_featured).slice(0,4);
-                featured.innerHTML = (featuredData.length ? featuredData : products.slice(0,4)).map(safeRender).join('') || '<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
+            if (!data?.length) {
+                const empty='<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
+                if(featured) featured.innerHTML=empty;
+                if(shopGrid) shopGrid.innerHTML=empty;
+                return true;
             }
-            if (shopGrid) {
-                shopGrid.classList.toggle('storefront-refreshing', !instant);
-                shopGrid.innerHTML = products.map(safeCompactRender).join('') || '<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
-            }
-            restoreCardColorSelections(featured);
-            restoreCardColorSelections(shopGrid);
-            featured?.classList.remove('storefront-refreshing');
-            shopGrid?.classList.remove('storefront-refreshing');
-        }
 
-        function resolveRequestedProduct() {
             const requestedProduct = new URLSearchParams(window.location.search).get('product');
-            if (!requestedProduct) return false;
-            const product = productBySlug(requestedProduct) || productById(requestedProduct);
-            if (product) { viewProduct(product, false); return true; }
-            return false;
-        }
-
-        async function fetchStoreProducts() {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
-            try {
-                const {data, error} = await supabaseClient
-                    .from('products')
-                    .select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active,created_at')
-                    .eq('active', true)
-                    .order('created_at', {ascending:false})
-                    .abortSignal(controller.signal);
-                if (error) throw error;
-                return Array.isArray(data) ? data : [];
-            } finally { clearTimeout(timeout); }
-        }
-
-        async function loadStoreProducts({force=false} = {}) {
-            if (!SUPABASE_READY) {
-                renderProductLoadError('Store backend is not configured.');
-                return false;
-            }
-            if (productLoadPromise && !force) return productLoadPromise;
-
-            const cached = readCachedProducts();
-            if (cached?.products?.length) {
-                setStoreProducts(cached.products);
-                renderStoreProducts(cached.products, {instant:true});
-                resolveRequestedProduct();
-            }
-
-            productLoadPromise = (async () => {
-                try {
-                    const data = await fetchStoreProducts();
-                    setStoreProducts(data);
-                    cacheProducts(data);
-                    renderStoreProducts(data, {instant:false});
-                    resolveRequestedProduct();
-                    warmProductImageCache(data);
-                    return true;
-                } catch (error) {
-                    console.error('Supabase product load failed:', error);
-                    if (!cached?.products?.length) renderProductLoadError(error?.name === 'AbortError' ? 'The product server took too long to respond.' : (error?.message || 'Database request failed.'));
-                    else showToast('Using your saved catalogue while we reconnect.', 'warning');
-                    return Boolean(cached?.products?.length);
+            if (requestedProduct) {
+                const product = productBySlug(requestedProduct) || productById(requestedProduct);
+                if (product) viewProduct(product, false);
+                else {
+                    history.replaceState({viewId:'shop'}, '', '/?shop=1');
+                    navigate('shop', false);
                 }
-            })().finally(() => { productLoadPromise = null; });
-            return productLoadPromise;
+            } else if (window.location.search.includes('shop=1')) {
+                navigate('shop', false);
+            }
+
+            const featuredData = data.filter(p => p.is_featured).slice(0,4);
+            if (featured) featured.innerHTML = (featuredData.length ? featuredData : data.slice(0,4)).map(p=>renderProductCard(p)).join('');
+            if (shopGrid) shopGrid.innerHTML = data.map(p=>renderProductCard(p,true)).join('');
+
+            initializeVariantPreviews();
+            return true;
         }
 
-        function warmProductImageCache(products) {
-            const urls = [];
-            (products || []).slice(0, 12).forEach(p => {
-                urls.push(productImageUrl(p.image_url));
-                Object.values(safeVariantMap(p.variants)).slice(0, 4).forEach(path => urls.push(productImageUrl(path)));
+        async function initializeSupabase(){
+            if(!SUPABASE_READY){ renderProductLoadError('Supabase configuration is missing.'); return; }
+
+            const {data:{session}} = await supabaseClient.auth.getSession();
+            if(session) await refreshAdminState(session.user);
+            supabaseClient.auth.onAuthStateChange((_event,session)=>{
+                if(session) refreshAdminState(session.user);
+                else adminState={user:null,isAdmin:false};
             });
-            const warm = () => urls.filter(Boolean).forEach(url => {
-                const img = new Image(); img.decoding = 'async'; img.src = url;
-            });
-            if ('requestIdleCallback' in window) window.requestIdleCallback(warm, {timeout:1800});
-            else setTimeout(warm, 350);
+
+            const isAdminRoute = window.location.pathname.replace(/\/+$/,'') === '/admin';
+            if (isAdminRoute) {
+                await handleAdminEntry();
+                return;
+            }
+            await loadStoreProducts();
         }
 
         function getInitialRoute() {
