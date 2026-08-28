@@ -2011,44 +2011,43 @@
             </article>`;
         }
 
+        // Stable delegated interaction: product cards are re-rendered from Supabase/cache,
+        // so handlers must live outside the generated card markup.
         function handleProductGridInteraction(event) {
-            const colorButton = event.target.closest('[data-product-color]');
+            const colorButton = event.target.closest?.('[data-product-color]');
             if (colorButton) {
                 event.preventDefault();
                 event.stopPropagation();
                 const card = colorButton.closest('.product-card');
                 const productId = card?.dataset.productId;
                 const colorKey = colorButton.dataset.productColor;
-                if (productId && colorKey) selectCardColor(colorButton, productId, colorKey);
+                if (productId && colorKey) window.selectCardColor(colorButton, productId, colorKey);
                 return;
             }
-            const quickButton = event.target.closest('[data-quick-add]');
+            const quickButton = event.target.closest?.('[data-quick-add]');
             if (quickButton) {
                 event.preventDefault();
                 event.stopPropagation();
                 const product = productById(quickButton.closest('.product-card')?.dataset.productId);
-                if (product) openQuickAdd(product);
+                if (product) window.openQuickAdd(product);
                 return;
             }
-            const openButton = event.target.closest('[data-product-open]');
+            const openButton = event.target.closest?.('[data-product-open]');
             if (openButton) {
+                event.preventDefault();
                 const product = productById(openButton.closest('.product-card')?.dataset.productId);
                 if (product) viewProduct(product);
             }
         }
 
-        function bindProductGridInteractions() {
-            ['featured-track', 'view-shop'].forEach(id => {
-                const root = document.getElementById(id);
-                if (root && !root.dataset.interactionsBound) {
-                    root.addEventListener('click', handleProductGridInteraction);
-                    root.dataset.interactionsBound = 'true';
-                }
-            });
+        // Bind exactly once to document. This remains alive even when product grids are replaced.
+        if (!document.documentElement.dataset.urbanfiberProductInteractions) {
+            document.addEventListener('click', handleProductGridInteraction, false);
+            document.documentElement.dataset.urbanfiberProductInteractions = 'true';
         }
 
         window.selectCardColor = function(button, productId, colorKey) {
-            const card = button.closest('.product-card');
+            const card = button?.closest('.product-card');
             const product = productById(productId);
             if (!card || !product) return;
             const variants = safeVariantMap(product.variants);
@@ -2064,27 +2063,29 @@
             img.style.opacity = '.55';
             const reveal = () => { img.style.opacity = '1'; markImageLoaded(img); };
             img.onload = reveal;
-            img.onerror = () => {
-                img.style.opacity = '1';
-                showToast('Could not load that color image. Please try again.', 'warning');
-            };
+            img.onerror = () => { img.style.opacity = '1'; };
             img.src = url;
-            // Persist the selected color for this card so returning to the page feels consistent.
-            const selections = JSON.parse(localStorage.getItem('urbanfiber-color-selections') || '{}');
-            selections[productId] = colorKey;
-            localStorage.setItem('urbanfiber-color-selections', JSON.stringify(selections));
+
+            // Persistence is best-effort; storage must never be allowed to break a UI click.
+            try {
+                const raw = localStorage.getItem('urbanfiber-color-selections');
+                const selections = raw ? (JSON.parse(raw) || {}) : {};
+                selections[String(productId)] = colorKey;
+                localStorage.setItem('urbanfiber-color-selections', JSON.stringify(selections));
+            } catch (_) {}
         };
 
         function restoreCardColorSelections(root) {
+            if (!root) return;
             let selections = {};
-            try { selections = JSON.parse(localStorage.getItem('urbanfiber-color-selections') || '{}') || {}; } catch (_) {}
-            root?.querySelectorAll('.product-card[data-product-id]').forEach(card => {
+            try { selections = JSON.parse(localStorage.getItem('urbanfiber-color-selections') || '{}') || {}; } catch (_) { return; }
+            root.querySelectorAll('.product-card[data-product-id]').forEach(card => {
                 const productId = card.dataset.productId;
-                const color = selections[productId];
+                const color = selections[String(productId)];
                 if (!color) return;
-                const button = card.querySelector(`[data-product-color="${CSS.escape(color)}"]`);
+                const button = [...card.querySelectorAll('[data-product-color]')].find(b => b.dataset.productColor === color);
                 const product = productById(productId);
-                if (button && product?.variants?.[color]) selectCardColor(button, productId, color);
+                if (button && product) window.selectCardColor(button, productId, color);
             });
         }
 
@@ -2096,13 +2097,14 @@
             if (shop) shop.innerHTML = html;
         }
 
-        const PRODUCT_CACHE_KEY = 'urbanfiber-product-cache-v2';
-        const PRODUCT_CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
+        const PRODUCT_CACHE_KEY = 'urbanfiber-product-cache-v3';
+        const PRODUCT_CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
         let productLoadPromise = null;
 
         function cacheProducts(products) {
             try {
-                localStorage.setItem(PRODUCT_CACHE_KEY, JSON.stringify({version:2, savedAt:Date.now(), products}));
+                const safe = Array.isArray(products) ? products : [];
+                localStorage.setItem(PRODUCT_CACHE_KEY, JSON.stringify({version:3, savedAt:Date.now(), products:safe}));
             } catch (error) {
                 console.warn('Product cache write skipped:', error);
             }
@@ -2110,22 +2112,30 @@
 
         function readCachedProducts() {
             try {
-                const cached = JSON.parse(localStorage.getItem(PRODUCT_CACHE_KEY) || 'null');
+                const raw = localStorage.getItem(PRODUCT_CACHE_KEY);
+                if (!raw) return null;
+                const cached = JSON.parse(raw);
                 if (!cached || !Array.isArray(cached.products)) return null;
-                return { products: cached.products, fresh: Date.now() - Number(cached.savedAt || 0) < PRODUCT_CACHE_MAX_AGE };
+                const products = cached.products.filter(isUsableStoreProduct);
+                if (!products.length) return null;
+                return {products, fresh: Date.now() - Number(cached.savedAt || 0) < PRODUCT_CACHE_MAX_AGE};
             } catch (error) {
-                localStorage.removeItem(PRODUCT_CACHE_KEY);
+                try { localStorage.removeItem(PRODUCT_CACHE_KEY); } catch (_) {}
                 return null;
             }
         }
 
+        function isUsableStoreProduct(p) {
+            return Boolean(p && p.id && p.name && p.slug && p.active !== false && Number.isFinite(Number(p.price_bdt)));
+        }
+
         function setStoreProducts(data) {
-            const products = Array.isArray(data) ? data : [];
+            const products = (Array.isArray(data) ? data : []).filter(isUsableStoreProduct);
             window.__URBANFIBER_PRODUCTS__ = products;
             Object.keys(PRODUCT_CATALOG).forEach(k => delete PRODUCT_CATALOG[k]);
             products.forEach(p => {
                 PRODUCT_CATALOG[p.name] = {
-                    id:p.id, title:p.name, category:p.category, price:Number(p.price_bdt),
+                    id:String(p.id), title:p.name, category:p.category, price:Number(p.price_bdt),
                     image:productImageUrl(p.image_url), variants:safeVariantMap(p.variants),
                     sizes:Array.isArray(p.sizes) && p.sizes.length ? p.sizes : ['S','M','L','XL']
                 };
@@ -2136,37 +2146,56 @@
         function renderStoreProducts(data, {instant=false} = {}) {
             const featured = document.getElementById('featured-track');
             const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
-            const products = Array.isArray(data) ? data : [];
+            const products = Array.isArray(data) ? data.filter(isUsableStoreProduct) : [];
+            const safeRender = p => {
+                try { return renderProductCard(p); }
+                catch (e) { console.error('Product card render failed:', p, e); return ''; }
+            };
+            const safeCompactRender = p => {
+                try { return renderProductCard(p,true); }
+                catch (e) { console.error('Product card render failed:', p, e); return ''; }
+            };
             if (featured) {
                 featured.classList.toggle('storefront-refreshing', !instant);
                 const featuredData = products.filter(p => p.is_featured).slice(0,4);
-                featured.innerHTML = (featuredData.length ? featuredData : products.slice(0,4)).map(p=>renderProductCard(p)).join('') || '<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
+                featured.innerHTML = (featuredData.length ? featuredData : products.slice(0,4)).map(safeRender).join('') || '<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
             }
             if (shopGrid) {
                 shopGrid.classList.toggle('storefront-refreshing', !instant);
-                shopGrid.innerHTML = products.map(p=>renderProductCard(p,true)).join('') || '<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
+                shopGrid.innerHTML = products.map(safeCompactRender).join('') || '<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
             }
-            bindProductGridInteractions();
             restoreCardColorSelections(featured);
             restoreCardColorSelections(shopGrid);
-            if (featured) featured.classList.remove('storefront-refreshing');
-            if (shopGrid) shopGrid.classList.remove('storefront-refreshing');
+            featured?.classList.remove('storefront-refreshing');
+            shopGrid?.classList.remove('storefront-refreshing');
         }
 
         function resolveRequestedProduct() {
             const requestedProduct = new URLSearchParams(window.location.search).get('product');
             if (!requestedProduct) return false;
             const product = productBySlug(requestedProduct) || productById(requestedProduct);
-            if (product) {
-                viewProduct(product, false);
-                return true;
-            }
+            if (product) { viewProduct(product, false); return true; }
             return false;
+        }
+
+        async function fetchStoreProducts() {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 12000);
+            try {
+                const {data, error} = await supabaseClient
+                    .from('products')
+                    .select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active,created_at')
+                    .eq('active', true)
+                    .order('created_at', {ascending:false})
+                    .abortSignal(controller.signal);
+                if (error) throw error;
+                return Array.isArray(data) ? data : [];
+            } finally { clearTimeout(timeout); }
         }
 
         async function loadStoreProducts({force=false} = {}) {
             if (!SUPABASE_READY) {
-                renderProductLoadError('Supabase is not configured.');
+                renderProductLoadError('Store backend is not configured.');
                 return false;
             }
             if (productLoadPromise && !force) return productLoadPromise;
@@ -2179,56 +2208,35 @@
             }
 
             productLoadPromise = (async () => {
-                const { data, error } = await supabaseClient
-                    .from('products')
-                    .select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active,created_at')
-                    .eq('active', true)
-                    .order('created_at', { ascending:false });
-                if (error) {
+                try {
+                    const data = await fetchStoreProducts();
+                    setStoreProducts(data);
+                    cacheProducts(data);
+                    renderStoreProducts(data, {instant:false});
+                    resolveRequestedProduct();
+                    warmProductImageCache(data);
+                    return true;
+                } catch (error) {
                     console.error('Supabase product load failed:', error);
-                    if (!cached?.products?.length) renderProductLoadError(error.message || 'Database request failed.');
+                    if (!cached?.products?.length) renderProductLoadError(error?.name === 'AbortError' ? 'The product server took too long to respond.' : (error?.message || 'Database request failed.'));
+                    else showToast('Using your saved catalogue while we reconnect.', 'warning');
                     return Boolean(cached?.products?.length);
                 }
-                setStoreProducts(data || []);
-                cacheProducts(data || []);
-                renderStoreProducts(data || [], {instant:false});
-                warmProductImageCache(data || []);
-                resolveRequestedProduct();
-                return true;
             })().finally(() => { productLoadPromise = null; });
             return productLoadPromise;
         }
 
         function warmProductImageCache(products) {
-            const list = (products || []).slice(0, 12);
-            const warm = () => list.forEach(p => {
-                const variants = safeVariantMap(p.variants);
-                Object.values(variants).slice(0, 3).forEach(path => {
-                    const url = productImageUrl(path);
-                    if (url) { const img = new Image(); img.decoding = 'async'; img.src = url; }
-                });
-            };
+            const urls = [];
+            (products || []).slice(0, 12).forEach(p => {
+                urls.push(productImageUrl(p.image_url));
+                Object.values(safeVariantMap(p.variants)).slice(0, 4).forEach(path => urls.push(productImageUrl(path)));
+            });
+            const warm = () => urls.filter(Boolean).forEach(url => {
+                const img = new Image(); img.decoding = 'async'; img.src = url;
+            });
             if ('requestIdleCallback' in window) window.requestIdleCallback(warm, {timeout:1800});
             else setTimeout(warm, 350);
-        }
-
-        async function initializeSupabase(){
-            if(!SUPABASE_READY){ renderProductLoadError('Supabase configuration is missing.'); return; }
-
-            const isAdminRoute = window.location.pathname.replace(/\/+$/,'') === '/admin';
-            if (isAdminRoute) {
-                const {data:{session}} = await supabaseClient.auth.getSession();
-                if(session) await refreshAdminState(session.user);
-                supabaseClient.auth.onAuthStateChange((_event,session)=>{
-                    if(session) refreshAdminState(session.user);
-                    else adminState={user:null,isAdmin:false};
-                });
-            }
-            if (isAdminRoute) {
-                await handleAdminEntry();
-                return;
-            }
-            await loadStoreProducts();
         }
 
         function getInitialRoute() {
