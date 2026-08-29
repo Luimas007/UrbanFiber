@@ -586,10 +586,6 @@
         @media(prefers-reduced-motion:reduce){
             .button-primary,.button-secondary,.button-icon,.product-card,.product-color-dot,#detail-img{transition:none!important}
         }
-        @media (max-width: 767px) {
-            .backdrop-blur-md, .backdrop-blur-sm { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-            .exhibition-stage, #cart-drawer, #checkout-modal { box-shadow: 0 10px 35px rgba(0,0,0,.16); }
-            .product-card { contain: content; }
         }
 
     </style>
@@ -762,8 +758,8 @@
                     <h1 id="detail-title" class="font-display text-4xl md:text-5xl font-bold uppercase tracking-wide mb-2">Product Name</h1>
                     <p id="detail-price" class="text-2xl text-gray-600 dark:text-gray-300 mb-8">৳0.00</p>
 
-                    <p id="detail-description" class="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
-                        Product details loading…
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                        Crafted from our signature heavy-weight cotton and Lycra blend. Designed with a severe drop shoulder, exaggerated body width, and cropped hem for the ultimate architectural streetwear silhouette.
                     </p>
 
                     <!-- Colors -->
@@ -776,7 +772,7 @@
                     <div class="mb-8">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-sm font-medium uppercase tracking-widest text-gray-500">Size</span>
-                            <button type="button" onclick="openSizeChart()" class="text-sm border-b border-gray-400 hover:text-black dark:hover:text-white transition-colors">Size Chart</button>
+                            <button type="button" class="text-sm border-b border-gray-400 hover:text-black dark:hover:text-white transition-colors">Size Chart</button>
                         </div>
                         <div id="size-grid" class="grid grid-cols-4 gap-3">
                             <button type="button" class="size-btn py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-black dark:hover:border-white transition-all" data-size="S">S</button>
@@ -801,14 +797,6 @@
             </div>
         </div>
     </main>
-
-    <div id="size-chart-modal" class="fixed inset-0 z-[115] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Size chart">
-        <div class="relative max-h-[92svh] w-full max-w-2xl overflow-auto rounded-3xl bg-[#efe9dd] p-4 shadow-2xl dark:bg-[#151515]">
-            <button type="button" onclick="closeSizeChart()" aria-label="Close size chart" class="absolute right-3 top-3 z-10 button-icon bg-black/10 dark:bg-white/10">×</button>
-            <img id="size-chart-image" src="" alt="Product size chart" class="mx-auto max-h-[82svh] w-auto max-w-full rounded-2xl object-contain">
-            <p id="size-chart-empty" class="hidden px-6 py-16 text-center text-sm opacity-60">Size chart is not available for this product yet.</p>
-        </div>
-    </div>
 
     <div id="site-toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-20 z-[120] max-w-[calc(100%-2rem)] -translate-x-1/2 translate-y-4 rounded-full border border-gray-200 bg-[#efe9dd]/95 px-5 py-3 text-center text-sm font-medium text-gray-900 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#121212]/95 dark:text-white"></div>
 
@@ -955,60 +943,7 @@
             global: { headers: { 'x-urbanfiber-client': 'storefront' } }
         }) : null;
 
-        // Fast, deterministic storefront data layer.
-        // One in-flight request at a time + short-lived local cache prevents
-        // repeated Supabase reads during SPA navigation and mobile interaction.
-        const PRODUCT_CACHE_KEY = 'urbanfiber-products-v2';
-        const PRODUCT_CACHE_TTL = 5 * 60 * 1000;
-        let storeProductsPromise = null;
-        let storeProductsLastLoadedAt = 0;
-
-        function readProductCache() {
-            try {
-                const cached = JSON.parse(localStorage.getItem(PRODUCT_CACHE_KEY) || 'null');
-                if (!cached || !Array.isArray(cached.data)) return null;
-                return cached;
-            } catch (_) { return null; }
-        }
-
-        function writeProductCache(data) {
-            try {
-                localStorage.setItem(PRODUCT_CACHE_KEY, JSON.stringify({ version: 2, savedAt: Date.now(), data }));
-            } catch (_) {}
-        }
-
-        function hydrateStoreProducts(data) {
-            const products = Array.isArray(data) ? data : [];
-            window.__URBANFIBER_PRODUCTS__ = products;
-            Object.keys(PRODUCT_CATALOG).forEach(k => delete PRODUCT_CATALOG[k]);
-            products.forEach(p => {
-                PRODUCT_CATALOG[p.name] = {
-                    id:p.id, title:p.name, category:p.category, price:Number(p.price_bdt),
-                    image:productImageUrl(p.image_url), variants:safeVariantMap(p.variants),
-                    sizes:Array.isArray(p.sizes) && p.sizes.length ? p.sizes : ['S','M','L','XL'],
-                    description:p.description || '',
-                    sizeChartUrl:productImageUrl(p.size_chart_url || '')
-                };
-            });
-            normalizeCart();
-        }
-
-        function renderStoreProducts(data) {
-            const featured = document.getElementById('featured-track');
-            const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
-            if (!Array.isArray(data) || !data.length) {
-                const empty='<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
-                if(featured) featured.innerHTML=empty;
-                if(shopGrid) shopGrid.innerHTML=empty;
-                return;
-            }
-            const featuredData = data.filter(p => p.is_featured).slice(0,4);
-            if (featured) featured.innerHTML = (featuredData.length ? featuredData : data.slice(0,4)).map(p=>renderProductCard(p)).join('');
-            if (shopGrid) shopGrid.innerHTML = data.map(p=>renderProductCard(p,true)).join('');
-        }
-
-        // Products are loaded exclusively from Supabase. There is intentionally no
-        // hard-coded storefront fallback catalog.nally no storefront fallback catalog.
+        // Products are loaded exclusively from Supabase. There is intentionally no storefront fallback catalog.
         const PRODUCT_CATALOG = {};
 
         const formatMoney = value => new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', maximumFractionDigits: 2 }).format(Number(value || 0));
@@ -1201,35 +1136,7 @@
             detailImg.src = image;
         }
 
-        function openSizeChart() {
-            const modal = document.getElementById('size-chart-modal');
-            const img = document.getElementById('size-chart-image');
-            const empty = document.getElementById('size-chart-empty');
-            if (!modal) return;
-            const url = currentProduct.sizeChartUrl || '';
-            if (url) {
-                img.src = url;
-                img.classList.remove('hidden');
-                empty.classList.add('hidden');
-            } else {
-                img.removeAttribute('src');
-                img.classList.add('hidden');
-                empty.classList.remove('hidden');
-            }
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            lockBodyScroll(true);
-        }
-
-        function closeSizeChart() {
-            const modal = document.getElementById('size-chart-modal');
-            if (!modal) return;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            lockBodyScroll(false);
-        }
-
-                function updateCartColor(index, colorKey) {
+        function updateCartColor(index, colorKey) {
             const item = cart[index];
             if (!item.variants || !item.variants[colorKey]) return;
             item.color = colorKey;
@@ -1537,12 +1444,10 @@
 
         function toggleTheme() {
             const html = document.documentElement;
-            const isDark = !html.classList.contains('dark');
-            html.classList.toggle('dark', isDark);
-            try { localStorage.setItem(APP_CONFIG.themeKey, isDark ? 'dark' : 'light'); } catch (_) {}
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem(APP_CONFIG.themeKey, isDark ? 'dark' : 'light');
             applyThemeIcon(isDark);
-            const themeMeta = document.querySelector('meta[name="theme-color"]');
-            if (themeMeta) themeMeta.setAttribute('content', isDark ? '#121212' : '#e6e1d6');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#e6e1d6');
         }
 
         (function initTheme() {
@@ -1630,18 +1535,7 @@
         }
 
         const storyCard = document.getElementById('story-card');
-        if (!window.matchMedia('(max-width: 767px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            startStoryAutoplay();
-        }
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                clearInterval(storyAutoplayTimer);
-                clearInterval(exhibitionTimer);
-            } else {
-                if (!window.matchMedia('(max-width: 767px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) startStoryAutoplay();
-                if (!window.matchMedia('(max-width: 767px)').matches) startExhibition();
-            }
-        });
+        startStoryAutoplay();
 
         function initializeVariantPreviews() {
             // Color dots are the intentional variant interaction. Avoid competing hover image swaps.
@@ -1704,19 +1598,13 @@
                 variants,
                 sizes: Array.isArray(product.sizes) && product.sizes.length ? product.sizes : ['S','M','L','XL'],
                 color: firstColor,
-                slug: product.slug,
-                description: product.description || '',
-                sizeChartUrl: productImageUrl(product.size_chart_url || '')
+                slug: product.slug
             };
             detailQuantity = 1;
             selectedSize = null;
 
             document.getElementById('detail-title').textContent = product.name;
             document.getElementById('detail-price').textContent = formatMoney(product.price_bdt);
-            const detailDescription = document.getElementById('detail-description');
-            if (detailDescription) {
-                detailDescription.textContent = product.description || 'Crafted from our signature heavyweight cotton and Lycra blend. Designed for an architectural oversized silhouette with unrestricted movement.';
-            }
             const detailImg = document.getElementById('detail-img');
             detailImg.classList.remove('is-loaded');
             detailImg.src = currentProduct.imgSrc || currentProduct.imageUrl;
@@ -1756,8 +1644,7 @@
 
         document.addEventListener('keydown', event => {
             if (event.key !== 'Escape') return;
-            if (!document.getElementById('size-chart-modal')?.classList.contains('hidden')) closeSizeChart();
-            else if (!document.getElementById('checkout-modal').classList.contains('hidden')) closeCheckout();
+            if (!document.getElementById('checkout-modal').classList.contains('hidden')) closeCheckout();
             else if (!document.getElementById('cart-drawer').classList.contains('translate-x-full')) closeCart();
         });
 
@@ -1851,7 +1738,7 @@
                     const { data, error } = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
                     if (error) throw error;
                     window.__ADMIN_PRODUCTS__ = data || [];
-                    content.innerHTML = `<div class="mb-7 flex items-end justify-between gap-4"><div><p class="text-[10px] uppercase tracking-[.3em] opacity-40">Catalog</p><h3 class="font-display text-3xl font-bold uppercase">Products</h3></div><button type="button" onclick="editProduct()" class="rounded-xl bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-white dark:bg-white dark:text-black">+ New product</button></div><div class="grid gap-4">${(data||[]).map(p=>`<article class="flex flex-col gap-4 rounded-2xl border border-black/10 bg-white p-4 dark:border-white/10 dark:bg-white/5 sm:flex-row sm:items-center"><img loading="lazy" decoding="async" src="${escapeHtml(variantImage(safeVariantMap(p.variants),Object.keys(safeVariantMap(p.variants))[0],p.image_url))}" class="h-24 w-20 rounded-xl object-cover" alt=""><div class="min-w-0 flex-1"><h4 class="font-display text-lg font-semibold uppercase">${escapeHtml(p.name)}</h4><p class="text-sm opacity-50">${formatMoney(p.price_bdt)} · ${escapeHtml(p.category)} · ${p.active?'Published':'Hidden'}</p><p class="mt-1 text-xs opacity-40">${Object.keys(safeVariantMap(p.variants)).join(' · ')}</p></div><div class="flex gap-2"><button type="button" onclick="editProductById('${escapeHtml(p.id)}')" class="rounded-xl border px-4 py-3 text-[10px] font-semibold uppercase tracking-widest">Edit</button><button type="button" onclick="deleteProduct('${escapeHtml(p.id)}')" class="rounded-xl border border-red-500/20 px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-red-600">Delete</button></div></article>`).join('') || '<div class="rounded-2xl border p-8 text-center opacity-50">No products.</div>'}</div>`;
+                    content.innerHTML = `<div class="mb-7 flex items-end justify-between gap-4"><div><p class="text-[10px] uppercase tracking-[.3em] opacity-40">Catalog</p><h3 class="font-display text-3xl font-bold uppercase">Products</h3></div><button type="button" onclick="editProduct()" class="rounded-xl bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-white dark:bg-white dark:text-black">+ New product</button></div><div class="grid gap-4">${(data||[]).map(p=>`<article class="flex flex-col gap-4 rounded-2xl border border-black/10 bg-white p-4 dark:border-white/10 dark:bg-white/5 sm:flex-row sm:items-center"><img src="${escapeHtml(variantImage(safeVariantMap(p.variants),Object.keys(safeVariantMap(p.variants))[0],p.image_url))}" class="h-24 w-20 rounded-xl object-cover" alt=""><div class="min-w-0 flex-1"><h4 class="font-display text-lg font-semibold uppercase">${escapeHtml(p.name)}</h4><p class="text-sm opacity-50">${formatMoney(p.price_bdt)} · ${escapeHtml(p.category)} · ${p.active?'Published':'Hidden'}</p><p class="mt-1 text-xs opacity-40">${Object.keys(safeVariantMap(p.variants)).join(' · ')}</p></div><div class="flex gap-2"><button type="button" onclick="editProductById('${escapeHtml(p.id)}')" class="rounded-xl border px-4 py-3 text-[10px] font-semibold uppercase tracking-widest">Edit</button><button type="button" onclick="deleteProduct('${escapeHtml(p.id)}')" class="rounded-xl border border-red-500/20 px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-red-600">Delete</button></div></article>`).join('') || '<div class="rounded-2xl border p-8 text-center opacity-50">No products.</div>'}</div>`;
                 } else if (tab === 'orders' || tab === 'sales') {
                     let query = supabaseClient.from('orders').select('*,order_items(*)').order('created_at',{ascending:false});
                     if (tab === 'orders') query = query.neq('status','completed').neq('status','cancelled');
@@ -1907,29 +1794,6 @@
             const safe=color||'black';
             row.innerHTML=`<div class="flex items-center gap-3"><div class="variant-swatch h-11 w-11 shrink-0 rounded-xl border border-black/10 shadow-inner dark:border-white/10" style="background:${escapeHtml((ADMIN_PALETTE.find(x=>x[0].toLowerCase().replace(/\\s+/g,'-')===safe)||['',safe])[1]||safe)}"></div><div class="min-w-0 flex-1"><div class="flex gap-2"><select class="variant-color w-full rounded-xl border bg-transparent px-3 py-2.5 text-xs font-medium" onchange="variantPaletteChanged(this)">${paletteOptions(safe)}</select><input class="variant-custom hidden w-28 rounded-xl border bg-transparent px-3 py-2.5 text-xs" placeholder="#HEX" pattern="^#[0-9A-Fa-f]{6}$" value="${/^#[0-9a-f]{6}$/i.test(safe)?safe:''}"></div><input class="variant-name mt-2 w-full rounded-xl border bg-transparent px-3 py-2 text-xs" value="${escapeHtml(safe)}" placeholder="Color name, e.g. midnight-blue"></div><button type="button" onclick="this.closest('.variant-row').remove()" class="h-9 w-9 shrink-0 rounded-full border text-lg opacity-50 transition hover:border-red-500 hover:text-red-600 hover:opacity-100">×</button></div><div class="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]"><label class="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed px-3 py-3"><input type="file" accept="image/*" class="variant-file w-full text-xs"><span class="text-[9px] uppercase tracking-widest opacity-40">Color image</span></label><div class="variant-preview h-16 w-16 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900">${imageUrl?`<img src="${escapeHtml(imageUrl)}" class="h-full w-full object-cover" alt="">`:'<span class="flex h-full items-center justify-center text-[9px] opacity-30">Preview</span>'}</div></div>`;
             list.appendChild(row);
-            const fileInput = row.querySelector('.variant-file');
-            const preview = row.querySelector('.variant-preview');
-            if (fileInput && preview) {
-                fileInput.addEventListener('change', () => {
-                    const file = fileInput.files?.[0];
-                    if (!file) return;
-                    if (!file.type.startsWith('image/')) {
-                        fileInput.value = '';
-                        showToast('Please select an image file.', 'warning');
-                        return;
-                    }
-                    if (file.size > 5 * 1024 * 1024) {
-                        fileInput.value = '';
-                        showToast('Each color image must be 5MB or smaller.', 'warning');
-                        return;
-                    }
-                    const oldUrl = preview.dataset.objectUrl;
-                    if (oldUrl) URL.revokeObjectURL(oldUrl);
-                    const objectUrl = URL.createObjectURL(file);
-                    preview.dataset.objectUrl = objectUrl;
-                    preview.innerHTML = `<img src="${objectUrl}" class="h-full w-full object-cover" alt="${escapeHtml(safe)} color preview">`;
-                });
-            }
         };
         window.variantPaletteChanged=function(select){
             const row=select.closest('.variant-row'), opt=select.options[select.selectedIndex], custom=row.querySelector('.variant-custom'), name=row.querySelector('.variant-name'), sw=row.querySelector('.variant-swatch');
@@ -1958,7 +1822,7 @@
                 <form id="product-form" class="space-y-5">
                     <section class="rounded-[1.75rem] border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-7">
                         <div class="mb-5"><p class="text-[9px] uppercase tracking-[.25em] opacity-40">01 · Identity</p><h4 class="mt-1 font-display text-xl font-bold uppercase">Product information</h4></div>
-                        <div class="grid gap-4 sm:grid-cols-2"><label class="sm:col-span-2"><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Product name</span><input name="name" required value="${escapeHtml(x.name)}" class="w-full rounded-xl border bg-transparent px-4 py-3.5 outline-none"></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Slug</span><input name="slug" required value="${escapeHtml(x.slug)}" class="w-full rounded-xl border bg-transparent px-4 py-3.5 outline-none"></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Category</span><select name="category" class="w-full rounded-xl border bg-transparent px-4 py-3.5"><option>Oversized</option><option>Boxy Fit</option><option>Regular Fit</option><option>Hoodie</option><option>Bottoms</option><option>Accessories</option></select></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Price</span><div class="flex"><span class="flex items-center rounded-l-xl border border-r-0 px-4 opacity-60">৳</span><input name="price_bdt" required type="number" min="0" step="0.01" value="${Number(x.price_bdt||0)}" class="w-full rounded-r-xl border bg-transparent px-4 py-3.5"></div></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Primary image</span><input name="image_file" type="file" accept="image/*" class="w-full rounded-xl border bg-transparent px-3 py-3 text-sm"></label><label class="sm:col-span-2"><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Product description</span><textarea name="description" rows="5" maxlength="4000" class="w-full rounded-xl border bg-transparent px-4 py-3.5 outline-none" placeholder="Describe the fit, fabric, construction, and care details.">${escapeHtml(x.description||'')}</textarea></label><label class="sm:col-span-2"><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Size-chart image</span><input name="size_chart_file" type="file" accept="image/*" class="w-full rounded-xl border bg-transparent px-3 py-3 text-sm"><span class="mt-2 block text-xs opacity-40">${x.size_chart_url?'A size chart is currently attached. Upload a new image to replace it.':'Upload an optional size-chart image shown from the product page.'}</span></label></div>
+                        <div class="grid gap-4 sm:grid-cols-2"><label class="sm:col-span-2"><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Product name</span><input name="name" required value="${escapeHtml(x.name)}" class="w-full rounded-xl border bg-transparent px-4 py-3.5 outline-none"></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Slug</span><input name="slug" required value="${escapeHtml(x.slug)}" class="w-full rounded-xl border bg-transparent px-4 py-3.5 outline-none"></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Category</span><select name="category" class="w-full rounded-xl border bg-transparent px-4 py-3.5"><option>Oversized</option><option>Boxy Fit</option><option>Regular Fit</option><option>Hoodie</option><option>Bottoms</option><option>Accessories</option></select></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Price</span><div class="flex"><span class="flex items-center rounded-l-xl border border-r-0 px-4 opacity-60">৳</span><input name="price_bdt" required type="number" min="0" step="0.01" value="${Number(x.price_bdt||0)}" class="w-full rounded-r-xl border bg-transparent px-4 py-3.5"></div></label><label><span class="mb-2 block text-[10px] font-semibold uppercase tracking-widest opacity-50">Primary image</span><input name="image_file" type="file" accept="image/*" class="w-full rounded-xl border bg-transparent px-3 py-3 text-sm"></label></div>
                     </section>
                     <section class="rounded-[1.75rem] border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-7">
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p class="text-[9px] uppercase tracking-[.25em] opacity-40">02 · Color system</p><h4 class="mt-1 font-display text-xl font-bold uppercase">Colors & imagery</h4><p class="mt-2 text-sm opacity-50">Choose from the palette, compare swatches, and attach a different product photo to every color.</p></div><button type="button" onclick="addColorVariantRow()" class="rounded-xl bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-white dark:bg-white dark:text-black">+ Add color</button></div>
@@ -1993,26 +1857,13 @@
                     }
 
                     let mainUrl=String(x.image_url||'').trim();
-                    let sizeChartUrl=String(x.size_chart_url||'').trim();
-                    const description=String(f.get('description')||'').trim();
                     const mainFile=f.get('image_file');
-                    const sizeChartFile=f.get('size_chart_file');
                     if(mainFile&&mainFile.size){
                         if(mainFile.size>5*1024*1024) throw new Error('Primary image must be 5MB or smaller.');
                         const path=`products/${crypto.randomUUID()}-${String(mainFile.name).toLowerCase().replace(/[^a-z0-9._-]+/g,'-')}`;
                         const up=await supabaseClient.storage.from('product-images').upload(path,mainFile,{contentType:mainFile.type||'application/octet-stream',upsert:false});
                         if(up.error) throw new Error('Primary image upload failed: '+up.error.message);
                         mainUrl=supabaseClient.storage.from('product-images').getPublicUrl(path).data.publicUrl;
-                    }
-
-                    if(description.length > 4000) throw new Error('Description must be 4000 characters or fewer.');
-                    if(sizeChartFile&&sizeChartFile.size){
-                        if(sizeChartFile.size>5*1024*1024) throw new Error('Size-chart image must be 5MB or smaller.');
-                        if(!sizeChartFile.type.startsWith('image/')) throw new Error('Size-chart file must be an image.');
-                        const path=`products/size-charts/${crypto.randomUUID()}-${String(sizeChartFile.name).toLowerCase().replace(/[^a-z0-9._-]+/g,'-')}`;
-                        const up=await supabaseClient.storage.from('product-images').upload(path,sizeChartFile,{contentType:sizeChartFile.type,upsert:false});
-                        if(up.error) throw new Error('Size-chart upload failed: '+up.error.message);
-                        sizeChartUrl=supabaseClient.storage.from('product-images').getPublicUrl(path).data.publicUrl;
                     }
 
                     const variants={};
@@ -2052,30 +1903,15 @@
                         variants,
                         sizes,
                         active:f.get('active')==='on',
-                        is_featured:f.get('is_featured')==='on',
-                        description,
-                        size_chart_url:sizeChartUrl
+                        is_featured:f.get('is_featured')==='on'
                     };
 
-                    const {data:savedProduct,error}=await supabaseClient.rpc('admin_save_product',{p_product:payload});
-                    // Supabase RPC returns the saved row directly. Keep the storefront
-                    // deterministic by updating memory/cache rather than issuing a second
-                    // products query immediately after save.
+                    const {error}=await supabaseClient.rpc('admin_save_product',{p_product:payload});
                     if(error) throw new Error(error.message);
-                    const saved = Array.isArray(savedProduct) ? savedProduct[0] : savedProduct;
-                    if(saved?.id){
-                        window.__ADMIN_PRODUCTS__=[...(window.__ADMIN_PRODUCTS__||[]).filter(item=>item.id!==saved.id), saved]
-                            .sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-                        const next = [...(window.__URBANFIBER_PRODUCTS__||[]).filter(item=>item.id!==saved.id)];
-                        if(saved.active) next.push(saved);
-                        next.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-                        hydrateStoreProducts(next);
-                        writeProductCache(next);
-                        renderStoreProducts(next);
-                    }
 
                     showToast(p?'Product updated.':'Product published.');
                     await loadAdminDashboard('products');
+                    await loadStoreProducts();
                 }catch(error){
                     console.error('Product save failed:',error);
                     showToast(error?.message||'Product could not be saved.','warning');
@@ -2087,17 +1923,7 @@
                 }
             };
         };
-        window.deleteProduct=async function(id){
-            if(!confirm('Delete this product? Existing order history is protected and will prevent deletion when referenced.')) return;
-            const {error}=await supabaseClient.rpc('admin_delete_product',{p_product_id:id});
-            if(error){showToast(`Delete failed: ${error.message}`,'warning');return;}
-            window.__ADMIN_PRODUCTS__=(window.__ADMIN_PRODUCTS__||[]).filter(p=>p.id!==id);
-            window.__URBANFIBER_PRODUCTS__=(window.__URBANFIBER_PRODUCTS__||[]).filter(p=>p.id!==id);
-            writeProductCache(window.__URBANFIBER_PRODUCTS__);
-            renderStoreProducts(window.__URBANFIBER_PRODUCTS__);
-            showToast('Product deleted.');
-            await loadAdminDashboard('products');
-        };
+        window.deleteProduct=async function(id){if(!confirm('Delete this product? Existing order history is protected and will prevent deletion when referenced.'))return;const {error}=await supabaseClient.from('products').delete().eq('id',id);if(error){showToast(`Delete failed: ${error.message}`,'warning');return;}showToast('Product deleted.');await loadAdminDashboard('products');await loadStoreProducts();};
         window.updateOrderStatus=async function(id,status){const {error}=await supabaseClient.rpc('admin_set_order_status',{p_order_id:id,p_status:status});if(error){showToast(`Status update failed: ${error.message}`,'warning');return;}showToast(`Order ${status}.`);await loadAdminDashboard('orders');};
         window.printReceipt=async function(id){const {data:o,error}=await supabaseClient.from('orders').select('*,order_items(*)').eq('id',id).single();if(error)return showToast('Could not load receipt.','warning');const items=(o.order_items||[]).map(i=>`<tr><td>${escapeHtml(i.product_name)}<br><small>${escapeHtml(i.color||'')} / ${escapeHtml(i.size||'')}</small></td><td>${i.quantity}</td><td>${formatMoney(i.unit_price_bdt)}</td><td>${formatMoney(i.line_total_bdt)}</td></tr>`).join('');const w=window.open('','_blank');if(!w)return;w.document.write(`<html><head><title>Receipt ${escapeHtml(o.order_number)}</title><style>body{font-family:Arial,sans-serif;max-width:760px;margin:30px auto;padding:20px}img{width:64px;height:64px;border-radius:50%}table{width:100%;border-collapse:collapse;margin-top:24px}td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}td:nth-child(n+2),th:nth-child(n+2){text-align:right}.total{text-align:right;font-size:20px;margin-top:24px}</style></head><body><img src="${APP_CONFIG.logo}"><h1>URBANFIBER</h1><p>Receipt: ${escapeHtml(o.order_number)}</p><p>${escapeHtml(o.customer_name)} · ${escapeHtml(o.phone)}<br>${escapeHtml(o.address)}, ${escapeHtml(o.district)}</p><table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${items}</tbody></table><p>Subtotal: ${formatMoney(o.subtotal_bdt)}</p><p>Delivery: ${formatMoney(o.delivery_charge_bdt)}</p><h2 class="total">Total: ${formatMoney(o.total_bdt)}</h2><p>Payment: Cash on Delivery · Status: ${escapeHtml(o.status)}</p><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();};
         function productImageUrl(path) {
@@ -2171,7 +1997,8 @@
                     style="background:${escapeHtml(variantHex(color))}"
                     data-color="${escapeHtml(color)}"
                     aria-label="${escapeHtml(color.replaceAll('-',' '))}"
-                    aria-pressed="${color === firstColor ? 'true' : 'false'}">
+                    aria-pressed="${color === firstColor ? 'true' : 'false'}"
+                    onclick="event.stopPropagation();selectCardColor(this,'${escapeHtml(p.id)}','${escapeHtml(color)}')">
                 </button>`).join('') : '';
 
             return `<article class="product-card group" data-product-id="${escapeHtml(p.id)}">
@@ -2207,15 +2034,7 @@
             }
         };
 
-        document.addEventListener('click', event => {
-            const button = event.target.closest('.product-color-dot');
-            if (!button) return;
-            event.preventDefault();
-            event.stopPropagation();
-            selectCardColor(button, button.closest('.product-card')?.dataset.productId, button.dataset.color);
-        });
-
-                function renderProductLoadError(message) {
+        function renderProductLoadError(message) {
             const featured = document.getElementById('featured-track');
             const shop = document.querySelector('#view-shop .grid.grid-cols-2');
             const html = `<div class="col-span-full rounded-2xl border border-red-500/30 bg-red-500/5 p-8 text-center"><p class="font-display text-lg font-semibold uppercase">Products could not be loaded</p><p class="mt-2 text-sm opacity-60">${escapeHtml(message)}</p><button type="button" onclick="loadStoreProducts()" class="mt-5 rounded-full border px-5 py-3 text-xs uppercase tracking-widest">Retry</button></div>`;
@@ -2223,123 +2042,82 @@
             if (shop) shop.innerHTML = html;
         }
 
-        async function loadStoreProducts(options = {}) {
+        async function loadStoreProducts() {
             if (!SUPABASE_READY) {
                 renderProductLoadError('Supabase is not configured.');
                 return false;
             }
+            const featured = document.getElementById('featured-track');
+            const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
+            if (featured) featured.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
+            if (shopGrid) shopGrid.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
 
-            const force = Boolean(options.force);
-            const cached = readProductCache();
-            const cacheFresh = cached && (Date.now() - Number(cached.savedAt || 0) < PRODUCT_CACHE_TTL);
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active,created_at')
+                .eq('active', true)
+                .order('created_at', { ascending:false });
 
-            // Render cache immediately. Never blank a working storefront while a
-            // background refresh is happening.
-            if (cached?.data?.length && !window.__URBANFIBER_PRODUCTS__?.length) {
-                hydrateStoreProducts(cached.data);
-                renderStoreProducts(cached.data);
+            if (error) {
+                console.error('Supabase product load failed:', error);
+                renderProductLoadError(error.message || 'Database request failed.');
+                return false;
             }
 
-            if (!force && cacheFresh && Array.isArray(window.__URBANFIBER_PRODUCTS__)) {
-                storeProductsLastLoadedAt = Number(cached.savedAt || Date.now());
+            window.__URBANFIBER_PRODUCTS__ = data || [];
+            Object.keys(PRODUCT_CATALOG).forEach(k => delete PRODUCT_CATALOG[k]);
+            window.__URBANFIBER_PRODUCTS__.forEach(p => {
+                PRODUCT_CATALOG[p.name] = {
+                    id:p.id, title:p.name, category:p.category, price:Number(p.price_bdt),
+                    image:productImageUrl(p.image_url), variants:safeVariantMap(p.variants),
+                    sizes:Array.isArray(p.sizes) && p.sizes.length ? p.sizes : ['S','M','L','XL']
+                };
+            });
+
+            normalizeCart();
+
+            if (!data?.length) {
+                const empty='<div class="col-span-full py-16 text-center text-sm opacity-50">No products are currently published.</div>';
+                if(featured) featured.innerHTML=empty;
+                if(shopGrid) shopGrid.innerHTML=empty;
                 return true;
             }
 
-            if (storeProductsPromise) return storeProductsPromise;
-
-            storeProductsPromise = (async () => {
-                const featured = document.getElementById('featured-track');
-                const shopGrid = document.querySelector('#view-shop .grid.grid-cols-2');
-                if (!window.__URBANFIBER_PRODUCTS__?.length) {
-                    if (featured) featured.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
-                    if (shopGrid) shopGrid.innerHTML = '<div class="col-span-full py-16 text-center text-sm opacity-50">Loading products…</div>';
-                }
-
-                const { data, error } = await supabaseClient
-                    .from('products')
-                    .select('id,name,slug,category,price_bdt,image_url,variants,sizes,is_featured,active,created_at,description,size_chart_url')
-                    .eq('active', true)
-                    .order('created_at', { ascending:false });
-
-                if (error) {
-                    console.error('Supabase product load failed:', error);
-                    if (!window.__URBANFIBER_PRODUCTS__?.length) {
-                        renderProductLoadError(error.message || 'Database request failed.');
-                        return false;
-                    }
-                    return true;
-                }
-
-                hydrateStoreProducts(data || []);
-                writeProductCache(data || []);
-                storeProductsLastLoadedAt = Date.now();
-                renderStoreProducts(data || []);
-
-                const requestedProduct = new URLSearchParams(window.location.search).get('product');
-                if (requestedProduct) {
-                    const product = productBySlug(requestedProduct) || productById(requestedProduct);
-                    if (product) viewProduct(product, false);
-                    else {
-                        history.replaceState({viewId:'shop'}, '', '/?shop=1');
-                        navigate('shop', false);
-                    }
-                } else if (window.location.search.includes('shop=1')) {
+            const requestedProduct = new URLSearchParams(window.location.search).get('product');
+            if (requestedProduct) {
+                const product = productBySlug(requestedProduct) || productById(requestedProduct);
+                if (product) viewProduct(product, false);
+                else {
+                    history.replaceState({viewId:'shop'}, '', '/?shop=1');
                     navigate('shop', false);
                 }
+            } else if (window.location.search.includes('shop=1')) {
+                navigate('shop', false);
+            }
 
-                // Warm the browser's HTTP cache without blocking interaction.
-                if ('requestIdleCallback' in window) {
-                    requestIdleCallback(() => warmProductAssets(data || []), { timeout: 1500 });
-                } else {
-                    setTimeout(() => warmProductAssets(data || []), 300);
-                }
-                return true;
-            })();
+            const featuredData = data.filter(p => p.is_featured).slice(0,4);
+            if (featured) featured.innerHTML = (featuredData.length ? featuredData : data.slice(0,4)).map(p=>renderProductCard(p)).join('');
+            if (shopGrid) shopGrid.innerHTML = data.map(p=>renderProductCard(p,true)).join('');
 
-            try { return await storeProductsPromise; }
-            finally { storeProductsPromise = null; }
-        }
-
-        function warmProductAssets(products) {
-            const urls = new Set();
-            (products || []).forEach(p => {
-                const variants = safeVariantMap(p.variants);
-                Object.values(variants).forEach(url => { const u=productImageUrl(url); if(u) urls.add(u); });
-                const main = productImageUrl(p.image_url);
-                if (main) urls.add(main);
-                const chart = productImageUrl(p.size_chart_url);
-                if (chart) urls.add(chart);
-            });
-            let i = 0;
-            const list = [...urls];
-            const next = () => {
-                const url = list[i++];
-                if (!url) return;
-                fetch(url, { cache: 'force-cache', credentials: 'omit' }).catch(() => {}).finally(() => {
-                    if ('requestIdleCallback' in window) requestIdleCallback(next, {timeout: 1200});
-                    else setTimeout(next, 50);
-                });
-            };
-            next();
+            initializeVariantPreviews();
+            return true;
         }
 
         async function initializeSupabase(){
             if(!SUPABASE_READY){ renderProductLoadError('Supabase configuration is missing.'); return; }
 
-            // Public storefronts do not need an auth round-trip. Avoid delaying the
-            // first product paint on mobile just to determine whether an admin exists.
+            const {data:{session}} = await supabaseClient.auth.getSession();
+            if(session) await refreshAdminState(session.user);
+            supabaseClient.auth.onAuthStateChange((_event,session)=>{
+                if(session) refreshAdminState(session.user);
+                else adminState={user:null,isAdmin:false};
+            });
+
             const isAdminRoute = window.location.pathname.replace(/\/+$/,'') === '/admin';
             if (isAdminRoute) {
-                const {data:{session}} = await supabaseClient.auth.getSession();
-                if(session) await refreshAdminState(session.user);
-                supabaseClient.auth.onAuthStateChange((_event,session)=>{
-                    if(session) refreshAdminState(session.user);
-                    else adminState={user:null,isAdmin:false};
-                });
                 await handleAdminEntry(true);
                 return;
             }
-
             await loadStoreProducts();
         }
 
@@ -2392,17 +2170,7 @@
             console.error('UrbanFiber initialization failed:', error);
             renderProductLoadError(error?.message || 'Store initialization failed.');
         });
-        // Start only after the first product render; this avoids a timer racing the
-        // initial Supabase/network work on mobile.
-        if (window.__URBANFIBER_PRODUCTS__?.length) startFeaturedTour();
-
-        // Register the lightweight static-asset service worker when hosted over HTTPS.
-        // It is same-origin only and never intercepts Supabase writes/auth.
-        if ('serviceWorker' in navigator && location.protocol === 'https:') {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(err => console.debug('Asset cache unavailable:', err));
-            }, { once:true });
-        }
+        startFeaturedTour();
     </script>
 </body>
 </html>
