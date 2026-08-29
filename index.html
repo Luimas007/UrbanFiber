@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#121212">
     <title>UrbanFiber | Premium Oversized T-Shirts</title>
+    <link rel="preconnect" href="https://trmbifurircmdgyfbcyd.supabase.co">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preload" as="image" href="brand.png" fetchpriority="high">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -31,7 +34,7 @@
                         brand: ['Cormorant Garamond', 'serif'],
                     },
                     colors: {
-                        uf: { dark: '#121212', light: '#ededeb', accent: '#333333' }
+                        uf: { dark: '#121212', light: '#e6e1d6', accent: '#333333' }
                     }
                 }
             }
@@ -166,15 +169,13 @@
             #checkout-modal { max-height: calc(100svh - 1rem); }
             #checkout-modal input, #checkout-modal select, #checkout-modal textarea { min-height: 3.25rem; }
             #checkout-modal textarea { min-height: 6rem; }
-        @media (min-width: 768px) {
         }
-
 
         /* ============================================================
            Premium interaction layer
            ============================================================ */
         :root {
-            --uf-surface: #f5f5f3;
+            --uf-surface: #efe9dd;
             --uf-card: rgba(255,255,255,.72);
             --uf-ink: #111111;
             --uf-muted: #737373;
@@ -186,7 +187,7 @@
         .dark {
             --uf-surface: #121212;
             --uf-card: rgba(255,255,255,.055);
-            --uf-ink: #f5f5f3;
+            --uf-ink: #efe9dd;
             --uf-muted: #999999;
             --uf-line: rgba(255,255,255,.11);
         }
@@ -585,6 +586,7 @@
         @media(prefers-reduced-motion:reduce){
             .button-primary,.button-secondary,.button-icon,.product-card,.product-color-dot,#detail-img{transition:none!important}
         }
+        }
 
     </style>
   <meta name="description" content="UrbanFiber — premium oversized silhouettes engineered for the modern city. Shop the core collection with Cash on Delivery across Bangladesh.">
@@ -601,7 +603,7 @@
 <body class="bg-uf-light text-gray-900 dark:bg-uf-dark dark:text-white font-sans overflow-x-hidden">
 
     <!-- Navigation -->
-    <nav id="site-header" class="fixed w-full z-50 top-0 transition-all duration-300 bg-[#ededeb]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
+    <nav id="site-header" class="fixed w-full z-50 top-0 transition-all duration-300 bg-[#e6e1d6]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
         <div class="relative max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <a href="/" onclick="return navigate('home')" class="flex items-center gap-3 group">
@@ -671,6 +673,9 @@
                 <div><p class="text-xs font-medium uppercase tracking-[0.25em] text-white/50">The model edit</p><h2 class="font-brand text-4xl font-semibold md:text-5xl">Worn in the city</h2></div>
                 <div class="flex items-center gap-3">
                     <p class="max-w-sm text-sm leading-relaxed text-white/60">Front and back views, captured in the natural rhythm of the collection.</p>
+                    <button type="button" id="exhibition-play" onclick="toggleExhibitionAutoplay()" aria-label="Pause auto-scroll" aria-pressed="true" class="button-icon shrink-0 border border-white/25 text-white hover:bg-white/10 transition-colors">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+                    </button>
                 </div>
             </div>
             <div id="exhibition-rail" class="exhibition-rail flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
@@ -793,10 +798,10 @@
         </div>
     </main>
 
-    <div id="site-toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-20 z-[120] max-w-[calc(100%-2rem)] -translate-x-1/2 translate-y-4 rounded-full border border-gray-200 bg-[#f5f5f3]/95 px-5 py-3 text-center text-sm font-medium text-gray-900 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#121212]/95 dark:text-white"></div>
+    <div id="site-toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-20 z-[120] max-w-[calc(100%-2rem)] -translate-x-1/2 translate-y-4 rounded-full border border-gray-200 bg-[#efe9dd]/95 px-5 py-3 text-center text-sm font-medium text-gray-900 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#121212]/95 dark:text-white"></div>
 
     <div id="cart-overlay" onclick="closeCart()" class="fixed inset-0 z-[60] hidden bg-black/40 opacity-0 transition-opacity duration-300"></div>
-    <aside id="cart-drawer" aria-label="Shopping cart" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-[#f5f5f3] text-gray-900 shadow-2xl transition-transform duration-300 dark:bg-[#121212] dark:text-white">
+    <aside id="cart-drawer" aria-label="Shopping cart" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-[#efe9dd] text-gray-900 shadow-2xl transition-transform duration-300 dark:bg-[#121212] dark:text-white">
         <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-white/10">
             <div>
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-gray-500">Your selection</p>
@@ -822,7 +827,7 @@
     </aside>
 
     <div id="checkout-nudge" class="pointer-events-none fixed bottom-4 left-4 right-4 z-[55] translate-y-6 opacity-0 transition-all duration-500 sm:left-auto sm:right-6 sm:w-96">
-        <div class="pointer-events-auto rounded-2xl border border-gray-200 bg-[#f5f5f3]/95 p-4 shadow-2xl backdrop-blur-md dark:border-white/10 dark:bg-[#121212]/95">
+        <div class="pointer-events-auto rounded-2xl border border-gray-200 bg-[#efe9dd]/95 p-4 shadow-2xl backdrop-blur-md dark:border-white/10 dark:bg-[#121212]/95">
             <div class="flex items-start gap-3">
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
                 <div class="min-w-0 flex-1"><p class="font-brand text-2xl leading-none">Your pieces are waiting</p><p class="mt-1 text-sm text-gray-500">Complete your order with Cash on Delivery.</p></div>
@@ -834,7 +839,7 @@
     </div>
 
     <div id="checkout-overlay" onclick="closeCheckout()" class="fixed inset-0 z-[80] hidden bg-black/50 p-4 opacity-0 transition-opacity duration-300 sm:p-6"></div>
-    <section id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" class="fixed left-1/2 top-1/2 z-[90] hidden max-h-[92vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-[46%] scale-95 overflow-y-auto rounded-2xl bg-[#f5f5f3] text-gray-900 opacity-0 shadow-2xl transition-all duration-300 dark:bg-[#121212] dark:text-white sm:w-[calc(100%-3rem)]">
+    <section id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" class="fixed left-1/2 top-1/2 z-[90] hidden max-h-[92vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-[46%] scale-95 overflow-y-auto rounded-2xl bg-[#efe9dd] text-gray-900 opacity-0 shadow-2xl transition-all duration-300 dark:bg-[#121212] dark:text-white sm:w-[calc(100%-3rem)]">
         <div class="flex items-start justify-between border-b border-gray-200 px-6 py-6 dark:border-white/10 sm:px-8">
             <div>
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-gray-500">UrbanFiber delivery</p>
@@ -1032,6 +1037,8 @@
         let checkoutNudgeTimer;
         let checkoutNudgeDelay;
         let exhibitionTimer;
+        let exhibitionPaused = false;
+        let exhibitionAutoplay = true;
         let storyAutoplayTimer;
         let activeStoryDetail = 'silhouette';
 
@@ -1279,11 +1286,30 @@
 
         function startExhibition() {
             clearInterval(exhibitionTimer);
-            exhibitionTimer = setInterval(() => moveExhibition(1), 4000);
+            if (!exhibitionAutoplay) return;
+            exhibitionTimer = setInterval(() => {
+                if (!exhibitionPaused) moveExhibition(1);
+            }, 4000);
+        }
+
+        function toggleExhibitionAutoplay() {
+            exhibitionAutoplay = !exhibitionAutoplay;
+            const btn = document.getElementById('exhibition-play');
+            btn.setAttribute('aria-pressed', exhibitionAutoplay ? 'true' : 'false');
+            btn.setAttribute('aria-label', exhibitionAutoplay ? 'Pause auto-scroll' : 'Play auto-scroll');
+            btn.innerHTML = exhibitionAutoplay
+                ? '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'
+                : '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            if (exhibitionAutoplay) startExhibition();
+            else clearInterval(exhibitionTimer);
         }
 
         const exhibitionRail = document.getElementById('exhibition-rail');
         startExhibition();
+        exhibitionRail?.addEventListener('mouseenter', () => { exhibitionPaused = true; });
+        exhibitionRail?.addEventListener('mouseleave', () => { exhibitionPaused = false; });
+        exhibitionRail?.addEventListener('touchstart', () => { exhibitionPaused = true; }, { passive: true });
+        exhibitionRail?.addEventListener('touchend', () => { exhibitionPaused = false; }, { passive: true });
 
         function openCheckout() {
             if (!cart.length) return;
@@ -1421,7 +1447,7 @@
             const isDark = html.classList.toggle('dark');
             localStorage.setItem(APP_CONFIG.themeKey, isDark ? 'dark' : 'light');
             applyThemeIcon(isDark);
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ededeb');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#e6e1d6');
         }
 
         (function initTheme() {
@@ -1430,7 +1456,7 @@
             if (saved === 'light') html.classList.remove('dark');
             else if (saved === 'dark') html.classList.add('dark');
             applyThemeIcon(html.classList.contains('dark'));
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', html.classList.contains('dark') ? '#121212' : '#ededeb');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', html.classList.contains('dark') ? '#121212' : '#e6e1d6');
         })();
 
         // --- Single Page Routing Logic ---
@@ -1743,11 +1769,14 @@
                 showAdminLogin();
             };
         }
-        async function handleAdminEntry(){
+        async function handleAdminEntry(sessionAlreadyResolved = false){
             if (window.location.pathname.replace(/\/+$/,'') !== '/admin') return;
             if(!SUPABASE_READY){showToast('Supabase is not configured.','warning');return;}
-            const {data:{session}}=await supabaseClient.auth.getSession();
-            if(session){await refreshAdminState(session.user);if(adminState.isAdmin){adminShell();document.getElementById('admin-panel').classList.remove('hidden');await loadAdminDashboard('overview');return;}}
+            if (!sessionAlreadyResolved) {
+                const {data:{session}}=await supabaseClient.auth.getSession();
+                if(session) await refreshAdminState(session.user);
+            }
+            if(adminState.isAdmin){adminShell();document.getElementById('admin-panel').classList.remove('hidden');await loadAdminDashboard('overview');return;}
             showAdminLogin();
         }
         const ADMIN_PALETTE = [
@@ -2086,7 +2115,7 @@
 
             const isAdminRoute = window.location.pathname.replace(/\/+$/,'') === '/admin';
             if (isAdminRoute) {
-                await handleAdminEntry();
+                await handleAdminEntry(true);
                 return;
             }
             await loadStoreProducts();
@@ -2108,7 +2137,7 @@
                 document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
                 document.querySelector('footer')?.classList.add('hidden');
                 document.getElementById('site-header')?.classList.add('hidden');
-                if (SUPABASE_READY) handleAdminEntry();
+                // Admin auth check runs once, from initializeSupabase() below.
                 return;
             }
             navigate(route.viewId, false);
@@ -2121,7 +2150,7 @@
                 document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
                 document.querySelector('footer')?.classList.add('hidden');
                 document.getElementById('site-header')?.classList.add('hidden');
-                if (SUPABASE_READY) showAdminLogin();
+                if (SUPABASE_READY) handleAdminEntry();
                 return;
             }
             if (route.viewId === 'product') {

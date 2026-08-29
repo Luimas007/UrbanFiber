@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#121212">
     <title>UrbanFiber | Premium Oversized T-Shirts</title>
+    <link rel="preconnect" href="https://trmbifurircmdgyfbcyd.supabase.co">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preload" as="image" href="brand.png" fetchpriority="high">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -31,7 +34,7 @@
                         brand: ['Cormorant Garamond', 'serif'],
                     },
                     colors: {
-                        uf: { dark: '#121212', light: '#ededeb', accent: '#333333' }
+                        uf: { dark: '#121212', light: '#e6e1d6', accent: '#333333' }
                     }
                 }
             }
@@ -166,15 +169,13 @@
             #checkout-modal { max-height: calc(100svh - 1rem); }
             #checkout-modal input, #checkout-modal select, #checkout-modal textarea { min-height: 3.25rem; }
             #checkout-modal textarea { min-height: 6rem; }
-        @media (min-width: 768px) {
         }
-
 
         /* ============================================================
            Premium interaction layer
            ============================================================ */
         :root {
-            --uf-surface: #f5f5f3;
+            --uf-surface: #efe9dd;
             --uf-card: rgba(255,255,255,.72);
             --uf-ink: #111111;
             --uf-muted: #737373;
@@ -186,7 +187,7 @@
         .dark {
             --uf-surface: #121212;
             --uf-card: rgba(255,255,255,.055);
-            --uf-ink: #f5f5f3;
+            --uf-ink: #efe9dd;
             --uf-muted: #999999;
             --uf-line: rgba(255,255,255,.11);
         }
@@ -520,6 +521,73 @@
         }
         @media (prefers-reduced-motion: reduce) { .product-image-placeholder::after { animation:none; } }
 
+    
+        /* UrbanFiber premium UI system — restrained, fast, touch-first */
+        .button-primary,.button-secondary,.button-icon,.size-btn,.product-color-dot{
+            -webkit-user-select:none;user-select:none;
+            touch-action:manipulation;
+        }
+        .button-primary{
+            display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+            min-height:3.15rem;padding:.85rem 1.35rem;border:1px solid transparent;
+            border-radius:999px;font-weight:650;letter-spacing:.14em;
+            box-shadow:0 8px 24px rgba(0,0,0,.12);
+        }
+        .button-secondary{
+            display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+            min-height:3rem;padding:.78rem 1.15rem;border:1px solid var(--uf-line);
+            border-radius:999px;background:transparent;color:inherit;font-weight:600;letter-spacing:.12em;
+        }
+        .button-icon{border:1px solid var(--uf-line);background:rgba(128,128,128,.04);transition:transform .2s var(--uf-ease),background .2s ease,border-color .2s ease}
+        .button-icon:hover{background:rgba(128,128,128,.10);border-color:currentColor;transform:translateY(-1px)}
+        .button-primary:hover{box-shadow:0 12px 30px rgba(0,0,0,.17);transform:translateY(-2px)}
+        .button-primary:active,.button-secondary:active,.button-icon:active{transform:scale(.98)}
+        .button-secondary:hover{background:rgba(128,128,128,.07);border-color:currentColor;transform:translateY(-1px)}
+        .button-primary:disabled,.button-secondary:disabled{opacity:.45;pointer-events:none}
+        .product-card{border-radius:1.35rem;padding:.35rem;transition:transform .3s var(--uf-ease),filter .3s ease}
+        .product-card:hover{transform:translateY(-5px);filter:drop-shadow(0 18px 24px rgba(0,0,0,.10))}
+        .product-card .product-img-wrapper{border-radius:1.1rem!important;box-shadow:none;background:#f0efeb}
+        .dark .product-card .product-img-wrapper{background:#1a1a1a}
+        .product-color-dot{width:1.7rem;height:1.7rem;border:2px solid rgba(255,255,255,.72);box-shadow:0 0 0 1px rgba(0,0,0,.16);transition:transform .2s var(--uf-ease),box-shadow .2s ease}
+        .product-color-dot:hover{transform:scale(1.12)}
+        .product-color-dot[aria-pressed=true]{box-shadow:0 0 0 2px var(--uf-surface),0 0 0 4px var(--uf-ink);transform:scale(1.08)}
+        #view-product .product-detail-copy{max-width:34rem}
+        #detail-img{transition:opacity .22s ease,transform .5s var(--uf-ease)}
+        #view-product .size-btn{border-radius:999px;background:transparent;min-height:3.1rem;font-weight:650}
+        #view-product .size-btn:hover{background:rgba(128,128,128,.07)}
+        #view-product .size-btn[aria-pressed=true]{box-shadow:0 8px 20px rgba(0,0,0,.12)}
+        #cart-drawer,#checkout-modal{will-change:transform}
+        #cart-drawer .button-primary,#checkout-modal .button-primary{min-height:3.35rem}
+        #checkout-modal input,#checkout-modal select,#checkout-modal textarea{border-radius:1rem!important;border-color:var(--uf-line)!important;background:rgba(128,128,128,.035)!important}
+        #checkout-modal input:focus,#checkout-modal select:focus,#checkout-modal textarea:focus{box-shadow:0 0 0 4px rgba(128,128,128,.10);border-color:currentColor!important}
+        .exhibition-stage{border-radius:2rem!important;box-shadow:0 24px 60px rgba(0,0,0,.18)}
+        .model-frame{border-radius:1.4rem;box-shadow:0 16px 40px rgba(0,0,0,.24)}
+        @media(max-width:767px){
+            body{font-size:15px}
+            .button-primary,.button-secondary{min-height:3.2rem;padding:.85rem 1rem}
+            .button-icon{min-width:3rem;min-height:3rem}
+            #view-shop .grid{gap:1rem}
+            #view-shop .product-card{padding:0}
+            #view-shop .product-card .flex.items-start{align-items:flex-start}
+            #view-shop .product-card .button-secondary{min-width:5.8rem;padding:.7rem .75rem;font-size:9px}
+            #view-product .product-actions{gap:.65rem}
+            #view-product .product-actions>div{border-radius:999px!important}
+            #view-product .product-actions>button{border-radius:999px!important}
+            #view-product h1{font-size:2.15rem;line-height:1.02}
+            #checkout-modal{width:calc(100% - 1rem);max-height:calc(100svh - .5rem);border-radius:1.5rem}
+            #checkout-modal>div:first-child{padding:1.15rem 1rem}
+            #checkout-modal form{padding:1rem}
+            #checkout-modal input,#checkout-modal select,#checkout-modal textarea{min-height:3.25rem}
+            #order-success{padding-left:1rem;padding-right:1rem}
+            .exhibition-stage{margin-left:.75rem;margin-right:.75rem;border-radius:1.5rem!important;padding:2rem .75rem}
+            .exhibition-rail .model-frame{flex-basis:84%;min-width:84%}
+            .hero-content button{border-radius:999px}
+        }
+        @media(prefers-reduced-motion:reduce){
+            .button-primary,.button-secondary,.button-icon,.product-card,.product-color-dot,#detail-img{transition:none!important}
+        }
+        }
+
     </style>
   <meta name="description" content="UrbanFiber — premium oversized silhouettes engineered for the modern city. Shop the core collection with Cash on Delivery across Bangladesh.">
     <meta name="theme-color" content="#121212">
@@ -535,7 +603,7 @@
 <body class="bg-uf-light text-gray-900 dark:bg-uf-dark dark:text-white font-sans overflow-x-hidden">
 
     <!-- Navigation -->
-    <nav id="site-header" class="fixed w-full z-50 top-0 transition-all duration-300 bg-[#ededeb]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
+    <nav id="site-header" class="fixed w-full z-50 top-0 transition-all duration-300 bg-[#e6e1d6]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
         <div class="relative max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <a href="/" onclick="return navigate('home')" class="flex items-center gap-3 group">
@@ -730,10 +798,10 @@
         </div>
     </main>
 
-    <div id="site-toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-20 z-[120] max-w-[calc(100%-2rem)] -translate-x-1/2 translate-y-4 rounded-full border border-gray-200 bg-[#f5f5f3]/95 px-5 py-3 text-center text-sm font-medium text-gray-900 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#121212]/95 dark:text-white"></div>
+    <div id="site-toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-20 z-[120] max-w-[calc(100%-2rem)] -translate-x-1/2 translate-y-4 rounded-full border border-gray-200 bg-[#efe9dd]/95 px-5 py-3 text-center text-sm font-medium text-gray-900 opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#121212]/95 dark:text-white"></div>
 
     <div id="cart-overlay" onclick="closeCart()" class="fixed inset-0 z-[60] hidden bg-black/40 opacity-0 transition-opacity duration-300"></div>
-    <aside id="cart-drawer" aria-label="Shopping cart" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-[#f5f5f3] text-gray-900 shadow-2xl transition-transform duration-300 dark:bg-[#121212] dark:text-white">
+    <aside id="cart-drawer" aria-label="Shopping cart" class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md translate-x-full flex-col bg-[#efe9dd] text-gray-900 shadow-2xl transition-transform duration-300 dark:bg-[#121212] dark:text-white">
         <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-white/10">
             <div>
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-gray-500">Your selection</p>
@@ -759,7 +827,7 @@
     </aside>
 
     <div id="checkout-nudge" class="pointer-events-none fixed bottom-4 left-4 right-4 z-[55] translate-y-6 opacity-0 transition-all duration-500 sm:left-auto sm:right-6 sm:w-96">
-        <div class="pointer-events-auto rounded-2xl border border-gray-200 bg-[#f5f5f3]/95 p-4 shadow-2xl backdrop-blur-md dark:border-white/10 dark:bg-[#121212]/95">
+        <div class="pointer-events-auto rounded-2xl border border-gray-200 bg-[#efe9dd]/95 p-4 shadow-2xl backdrop-blur-md dark:border-white/10 dark:bg-[#121212]/95">
             <div class="flex items-start gap-3">
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
                 <div class="min-w-0 flex-1"><p class="font-brand text-2xl leading-none">Your pieces are waiting</p><p class="mt-1 text-sm text-gray-500">Complete your order with Cash on Delivery.</p></div>
@@ -771,7 +839,7 @@
     </div>
 
     <div id="checkout-overlay" onclick="closeCheckout()" class="fixed inset-0 z-[80] hidden bg-black/50 p-4 opacity-0 transition-opacity duration-300 sm:p-6"></div>
-    <section id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" class="fixed left-1/2 top-1/2 z-[90] hidden max-h-[92vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-[46%] scale-95 overflow-y-auto rounded-2xl bg-[#f5f5f3] text-gray-900 opacity-0 shadow-2xl transition-all duration-300 dark:bg-[#121212] dark:text-white sm:w-[calc(100%-3rem)]">
+    <section id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" class="fixed left-1/2 top-1/2 z-[90] hidden max-h-[92vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-[46%] scale-95 overflow-y-auto rounded-2xl bg-[#efe9dd] text-gray-900 opacity-0 shadow-2xl transition-all duration-300 dark:bg-[#121212] dark:text-white sm:w-[calc(100%-3rem)]">
         <div class="flex items-start justify-between border-b border-gray-200 px-6 py-6 dark:border-white/10 sm:px-8">
             <div>
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-gray-500">UrbanFiber delivery</p>
@@ -798,7 +866,17 @@
             </div>
             <button type="submit" class="button-primary w-full bg-black py-4 text-sm font-medium uppercase tracking-[0.18em] text-white hover:opacity-80 dark:bg-white dark:text-black">Place COD Order</button>
         </form>
-        <div id="order-success" class="hidden px-6 pb-8 text-center sm:px-8"><div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-black text-xl text-white dark:bg-white dark:text-black">&#10003;</div><h3 class="font-brand text-3xl">Order received</h3><p class="mt-2 text-sm text-gray-500">Thank you. We will call to confirm your Cash on Delivery order.</p><button onclick="closeCheckout()" class="mt-6 rounded-full border border-gray-300 px-6 py-3 text-sm font-medium uppercase tracking-widest dark:border-white/20">Continue shopping</button></div>
+        <div id="order-success" class="hidden px-5 pb-8 text-center sm:px-8">
+            <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-black text-xl text-white shadow-lg dark:bg-white dark:text-black">&#10003;</div>
+            <p class="mb-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-gray-500">Order confirmed</p>
+            <h3 class="font-brand text-3xl sm:text-4xl">Order received</h3>
+            <p id="order-success-copy" class="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">Thank you. We will call to confirm your Cash on Delivery order.</p>
+            <div class="mx-auto mt-7 grid max-w-md gap-3 sm:grid-cols-2">
+                <button id="customer-invoice-download" type="button" class="button-primary w-full bg-black py-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-white dark:bg-white dark:text-black">Download invoice</button>
+                <button type="button" onclick="closeCheckout()" class="button-secondary w-full py-4 text-[10px] font-semibold uppercase tracking-[0.18em]">Continue shopping</button>
+            </div>
+            <button id="customer-invoice-print" type="button" class="mt-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-500 transition hover:text-black dark:hover:text-white">Print / Save as PDF</button>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -1227,11 +1305,11 @@
         }
 
         const exhibitionRail = document.getElementById('exhibition-rail');
-        exhibitionRail.addEventListener('mouseenter', () => { exhibitionPaused = true; });
-        exhibitionRail.addEventListener('mouseleave', () => { exhibitionPaused = false; });
-        exhibitionRail.addEventListener('touchstart', () => { exhibitionPaused = true; }, { passive: true });
-        exhibitionRail.addEventListener('touchend', () => { exhibitionPaused = false; }, { passive: true });
         startExhibition();
+        exhibitionRail?.addEventListener('mouseenter', () => { exhibitionPaused = true; });
+        exhibitionRail?.addEventListener('mouseleave', () => { exhibitionPaused = false; });
+        exhibitionRail?.addEventListener('touchstart', () => { exhibitionPaused = true; }, { passive: true });
+        exhibitionRail?.addEventListener('touchend', () => { exhibitionPaused = false; }, { passive: true });
 
         function openCheckout() {
             if (!cart.length) return;
@@ -1296,14 +1374,64 @@
             try {
                 const { data, error } = await supabaseClient.rpc('create_guest_order', { p_order: orderDraft });
                 if (error) throw error;
+                const invoice = {
+                    order: data,
+                    customer: orderDraft.customer,
+                    items: cart.map(item => {
+                        const product = productById(item.productId);
+                        return {
+                            product_name: product?.name || item.title || 'UrbanFiber product',
+                            color: item.color, size: item.size, quantity: Math.max(1, Math.min(20, Number(item.quantity) || 1)),
+                            unit_price_bdt: Number(product?.price_bdt ?? item.price ?? 0)
+                        };
+                    })
+                };
+                window.__URBANFIBER_LAST_INVOICE__ = invoice;
                 cart = []; saveCart(); form.classList.add('hidden'); document.getElementById('order-success').classList.remove('hidden');
-                const successText = document.querySelector('#order-success p');
+                const successText = document.getElementById('order-success-copy');
                 if (successText) successText.textContent = `Order ${data.order_number} received. Total ${formatMoney(data.total_bdt)}. We will call to confirm your Cash on Delivery order.`;
+                const invoiceDownload = document.getElementById('customer-invoice-download');
+                const invoicePrint = document.getElementById('customer-invoice-print');
+                if (invoiceDownload) invoiceDownload.onclick = () => downloadCustomerInvoice(window.__URBANFIBER_LAST_INVOICE__);
+                if (invoicePrint) invoicePrint.onclick = () => printCustomerInvoice(window.__URBANFIBER_LAST_INVOICE__);
             } catch (error) {
                 console.error('Order creation failed:', error);
                 const message = error?.message || 'Database request failed.';
                 showToast(message, 'warning');
             } finally { submitButton.disabled = false; submitButton.textContent = 'Place COD Order'; }
+        }
+
+        function buildInvoiceDocument(invoice) {
+            if (!invoice?.order) return '';
+            const o = invoice.order;
+            const c = invoice.customer || {};
+            const items = (invoice.items || []).map(item => {
+                const line = Number(item.unit_price_bdt || 0) * Number(item.quantity || 0);
+                return `<tr><td><strong>${escapeHtml(item.product_name)}</strong><br><small>${escapeHtml(item.color || '')} / ${escapeHtml(item.size || '')}</small></td><td>${Number(item.quantity || 0)}</td><td>${formatMoney(item.unit_price_bdt)}</td><td>${formatMoney(line)}</td></tr>`;
+            }).join('');
+            return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UrbanFiber Invoice ${escapeHtml(o.order_number || '')}</title><style>
+                *{box-sizing:border-box}body{margin:0;background:#f4f3ef;color:#111;font-family:Inter,Arial,sans-serif}.sheet{width:min(820px,calc(100% - 32px));margin:32px auto;background:#fff;padding:42px;box-shadow:0 18px 60px rgba(0,0,0,.10)}.top{display:flex;justify-content:space-between;gap:24px;border-bottom:1px solid #e7e5df;padding-bottom:26px}.brand{font-weight:800;letter-spacing:.18em;font-size:22px}.muted{color:#777}.meta{text-align:right;font-size:13px;line-height:1.7}h1{font-size:32px;margin:34px 0 8px}.customer{margin:28px 0;padding:18px;background:#f7f6f2;border-radius:14px;line-height:1.7;font-size:14px}table{width:100%;border-collapse:collapse;margin-top:26px;font-size:14px}th,td{text-align:left;padding:14px 8px;border-bottom:1px solid #e7e5df}th:nth-child(n+2),td:nth-child(n+2){text-align:right}.totals{margin:24px 0 0 auto;max-width:330px}.row{display:flex;justify-content:space-between;padding:7px 0}.grand{font-size:21px;font-weight:800;border-top:1px solid #111;margin-top:8px;padding-top:14px}.foot{margin-top:34px;padding-top:20px;border-top:1px solid #e7e5df;font-size:12px;color:#777}@media print{body{background:#fff}.sheet{width:100%;margin:0;box-shadow:none;padding:20px}}
+            </style></head><body><main class="sheet"><div class="top"><div><div class="brand">URBANFIBER</div><div class="muted" style="margin-top:8px">Premium oversized essentials</div></div><div class="meta"><strong>INVOICE</strong><br>${escapeHtml(o.order_number || '')}<br>${new Date().toLocaleDateString('en-GB')}</div></div><h1>Thank you for your order.</h1><div class="customer"><strong>Delivery details</strong><br>${escapeHtml(c.name || '')}<br>${escapeHtml(c.phone || '')}<br>${escapeHtml(c.address || '')}, ${escapeHtml(c.area || '')}, ${escapeHtml(c.district || '')}${c.postcode ? `, ${escapeHtml(c.postcode)}` : ''}</div><table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${items}</tbody></table><div class="totals"><div class="row"><span>Subtotal</span><strong>${formatMoney(o.subtotal_bdt)}</strong></div><div class="row"><span>Delivery</span><strong>${formatMoney(o.delivery_charge_bdt)}</strong></div><div class="row grand"><span>Total</span><strong>${formatMoney(o.total_bdt)}</strong></div></div><div class="foot">Payment method: Cash on Delivery · Currency: BDT<br>UrbanFiber · urban-fiber.com</div></main></body></html>`;
+        }
+
+        function downloadCustomerInvoice(invoice) {
+            const html = buildInvoiceDocument(invoice);
+            if (!html) return showToast('Invoice is unavailable.', 'warning');
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `UrbanFiber-${invoice.order.order_number || 'invoice'}.html`;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        function printCustomerInvoice(invoice) {
+            const html = buildInvoiceDocument(invoice);
+            if (!html) return showToast('Invoice is unavailable.', 'warning');
+            const w = window.open('', '_blank', 'noopener,noreferrer');
+            if (!w) return showToast('Please allow pop-ups to print your invoice.', 'warning');
+            w.document.open(); w.document.write(html); w.document.close();
+            setTimeout(() => w.print(), 250);
         }
 
         // --- Theme Toggle Logic (persists choice) ---
@@ -1319,7 +1447,7 @@
             const isDark = html.classList.toggle('dark');
             localStorage.setItem(APP_CONFIG.themeKey, isDark ? 'dark' : 'light');
             applyThemeIcon(isDark);
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ededeb');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#e6e1d6');
         }
 
         (function initTheme() {
@@ -1328,7 +1456,7 @@
             if (saved === 'light') html.classList.remove('dark');
             else if (saved === 'dark') html.classList.add('dark');
             applyThemeIcon(html.classList.contains('dark'));
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', html.classList.contains('dark') ? '#121212' : '#ededeb');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', html.classList.contains('dark') ? '#121212' : '#e6e1d6');
         })();
 
         // --- Single Page Routing Logic ---
@@ -1410,128 +1538,26 @@
         startStoryAutoplay();
 
         function initializeVariantPreviews() {
-            const variantsByImage = {
-                'Materials/stronger_black.jpeg': ['Materials/stronger_black.jpeg', 'Materials/stronger_white.jpeg'],
-                'Materials/urban_black.jpeg': ['Materials/urban_black.jpeg', 'Materials/urban_ash.jpeg'],
-                'Materials/vibes_black.jpeg': ['Materials/vibes_black.jpeg', 'Materials/vibes_white.jpeg'],
-                'Materials/time_black.jpeg': ['Materials/time_black.jpeg', 'Materials/time_white.jpeg']
-            };
-            document.querySelectorAll('.product-card').forEach(card => {
-                const image = card.querySelector('.product-img-wrapper img');
-                const variants = variantsByImage[image?.getAttribute('src')];
-                if (!image || !variants || variants.length < 2) return;
-                let previewTimer;
-                let previewIndex = 0;
-                let touchStartX = null;
-                let suppressClick = false;
-                const showVariant = nextIndex => {
-                    previewIndex = (nextIndex + variants.length) % variants.length;
-                    image.style.opacity = '0.35';
-                    setTimeout(() => {
-                        image.src = variants[previewIndex];
-                        image.style.opacity = '1';
-                    }, 90);
-                };
-                const stopPreview = () => {
-                    clearInterval(previewTimer);
-                    previewIndex = 0;
-                    image.src = variants[0];
-                    image.style.opacity = '1';
-                    image.classList.remove('variant-preview');
-                };
-                const startPreview = () => {
-                    if (!window.matchMedia('(hover: hover)').matches) return;
-                    clearInterval(previewTimer);
-                    image.classList.add('variant-preview');
-                    previewTimer = setInterval(() => {
-                        showVariant(previewIndex + 1);
-                    }, 650);
-                };
-                card.addEventListener('mouseenter', startPreview);
-                card.addEventListener('mouseleave', stopPreview);
-                card.addEventListener('focusin', startPreview);
-                card.addEventListener('focusout', stopPreview);
-                image.addEventListener('touchstart', event => {
-                    touchStartX = event.changedTouches[0].clientX;
-                }, { passive: true });
-                image.addEventListener('touchend', event => {
-                    if (touchStartX === null) return;
-                    const distance = event.changedTouches[0].clientX - touchStartX;
-                    touchStartX = null;
-                    if (Math.abs(distance) < 18) return;
-                    event.preventDefault();
-                    showVariant(previewIndex + (distance < 0 ? 1 : -1));
-                    suppressClick = true;
-                    setTimeout(() => { suppressClick = false; }, 350);
-                }, { passive: false });
-                card.addEventListener('click', event => {
-                    if (!suppressClick) return;
-                    event.preventDefault();
-                    event.stopImmediatePropagation();
-                    suppressClick = false;
-                }, true);
-            });
+            // Color dots are the intentional variant interaction. Avoid competing hover image swaps.
         }
 
         function startFeaturedTour() {
             const tourKey = 'urbanfiber-featured-tour-seen';
             if (localStorage.getItem(tourKey) || getInitialRoute?.().viewId !== 'home') return;
             localStorage.setItem(tourKey, 'true');
-
             const track = document.getElementById('featured-track');
-            const featured = document.getElementById('featured-drops');
+            if (!track) return;
             const cards = [...track.querySelectorAll('.product-card')];
-            const variantsByImage = {
-                'Materials/stronger_black.jpeg': 'Materials/stronger_white.jpeg',
-                'Materials/urban_black.jpeg': 'Materials/urban_ash.jpeg',
-                'Materials/vibes_black.jpeg': 'Materials/vibes_white.jpeg',
-                'Materials/time_black.jpeg': 'Materials/time_white.jpeg'
-            };
-            let tourTimer;
-            let step = 0;
-            let cancelled = false;
-
-            const cancelTour = () => {
-                cancelled = true;
-                clearTimeout(tourTimer);
-            };
-            const showNextColor = card => {
-                const image = card.querySelector('.product-img-wrapper img');
-                const alternate = variantsByImage[image?.getAttribute('src')];
-                if (!image || !alternate) return;
-                const original = image.getAttribute('src');
-                image.classList.add('variant-preview');
-                image.style.opacity = '0.35';
-                setTimeout(() => {
-                    if (!cancelled) {
-                        image.src = alternate;
-                        image.style.opacity = '1';
-                    }
-                }, 100);
-                setTimeout(() => {
-                    if (!cancelled) {
-                        image.src = original;
-                        image.classList.remove('variant-preview');
-                    }
-                }, 850);
-            };
-            const tourStep = () => {
+            if (cards.length < 2 || !window.matchMedia('(hover: hover)').matches) return;
+            let timer; let step = 0; let cancelled = false;
+            const cancel = () => { cancelled = true; clearTimeout(timer); };
+            ['wheel','touchstart','pointerdown','keydown'].forEach(name => window.addEventListener(name, cancel, {once:true, passive:true}));
+            const run = () => {
                 if (cancelled || step >= cards.length) return;
-                const card = cards[step];
-                track.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
-                showNextColor(card);
-                step += 1;
-                tourTimer = setTimeout(tourStep, 1250);
+                cards[step++].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+                timer = setTimeout(run, 1350);
             };
-
-            ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => {
-                window.addEventListener(eventName, cancelTour, { once: true, passive: true });
-            });
-            tourTimer = setTimeout(() => {
-                if (cancelled) return;
-                featured.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                tourTimer = setTimeout(tourStep, 800);
-            }, 1400);
+            timer = setTimeout(run, 1800);
         }
 
         // --- Dynamic Product View ---
@@ -1743,11 +1769,14 @@
                 showAdminLogin();
             };
         }
-        async function handleAdminEntry(){
+        async function handleAdminEntry(sessionAlreadyResolved = false){
             if (window.location.pathname.replace(/\/+$/,'') !== '/admin') return;
             if(!SUPABASE_READY){showToast('Supabase is not configured.','warning');return;}
-            const {data:{session}}=await supabaseClient.auth.getSession();
-            if(session){await refreshAdminState(session.user);if(adminState.isAdmin){adminShell();document.getElementById('admin-panel').classList.remove('hidden');await loadAdminDashboard('overview');return;}}
+            if (!sessionAlreadyResolved) {
+                const {data:{session}}=await supabaseClient.auth.getSession();
+                if(session) await refreshAdminState(session.user);
+            }
+            if(adminState.isAdmin){adminShell();document.getElementById('admin-panel').classList.remove('hidden');await loadAdminDashboard('overview');return;}
             showAdminLogin();
         }
         const ADMIN_PALETTE = [
@@ -1942,7 +1971,7 @@
             })();
             let selectedSize = null, selectedColor = firstColor;
             modal.querySelector('#quick-title').textContent=p.name;
-            modal.querySelector('#quick-preview').innerHTML=`<img src="${escapeHtml(productImageUrl(p.image_url))}" class="h-16 w-16 rounded-xl object-cover" alt=""><div><p class="font-semibold">${escapeHtml(p.name)}</p><p class="text-sm opacity-50">${formatMoney(p.price_bdt)}</p></div>`;
+            modal.querySelector('#quick-preview').innerHTML=`<img id="quick-preview-img" src="${escapeHtml(variantImage(p.variants, firstColor, p.image_url))}" class="h-16 w-16 rounded-2xl object-cover bg-black/5 dark:bg-white/5" alt=""><div class="min-w-0"><p class="truncate font-semibold">${escapeHtml(p.name)}</p><p class="mt-1 text-sm opacity-50">${formatMoney(p.price_bdt)}</p></div>`;
             modal.querySelector('#quick-sizes').innerHTML=sizes.map(sz=>`<button type="button" data-size="${escapeHtml(sz)}" class="quick-size rounded-xl border px-3 py-3 text-xs font-semibold transition hover:-translate-y-0.5">${escapeHtml(sz)}</button>`).join('');
             modal.querySelectorAll('.quick-size').forEach(b=>b.onclick=()=>{selectedSize=b.dataset.size;modal.querySelectorAll('.quick-size').forEach(x=>x.classList.remove('bg-black','text-white','dark:bg-white','dark:text-black'));b.classList.add('bg-black','text-white','dark:bg-white','dark:text-black');});
             modal.querySelector('#quick-colors').innerHTML=colors.map(c=>{const hex=(ADMIN_PALETTE.find(x=>x[0].toLowerCase().replace(/\s+/g,'-')===c)||[])[1]||c;return `<button type="button" data-color="${escapeHtml(c)}" class="quick-color flex items-center gap-2 rounded-full border px-3 py-2 text-xs"><span class="h-4 w-4 rounded-full border border-black/10" style="background:${escapeHtml(hex)}"></span>${escapeHtml(c.replaceAll('-',' '))}</button>`}).join('') || '<span class="text-xs opacity-50">Default color</span>' || '<span class="text-xs opacity-50">Default color</span>';
@@ -2084,8 +2113,12 @@
                 else adminState={user:null,isAdmin:false};
             });
 
+            const isAdminRoute = window.location.pathname.replace(/\/+$/,'') === '/admin';
+            if (isAdminRoute) {
+                await handleAdminEntry(true);
+                return;
+            }
             await loadStoreProducts();
-            await handleAdminEntry();
         }
 
         function getInitialRoute() {
@@ -2104,7 +2137,7 @@
                 document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
                 document.querySelector('footer')?.classList.add('hidden');
                 document.getElementById('site-header')?.classList.add('hidden');
-                if (SUPABASE_READY) handleAdminEntry();
+                // Admin auth check runs once, from initializeSupabase() below.
                 return;
             }
             navigate(route.viewId, false);
@@ -2117,7 +2150,7 @@
                 document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
                 document.querySelector('footer')?.classList.add('hidden');
                 document.getElementById('site-header')?.classList.add('hidden');
-                if (SUPABASE_READY) showAdminLogin();
+                if (SUPABASE_READY) handleAdminEntry();
                 return;
             }
             if (route.viewId === 'product') {
