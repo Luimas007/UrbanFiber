@@ -1127,13 +1127,6 @@ function wire() {
   stage.addEventListener('mouseleave', () => railPaused = false);
   rail.addEventListener('touchstart', () => railPaused = true, { passive:true });
   rail.addEventListener('touchend',   () => { setTimeout(() => railPaused = false, 2500); }, { passive:true });
-  // mouse wheel has no horizontal axis on a desktop trackpad/mouse — remap
-  // vertical wheel delta to horizontal scroll so the rail is reachable without touch.
-  rail.addEventListener('wheel', (e) => {
-    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-    e.preventDefault();
-    rail.scrollLeft += e.deltaY;
-  }, { passive:false });
   $('#rail-prev').addEventListener('click', () => railNav(-1));
   $('#rail-next').addEventListener('click', () => railNav(1));
 
