@@ -203,6 +203,11 @@ input,select,textarea{font:inherit;color:inherit}
   opacity:0;transform:scale(1.035);transition:opacity 1.6s ease,transform 7s ease}
 .hero__img.is-active{opacity:1;transform:scale(1)}
 @media(prefers-reduced-motion:reduce){.hero__img{transition:opacity 1.6s ease;transform:none}}
+.hero__dots{position:absolute;left:50%;bottom:var(--s4);translate:-50% 0;z-index:1;
+  display:flex;gap:.5rem}
+.hero__dots span{width:1.5rem;height:3px;border-radius:99px;background:rgba(255,255,255,.35);
+  transition:background .5s ease}
+.hero__dots span.is-active{background:rgba(255,255,255,.92)}
 .hero__body{padding:var(--s6) var(--s4) 0;text-align:center;color:var(--fg);
   display:grid;gap:var(--s4);justify-items:center;max-width:min(100%,72rem);width:min(100%,72rem);margin-inline:auto;min-width:0}
 .hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;max-width:min(100%,14ch);min-width:0}
@@ -636,6 +641,10 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
         <source srcset="brand2-1920.webp 1920w, brand2-1280.webp 1280w" sizes="100vw" type="image/webp">
         <img class="hero__img" src="brand2.jpg" alt="" width="1940" height="810" loading="lazy" decoding="async" draggable="false">
       </picture>
+      <div class="hero__dots" id="hero-dots" aria-hidden="true">
+        <span class="is-active"></span>
+        <span></span>
+      </div>
     </div>
     <div class="hero__body">
       <h1 class="hero__title" id="hero-title">Built for the city</h1>

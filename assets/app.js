@@ -396,12 +396,16 @@ let heroTimer, heroSlides = [];
 function heroStart() {
   clearInterval(heroTimer);
   heroSlides = [...$('#hero-media').querySelectorAll('.hero__img')];
-  if (heroSlides.length < 2 || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const dots = [...$('#hero-dots').children];
+  if (heroSlides.length < 2) { $('#hero-dots').hidden = true; return; }
+  if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   let heroIdx = 0;
   heroTimer = setInterval(() => {
     heroSlides[heroIdx].classList.remove('is-active');
+    dots[heroIdx]?.classList.remove('is-active');
     heroIdx = (heroIdx + 1) % heroSlides.length;
     heroSlides[heroIdx].classList.add('is-active');
+    dots[heroIdx]?.classList.add('is-active');
   }, 5000);
 }
 
