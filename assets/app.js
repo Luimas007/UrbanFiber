@@ -700,6 +700,17 @@ function renderCart() {
     <button class="btn btn--primary btn--block btn--lg" id="go-checkout">Checkout</button>`;
 }
 
+/* -------------------------------- mobile nav ------------------------------- */
+function toggleMenu() {
+  const open = !$('#nav-primary').classList.contains('is-open');
+  $('#nav-primary').classList.toggle('is-open', open);
+  $('#menu-btn').setAttribute('aria-expanded', String(open));
+}
+function closeMenu() {
+  $('#nav-primary').classList.remove('is-open');
+  $('#menu-btn').setAttribute('aria-expanded', 'false');
+}
+
 /* ------------------------------- overlays --------------------------------- */
 let lastFocus = null;
 function lockScroll(on) { document.body.classList.toggle('is-locked', on); }
@@ -889,6 +900,7 @@ function wire() {
     const nav = t.closest('[data-nav]');
     if (nav) {
       e.preventDefault();
+      closeMenu();
       navigate(nav.dataset.nav);
       return;
     }
@@ -986,6 +998,8 @@ function wire() {
       try { localStorage.setItem(CFG.themeKey, next); } catch {}
       return;
     }
+    if (t.closest('#menu-btn')) { toggleMenu(); return; }
+    if (!t.closest('#nav-primary') && !t.closest('#menu-btn')) closeMenu();
   });
 
   // keyboard: cards are focusable
@@ -998,6 +1012,7 @@ function wire() {
       if ($('#lightbox').getAttribute('aria-hidden') === 'false') closeLightbox();
       else if ($('#checkout').getAttribute('aria-hidden') === 'false') closeCheckout();
       else if ($('#cart').getAttribute('aria-hidden') === 'false') closeCart();
+      else if ($('#nav-primary').classList.contains('is-open')) closeMenu();
     }
   });
 
