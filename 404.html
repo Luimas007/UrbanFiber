@@ -79,6 +79,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 1rem)}
 body{
   margin:0;background:var(--bg);color:var(--fg);
@@ -612,6 +613,13 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
         <source srcset="brand-1920.avif 1920w, brand-1280.avif 1280w" sizes="100vw" type="image/avif">
         <source srcset="brand-1920.webp 1920w, brand-1280.webp 1280w" sizes="100vw" type="image/webp">
         <img class="hero__img is-active" src="brand.jpg" alt="" width="1940" height="810" fetchpriority="high" decoding="async">
+      </picture>
+      <picture>
+        <source media="(max-width:767px)" srcset="brand2-768.avif" type="image/avif">
+        <source media="(max-width:767px)" srcset="brand2-768.webp" type="image/webp">
+        <source srcset="brand2-1920.avif 1920w, brand2-1280.avif 1280w" sizes="100vw" type="image/avif">
+        <source srcset="brand2-1920.webp 1920w, brand2-1280.webp 1280w" sizes="100vw" type="image/webp">
+        <img class="hero__img" src="brand2.jpg" alt="" width="1940" height="810" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="hero__body">

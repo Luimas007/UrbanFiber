@@ -543,12 +543,9 @@ async function viewAppearance(v) {
       </div>
 
       <div class="card">
-        <h3 style="font-size:.95rem;margin-bottom:.3rem">Hero images</h3>
-        <p class="hint" style="margin-bottom:.8rem">The photo (or photos) at the top of your homepage. With two or more, they crossfade automatically. Leave empty to use the default UrbanFiber banner. The image is shown whole — nothing from the store is drawn on top of it — so headline/button text below is safe with any photo, including ones with their own logo or text baked in.</p>
-        <div id="hero-images"></div>
-        <label class="f" style="margin-top:.6rem"><span>Add a hero image</span>
-          <input class="in" type="file" id="hero-add" accept="image/*"></label>
-        <div class="grid g2" style="margin-top:.85rem">
+        <h3 style="font-size:.95rem;margin-bottom:.3rem">Hero</h3>
+        <p class="hint" style="margin-bottom:.8rem">The homepage banner crossfades between the two bundled UrbanFiber photos automatically.</p>
+        <div class="grid g2">
           <label class="f" style="grid-column:1/-1"><span>Headline</span>
             <input class="in" name="hero_headline" maxlength="60" value="${esc(s.hero_headline||'')}" placeholder="Built for the city"></label>
           <label class="f" style="grid-column:1/-1"><span>Supporting line</span>
@@ -580,9 +577,7 @@ async function viewAppearance(v) {
       </div>
     </form>`;
 
-  populateImageList($('#hero-images'), s.hero_images);
   populateImageList($('#model-images'), s.model_images);
-  wireImageAdd($('#hero-add'), $('#hero-images'), 'products/hero');
   wireImageAdd($('#model-add'), $('#model-images'), 'products/models');
   $('#sform').addEventListener('submit', saveSettings);
 }
@@ -627,12 +622,10 @@ async function saveSettings(e) {
   err.hidden = true; btn.disabled = true; btn.textContent = 'Saving…';
   try {
     const fd = new FormData(form);
-    const heroImages  = [...$('#hero-images').children].map(r => r.dataset.url);
     const modelImages = [...$('#model-images').children].map(r => r.dataset.url);
 
     const freeRaw = String(fd.get('free_delivery_over_bdt') || '').trim();
     const payload = {
-      hero_images: heroImages,
       model_images: modelImages,
       hero_headline: String(fd.get('hero_headline') || '').trim(),
       hero_subcopy: String(fd.get('hero_subcopy') || '').trim(),

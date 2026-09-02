@@ -102,7 +102,6 @@ const IMG_SIZE = {
   card: { width: 400, height: 500, quality: 70 },
   pdp:  { width: 800, height: 1000, quality: 78 },
   line: { width: 160, height: 200, quality: 65 },
-  hero: { width: 1600, quality: 72 },
   rail: { width: 880, height: 704, quality: 68 }
 };
 function sizedImg(url, preset) {
@@ -352,7 +351,6 @@ function paintCategories() {
 function paintSettings() {
   const s = state.settings;
   if (!s) return;
-  renderHero(Array.isArray(s.hero_images) ? s.hero_images.filter(Boolean) : []);
   renderRail(Array.isArray(s.model_images) ? s.model_images.filter(Boolean) : []);
   if (s.hero_headline) $('#hero-title').textContent = s.hero_headline;
   if (s.hero_subcopy)  $('#hero-sub').textContent  = s.hero_subcopy;
@@ -392,32 +390,19 @@ function paintAll() {
 }
 
 /* -------------------------------- hero -------------------------------- */
-/* Bundled default lives in the static markup and is preloaded/fetchpriority
-   for LCP — heroKey starts pre-seeded to the empty-array state so the common
-   case (no admin override) never touches that element or re-triggers a load. */
-let heroTimer, heroSlides = [], heroIdx = 0, heroKey = '[]', defaultHeroHTML = null;
+/* Two bundled slides live in the static markup (brand.jpg, brand2.jpg) and
+   crossfade automatically. */
+let heroTimer, heroSlides = [];
 function heroStart() {
   clearInterval(heroTimer);
+  heroSlides = [...$('#hero-media').querySelectorAll('.hero__img')];
   if (heroSlides.length < 2 || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  let heroIdx = 0;
   heroTimer = setInterval(() => {
     heroSlides[heroIdx].classList.remove('is-active');
     heroIdx = (heroIdx + 1) % heroSlides.length;
     heroSlides[heroIdx].classList.add('is-active');
   }, 5000);
-}
-function renderHero(urls) {
-  const key = JSON.stringify(urls);
-  if (key === heroKey) return;
-  heroKey = key;
-  const media = $('#hero-media');
-  if (defaultHeroHTML === null) defaultHeroHTML = media.innerHTML;
-  media.innerHTML = urls.length
-    ? urls.map((u, i) => `<img class="hero__img${i === 0 ? ' is-active' : ''}" src="${esc(sizedImg(u, 'hero'))}"
-        alt="" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async">`).join('')
-    : defaultHeroHTML;
-  heroSlides = [...media.querySelectorAll('.hero__img')];
-  heroIdx = 0;
-  heroStart();
 }
 
 /* -------------------------------- rail ------------------------------------ */
@@ -1135,6 +1120,13 @@ function wire() {
   rail.addEventListener('mouseleave', () => railPaused = false);
   rail.addEventListener('touchstart', () => railPaused = true, { passive:true });
   rail.addEventListener('touchend',   () => { setTimeout(() => railPaused = false, 2500); }, { passive:true });
+  // mouse wheel has no horizontal axis on a desktop trackpad/mouse — remap
+  // vertical wheel delta to horizontal scroll so the rail is reachable without touch.
+  rail.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    e.preventDefault();
+    rail.scrollLeft += e.deltaY;
+  }, { passive:false });
 
   // header hide on scroll down (mobile reading space)
   let lastY = 0;
@@ -1160,6 +1152,7 @@ function boot() {
   loadCart();
   renderRail([]);
   wire();
+  heroStart();
   railStart();
   storyStart();
   renderCartCount();
