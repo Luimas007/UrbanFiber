@@ -1,0 +1,44 @@
+name: Keep-alive Ping
+
+# A single lightweight daily request to the deployed site. Its real purpose
+# is to stop the Supabase backend from auto-pausing after a period of no
+# API activity (free-tier projects pause after ~7 days idle) — loading the
+# homepage triggers a catalogue fetch, so one successful ping a day is
+# comfortably enough, with a wide safety margin, while staying minimal.
+#
+# Reconfiguring for a new deployment: set the SITE_URL repository variable
+# (Settings -> Secrets and variables -> Actions -> Variables) to the new
+# production URL. Nothing in this file needs to change.
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # once a day, 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping deployed site
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "::warning::SITE_URL repository variable is not set — skipping. Configure it under Settings > Secrets and variables > Actions > Variables."
+            exit 0
+          fi
+
+          echo "Pinging $SITE_URL"
+          status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 --retry 2 --retry-delay 5 --retry-all-errors "$SITE_URL" || echo "000")
+          echo "Response status: $status"
+
+          if [ "$status" -ge 200 ] && [ "$status" -lt 400 ]; then
+            echo "Site responded normally."
+          else
+            # Best-effort: a transient failure here shouldn't page anyone or
+            # block anything else, so warn instead of failing the job.
+            echo "::warning::Site returned status $status (or was unreachable). Not treating this as a failure — will retry on the next scheduled run."
+          fi

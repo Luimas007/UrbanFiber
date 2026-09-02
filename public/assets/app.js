@@ -64,7 +64,7 @@ function readyImages(root = document) {
 }
 
 /* ------------------------------- supabase --------------------------------- */
-const CONF = window.__UF__ || {};
+const CONF = window.__UF_CONFIG__ || {};
 let sb = null;
 try {
   if (CONF.supabaseUrl && CONF.supabaseKey && window.supabase?.createClient) {

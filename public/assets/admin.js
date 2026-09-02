@@ -8,7 +8,7 @@
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-const CONF = window.__UF__ || {};
+const CONF = window.__UF_CONFIG__ || {};
 const sb = window.supabase.createClient(CONF.supabaseUrl, CONF.supabaseKey, {
   auth: { persistSession: true, autoRefreshToken: true }
 });

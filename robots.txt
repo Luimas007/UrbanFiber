@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /admin.html
-Disallow: /supabase-setup.sql
-Disallow: /supabase-patch.sql
-Disallow: /supabase-storage-fix.sql
-
-Sitemap: https://urban-fiber.com/sitemap.xml
