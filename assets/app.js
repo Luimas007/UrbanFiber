@@ -441,6 +441,13 @@ function railStep() {
   const atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 8;
   rail.scrollTo({ left: atEnd ? 0 : rail.scrollLeft + step, behavior: 'smooth' });
 }
+function railNav(dir) {
+  const rail = $('#rail');
+  const card = rail.querySelector('.frame');
+  if (!card) return;
+  const step = card.getBoundingClientRect().width + 12;
+  rail.scrollBy({ left: dir * step, behavior: 'smooth' });
+}
 function railStart() {
   clearInterval(railTimer);
   if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
@@ -1115,9 +1122,9 @@ function wire() {
   $('#co-form [name=district]').addEventListener('change', updateTotals);
 
   // rail pause on interaction
-  const rail = $('#rail');
-  rail.addEventListener('mouseenter', () => railPaused = true);
-  rail.addEventListener('mouseleave', () => railPaused = false);
+  const rail = $('#rail'), stage = $('.stage');
+  stage.addEventListener('mouseenter', () => railPaused = true);
+  stage.addEventListener('mouseleave', () => railPaused = false);
   rail.addEventListener('touchstart', () => railPaused = true, { passive:true });
   rail.addEventListener('touchend',   () => { setTimeout(() => railPaused = false, 2500); }, { passive:true });
   // mouse wheel has no horizontal axis on a desktop trackpad/mouse — remap
@@ -1127,6 +1134,8 @@ function wire() {
     e.preventDefault();
     rail.scrollLeft += e.deltaY;
   }, { passive:false });
+  $('#rail-prev').addEventListener('click', () => railNav(-1));
+  $('#rail-next').addEventListener('click', () => railNav(1));
 
   // header hide on scroll down (mobile reading space)
   let lastY = 0;

@@ -419,6 +419,38 @@ const STATUS = {
 const NEXT = { pending:['accepted','cancelled'], accepted:['shipped','cancelled'],
   shipped:['completed','cancelled'], completed:[], cancelled:[] };
 
+/** Forces a deliberate 3-second pause before an admin can confirm cancelling
+ *  an order — cancellation can't be undone, so accidental clicks shouldn't
+ *  be able to complete it instantly. */
+function confirmCancel(orderNumber) {
+  return new Promise(resolve => {
+    const scrim = document.createElement('div');
+    scrim.className = 'confirm-scrim';
+    scrim.innerHTML = `
+      <div class="confirm-card" role="alertdialog" aria-modal="true" aria-label="Cancel order">
+        <p class="eyebrow" style="color:var(--danger)">Cancel order</p>
+        <h3 style="font-size:1.15rem;margin-top:.35rem">Cancel ${esc(orderNumber)}?</h3>
+        <p class="muted" style="margin-top:.5rem;font-size:.88rem;line-height:1.5">This can't be undone. Make sure the customer has already been informed before you confirm.</p>
+        <div style="display:flex;gap:.6rem;margin-top:1.2rem">
+          <button type="button" class="btn btn--g" id="confirm-no" style="flex:1">Keep order</button>
+          <button type="button" class="btn btn--d" id="confirm-yes" style="flex:1" disabled>Cancel order (3)</button>
+        </div>
+      </div>`;
+    document.body.appendChild(scrim);
+    const yes = $('#confirm-yes', scrim), no = $('#confirm-no', scrim);
+    let left = 3;
+    const timer = setInterval(() => {
+      left--;
+      if (left <= 0) { clearInterval(timer); yes.disabled = false; yes.textContent = 'Cancel order'; }
+      else yes.textContent = `Cancel order (${left})`;
+    }, 1000);
+    const done = v => { clearInterval(timer); scrim.remove(); resolve(v); };
+    no.addEventListener('click', () => done(false));
+    scrim.addEventListener('click', e => { if (e.target === scrim) done(false); });
+    yes.addEventListener('click', () => done(true));
+  });
+}
+
 async function viewOrders(v, mode) {
   let q = sb.from('orders').select('*,order_items(*)').order('created_at', { ascending:false });
   q = mode === 'open'
@@ -460,6 +492,10 @@ async function viewOrders(v, mode) {
       }).join('')}`;
 
   $$('[data-st]', v).forEach(b => b.addEventListener('click', async () => {
+    if (b.dataset.to === 'cancelled') {
+      const ord = list.find(o => o.id === b.dataset.st);
+      if (!await confirmCancel(ord ? ord.order_number : 'this order')) return;
+    }
     b.disabled = true;
     const { error } = await sb.rpc('admin_set_order_status', { p_order_id: b.dataset.st, p_status: b.dataset.to });
     if (error) { toast(error.message || 'Update failed.', 'err'); b.disabled = false; return; }

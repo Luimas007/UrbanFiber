@@ -58,6 +58,11 @@ input,select,textarea{font:inherit;color:inherit}
   border-radius:1.75rem;padding:2rem 1.75rem}
 .login-card img{width:2.75rem;height:2.75rem;border-radius:var(--r-pill);object-fit:cover}
 
+.confirm-scrim{position:fixed;inset:0;z-index:60;display:grid;place-items:center;
+  padding:1.25rem;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
+.confirm-card{width:100%;max-width:22rem;background:var(--panel);border:1px solid var(--line-2);
+  border-radius:1.25rem;padding:1.5rem}
+
 /* ---- shell ---- */
 #app{display:none;min-height:100dvh;flex-direction:column}
 #app.on{display:flex}
