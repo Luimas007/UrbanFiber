@@ -486,6 +486,7 @@ async function viewOrders(v, mode) {
             ${items}
           </div>
           <div class="ord__a">${actions}
+            <button class="btn btn--g btn--sm" data-invoice="${esc(o.id)}">Invoice</button>
             <button class="btn btn--g btn--sm" data-print="${esc(o.id)}">Print slip</button>
           </div>
         </div>`;
@@ -504,6 +505,22 @@ async function viewOrders(v, mode) {
   }));
   $$('[data-print]', v).forEach(b => b.addEventListener('click',
     () => printSlip(list.find(o => o.id === b.dataset.print))));
+  $$('[data-invoice]', v).forEach(b => b.addEventListener('click',
+    () => viewInvoice(list.find(o => o.id === b.dataset.invoice))));
+}
+
+/** Same invoiceHtml() the customer sees (assets/invoice.js), built from the
+ *  order row admin already has loaded — so admin and customer always see
+ *  byte-identical output for the same order. */
+function viewInvoice(o) {
+  if (!o) return;
+  const inv = {
+    order: o,
+    customer: { name:o.customer_name, phone:o.phone, district:o.district, area:o.area, postcode:o.postcode, address:o.address },
+    items: (o.order_items || []).map(i => ({ title:i.product_name, color:i.color, size:i.size, quantity:i.quantity, price:i.unit_price_bdt }))
+  };
+  const result = printInvoiceWindow(invoiceHtml(inv));
+  if (result === 'blocked') toast('Allow pop-ups to view the invoice.', 'err');
 }
 
 function printSlip(o) {
