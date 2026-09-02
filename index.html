@@ -203,12 +203,12 @@ input,select,textarea{font:inherit;color:inherit}
   opacity:0;transform:scale(1.035);transition:opacity 1.6s ease,transform 7s ease}
 .hero__img.is-active{opacity:1;transform:scale(1)}
 @media(prefers-reduced-motion:reduce){.hero__img{transition:opacity 1.6s ease;transform:none}}
-.hero__body{padding:var(--s6) var(--s4) var(--s7);text-align:center;color:var(--fg);
+.hero__body{padding:var(--s6) var(--s4) 0;text-align:center;color:var(--fg);
   display:grid;gap:var(--s4);justify-items:center;max-width:min(100%,72rem);width:min(100%,72rem);margin-inline:auto;min-width:0}
 .hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;max-width:min(100%,14ch);min-width:0}
 .hero__sub{max-width:min(100%,44ch);color:var(--fg-muted);text-wrap:pretty}
 .hero .btn{width:100%;max-width:22rem}
-@media(min-width:768px){.hero__body{padding-block:var(--s7) var(--s8)}.hero .btn{width:auto}}
+@media(min-width:768px){.hero__body{padding-top:var(--s7)}.hero .btn{width:auto}}
 
 /* ---------- story ---------- */
 .tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:var(--s5)}
@@ -246,6 +246,7 @@ input,select,textarea{font:inherit;color:inherit}
   transition:opacity .4s ease,transform .6s var(--ease)}
 .frame img.is-ready{opacity:1}
 .frame:hover img{transform:scale(1.12)}
+.rail-wrap{position:relative}
 .rail-nav{position:absolute;top:50%;translate:0 -50%;width:2.75rem;height:2.75rem;border-radius:var(--r-pill);
   background:rgba(18,18,18,.6);border:1px solid rgba(255,255,255,.22);color:#f2ede4;
   display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .25s ease,background .2s ease;
@@ -626,14 +627,14 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
         <source media="(max-width:767px)" srcset="brand-768.webp" type="image/webp">
         <source srcset="brand-1920.avif 1920w, brand-1280.avif 1280w" sizes="100vw" type="image/avif">
         <source srcset="brand-1920.webp 1920w, brand-1280.webp 1280w" sizes="100vw" type="image/webp">
-        <img class="hero__img is-active" src="brand.jpg" alt="" width="1940" height="810" fetchpriority="high" decoding="async">
+        <img class="hero__img is-active" src="brand.jpg" alt="" width="1940" height="810" fetchpriority="high" decoding="async" draggable="false">
       </picture>
       <picture>
         <source media="(max-width:767px)" srcset="brand2-768.avif" type="image/avif">
         <source media="(max-width:767px)" srcset="brand2-768.webp" type="image/webp">
         <source srcset="brand2-1920.avif 1920w, brand2-1280.avif 1280w" sizes="100vw" type="image/avif">
         <source srcset="brand2-1920.webp 1920w, brand2-1280.webp 1280w" sizes="100vw" type="image/webp">
-        <img class="hero__img" src="brand2.jpg" alt="" width="1940" height="810" loading="lazy" decoding="async">
+        <img class="hero__img" src="brand2.jpg" alt="" width="1940" height="810" loading="lazy" decoding="async" draggable="false">
       </picture>
     </div>
     <div class="hero__body">
@@ -679,13 +680,15 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
           <h2 class="font-brand" style="font-size:var(--step-3);margin-top:var(--s3)">Worn in the city</h2>
         </div>
       </div>
-      <div class="rail" id="rail"></div>
-      <button type="button" class="rail-nav rail-nav--prev" id="rail-prev" aria-label="Previous photo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button type="button" class="rail-nav rail-nav--next" id="rail-next" aria-label="Next photo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
+      <div class="rail-wrap">
+        <div class="rail" id="rail"></div>
+        <button type="button" class="rail-nav rail-nav--prev" id="rail-prev" aria-label="Previous photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="rail-nav rail-nav--next" id="rail-next" aria-label="Next photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
     </div>
   </section>
 
