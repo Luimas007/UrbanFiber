@@ -197,10 +197,10 @@ input,select,textarea{font:inherit;color:inherit}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;
   background:linear-gradient(180deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.18) 38%,color-mix(in srgb,var(--bg) 92%,transparent) 100%)}
 .hero__body{grid-row:2;padding:var(--s6) var(--s4) var(--s7);text-align:center;color:#fff;
-  display:grid;gap:var(--s4);justify-items:center}
+  display:grid;gap:var(--s4);justify-items:center;max-width:min(100%,72rem);width:min(100%,72rem);margin-inline:auto;min-width:0}
 .hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;
-  text-shadow:0 2px 24px rgba(0,0,0,.4);max-width:14ch}
-.hero__sub{max-width:44ch;color:rgba(255,255,255,.86);text-shadow:0 1px 12px rgba(0,0,0,.5);text-wrap:pretty}
+  text-shadow:0 2px 24px rgba(0,0,0,.4);max-width:min(100%,14ch);min-width:0}
+.hero__sub{max-width:min(100%,44ch);color:rgba(255,255,255,.86);text-shadow:0 1px 12px rgba(0,0,0,.5);text-wrap:pretty}
 @media(min-width:768px){.hero{min-height:min(88svh,48rem)}.hero__body{padding-bottom:var(--s8)}}
 
 /* On phones the brand image is a wide 2.4:1 banner. Cropping it to fill a tall
