@@ -47,6 +47,22 @@ const isSoldOut = p => p?.stock_status === 'sold_out';
 const variantsOf = p => (p?.variants && typeof p.variants === 'object' && !Array.isArray(p.variants)) ? p.variants : {};
 const sizesOf    = p => (Array.isArray(p?.sizes) && p.sizes.length) ? p.sizes : ['S','M','L','XL'];
 
+/**
+ * Images fade in via .is-ready. A cached image can already be complete before
+ * any load handler is attached, so relying on `onload` alone leaves it stuck at
+ * opacity 0 — an invisible product photo. Always sweep after rendering.
+ */
+function markReady(img) { img.classList.add('is-ready'); }
+function readyImages(root = document) {
+  root.querySelectorAll('img[data-fade]').forEach(img => {
+    if (img.complete) markReady(img);            // cached or already decoded
+    else {
+      img.addEventListener('load',  () => markReady(img), { once: true });
+      img.addEventListener('error', () => markReady(img), { once: true });
+    }
+  });
+}
+
 /* ------------------------------- supabase --------------------------------- */
 const CONF = window.__UF__ || {};
 let sb = null;
@@ -249,7 +265,7 @@ function cardHtml(p) {
   return `<article class="card" data-card="${esc(p.id)}">
     <div class="card__media" data-open="${esc(p.id)}" role="button" tabindex="0" aria-label="View ${esc(p.name)}">
       ${flagsHtml(p)}
-      <img src="${esc(src)}" alt="${esc(p.name)}" width="400" height="500" loading="lazy" decoding="async">
+      <img src="${esc(src)}" alt="${esc(p.name)}" width="400" height="500" loading="lazy" decoding="async" data-fade>
     </div>
     <div class="card__body">
       <h3 class="card__name">${esc(p.name)}</h3>
@@ -268,6 +284,7 @@ function paintFeatured() {
   const list = (feat.length ? feat : state.products).slice(0, 4);
   if (!list.length) { track.innerHTML = emptyState('Nothing published yet', 'New drops are on the way.'); return; }
   track.innerHTML = list.map(cardHtml).join('');
+  readyImages(track);
   $('#feat-all').style.display = window.matchMedia('(min-width:768px)').matches ? '' : 'none';
 }
 
@@ -290,6 +307,7 @@ function paintShop() {
     ? list.map(cardHtml).join('')
     : emptyState('Nothing here yet', 'Try a different category.',
         `<button class="btn btn--ghost" id="clear-filter">Clear filter</button>`);
+  readyImages(grid);
 }
 
 function paintCategories() {
@@ -495,10 +513,11 @@ function openProduct(id, { push = true } = {}) {
   // image
   const img = $('#pdp-img');
   img.classList.remove('is-ready');
-  img.onload = () => img.classList.add('is-ready');
-  img.onerror = () => { img.classList.add('is-ready'); };
+  img.onload = () => markReady(img);
+  img.onerror = () => markReady(img);
   img.src = variantImg(p, color);
   img.alt = p.name;
+  if (img.complete) markReady(img);          // cached: onload will not fire
 
   $('#qty-val').textContent = state.pdp.qty;
   $('#pdp-add').disabled = isSoldOut(p);
@@ -548,17 +567,27 @@ function renderCart() {
   body.innerHTML = state.cart.map((it, i) => {
     const p = state.byId.get(it.productId);
     const colors = Object.keys(variantsOf(p));
+    const sizes = sizesOf(p);
     const dots = colors.length > 1 ? `<span class="line__dots">${colors.map(c =>
       `<button class="dot" style="background:${esc(hexFor(c))}" data-line-color="${i}" data-color="${esc(c)}"
         aria-label="${esc(titleCase(c))}" aria-pressed="${c === it.color}"></button>`).join('')}</span>` : '';
+    // Size is editable in the cart — changing your mind should not mean
+    // removing the item and starting over.
+    const sizeCtl = `<label class="line__size">
+        <span class="sr-only">Size for ${esc(it.title)}</span>
+        <select data-line-size="${i}" aria-label="Size for ${esc(it.title)}">
+          ${sizes.map(s => `<option value="${esc(s)}" ${s === it.size ? 'selected' : ''}>${esc(s)}</option>`).join('')}
+        </select>
+      </label>`;
     const sale = it.listPrice > it.price
       ? `<s class="price__was">${money(it.listPrice)}</s>` : '';
     return `<div class="line">
-      <div class="line__img"><img src="${esc(it.img)}" alt="" loading="lazy"></div>
+      <div class="line__img"><img src="${esc(it.img)}" alt="" loading="lazy" data-fade></div>
       <div class="line__body">
         <p class="line__name">${esc(it.title)}</p>
-        <div class="line__meta"><span>${money(it.price)}</span>${sale}<span>·</span><span>${esc(it.size || '—')}</span></div>
-        <div class="line__meta">${dots}
+        <div class="line__meta"><span>${money(it.price)}</span>${sale}</div>
+        <div class="line__meta">${dots}${sizeCtl}</div>
+        <div class="line__meta">
           <span class="line__qty">
             <button data-qty="${i}" data-d="-1" aria-label="Decrease quantity of ${esc(it.title)}">−</button>
             <output>${it.quantity}</output>
@@ -571,6 +600,7 @@ function renderCart() {
       </button>
     </div>`;
   }).join('');
+  readyImages(body);
 
   foot.innerHTML = `
     <div class="totals">
@@ -843,8 +873,10 @@ function wire() {
       dot.setAttribute('aria-pressed', 'true');
       const img = $('img', card);
       img.classList.remove('is-ready');
-      img.onload = () => img.classList.add('is-ready');
+      img.onload = () => markReady(img);
+      img.onerror = () => markReady(img);
       img.src = variantImg(p, dot.dataset.color);
+      if (img.complete) markReady(img);
       return;
     }
 
@@ -856,7 +888,10 @@ function wire() {
       $('#pdp-color-name').textContent = titleCase(c);
       const img = $('#pdp-img');
       img.classList.remove('is-ready');
+      img.onload = () => markReady(img);
+      img.onerror = () => markReady(img);
       img.src = variantImg(state.pdp.product, c);
+      if (img.complete) markReady(img);
       return;
     }
 
@@ -958,6 +993,30 @@ function wire() {
     if (!state.pdp) return;
     state.pdp.qty = Math.max(1, state.pdp.qty - 1);
     $('#qty-val').textContent = state.pdp.qty;
+  });
+
+  // Size dropdowns live inside the cart, which re-renders constantly, so listen
+  // on the container rather than the individual selects.
+  $('#cart-body').addEventListener('change', e => {
+    const sel = e.target.closest('[data-line-size]');
+    if (!sel) return;
+    const i = Number(sel.dataset.lineSize);
+    const item = state.cart[i];
+    if (!item) return;
+    const next = sel.value;
+    if (next === item.size) return;
+    // Switching to a size already in the cart should merge, not duplicate.
+    const twin = state.cart.findIndex((o, j) =>
+      j !== i && o.productId === item.productId && o.color === item.color && o.size === next);
+    if (twin > -1) {
+      state.cart[twin].quantity = Math.min(CFG.maxQty, state.cart[twin].quantity + item.quantity);
+      state.cart.splice(i, 1);
+      toast(`Merged into size ${next}`);
+    } else {
+      item.size = next;
+      toast(`Size changed to ${next}`);
+    }
+    saveCart();
   });
 
   $('#f-cat').addEventListener('change', paintShop);

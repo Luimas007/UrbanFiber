@@ -201,6 +201,20 @@ input,select,textarea{font:inherit;color:inherit}
 .hero__sub{max-width:44ch;color:rgba(255,255,255,.86);text-shadow:0 1px 12px rgba(0,0,0,.5);text-wrap:pretty}
 @media(min-width:768px){.hero{min-height:min(88svh,48rem)}.hero__body{padding-bottom:var(--s8)}}
 
+/* On phones the brand image is a wide 2.4:1 banner. Cropping it to fill a tall
+   viewport (object-fit:cover) zooms it drastically and cuts off the artwork, so
+   show it whole and put the copy underneath instead of over it. */
+@media(max-width:767px){
+  .hero{min-height:0;display:block;overflow:visible}
+  .hero::after{display:none}
+  .hero__media{position:relative;inset:auto;z-index:0;background:var(--bg-sunk)}
+  .hero__media img{width:100%;height:auto;object-fit:contain;object-position:center}
+  .hero__body{grid-row:auto;color:var(--fg);padding:var(--s5) var(--s4) var(--s6);gap:var(--s3)}
+  .hero__title{text-shadow:none;max-width:none}
+  .hero__sub{color:var(--fg-muted);text-shadow:none}
+  .hero .btn--onimage{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);backdrop-filter:none;width:100%;max-width:22rem}
+}
+
 /* ---------- story ---------- */
 .tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:var(--s5)}
 .tab{padding:.6rem 1.2rem;border:1px solid var(--line-strong);border-radius:var(--r-pill);
@@ -349,13 +363,35 @@ input,select,textarea{font:inherit;color:inherit}
 .size[aria-pressed=true]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 .size:disabled{opacity:.35;text-decoration:line-through}
 .qty{display:inline-flex;align-items:center;border:1px solid var(--line-strong);border-radius:var(--r-pill);padding:.2rem}
-.qty button{width:2.4rem;height:2.4rem;border-radius:var(--r-pill);display:grid;place-items:center;font-size:1.1rem}
+.qty button{width:2.75rem;height:2.75rem;border-radius:var(--r-pill);display:grid;place-items:center;font-size:1.15rem}
 .qty button:hover:not(:disabled){background:color-mix(in srgb,var(--fg) 8%,transparent)}
 .qty output{min-width:2.2rem;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
 .pdp__actions{display:grid;gap:var(--s3)}
 @media(min-width:768px){
   .pdp{grid-template-columns:1fr 1fr;gap:var(--s7);align-items:start}
   .pdp__actions{grid-template-columns:auto 1fr;align-items:center}
+}
+/* On a phone a full 4:5 photo pushed the name, price and Add to cart nearly two
+   screens down. Cap the image so the essentials are visible immediately, and
+   keep the buy controls pinned within thumb reach while you scroll. */
+@media(max-width:767px){
+  #view-product .section{padding-top:var(--s4)}
+  .pdp__main{aspect-ratio:auto;height:46svh;max-height:24rem}
+  .pdp__main img{object-fit:cover;object-position:center 42%}
+  /* Fixed rather than sticky: sticky released as soon as you scrolled into the
+     footer. Scoped to #view-product, which is display:none on other views, so
+     the bar simply does not exist elsewhere — no JS toggling needed. */
+  #view-product .pdp__actions{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;
+    grid-template-columns:auto 1fr;align-items:center;gap:var(--s3);
+    padding:var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));
+    background:color-mix(in srgb,var(--bg) 92%,transparent);
+    backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);
+    box-shadow:0 -6px 24px rgba(0,0,0,.14);
+  }
+  /* Leave room so the delivery note is never hidden behind the bar. */
+  #view-product .section{padding-bottom:calc(6rem + env(safe-area-inset-bottom))}
 }
 .notice{display:flex;gap:.6rem;align-items:flex-start;padding:.85rem 1rem;border-radius:var(--r-md);
   background:var(--bg-raise);border:1px solid var(--line);font-size:var(--step--1)}
@@ -387,24 +423,38 @@ input,select,textarea{font:inherit;color:inherit}
 
 /* cart lines */
 .line{display:grid;grid-template-columns:4.5rem 1fr auto;gap:var(--s3);
-  padding-block:var(--s3);border-bottom:1px solid var(--line);align-items:start}
+  padding-block:var(--s4);border-bottom:1px solid var(--line);align-items:start}
 .line:last-child{border-bottom:0}
 .line__img{aspect-ratio:4/5;border-radius:var(--r-sm);overflow:hidden;background:var(--bg-sunk)}
 .line__img img{width:100%;height:100%;object-fit:cover;transition:opacity .2s}
 .line__body{display:grid;gap:.4rem;min-width:0}
 .line__name{font-weight:600;font-size:var(--step--1);line-height:1.3}
-.line__meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:var(--step--1);color:var(--fg-muted)}
+.line__meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-size:var(--step--1);color:var(--fg-muted)}
 .line__dots{display:flex;gap:.55rem}
 .line__dots .dot{width:1.15rem;height:1.15rem}
 @media(pointer:coarse){
-  .line__dots{gap:.9rem}
-  .line__dots .dot{width:1.9rem;height:1.9rem}
+  .line__dots{gap:1.15rem}
+  .line__dots .dot{width:2.1rem;height:2.1rem}
+  .line__dots .dot::after{inset:-0.55rem}
 }
-.line__qty{display:inline-flex;align-items:center;gap:.15rem;border:1px solid var(--line);border-radius:var(--r-pill);padding:.1rem}
-.line__qty button{width:1.9rem;height:1.9rem;border-radius:var(--r-pill);display:grid;place-items:center}
+.line__qty{display:inline-flex;align-items:center;gap:.15rem;border:1px solid var(--line-strong);border-radius:var(--r-pill);padding:.15rem}
+.line__qty button{width:2.75rem;height:2.75rem;border-radius:var(--r-pill);display:grid;place-items:center;font-size:1.05rem}
 .line__qty button:hover{background:color-mix(in srgb,var(--fg) 9%,transparent)}
-.line__qty output{min-width:1.6rem;text-align:center;font-size:var(--step--1);font-variant-numeric:tabular-nums}
-.line__del{width:2.25rem;height:2.25rem;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--sale)}
+.line__qty button:active{transform:scale(.9)}
+.line__qty output{min-width:2rem;text-align:center;font-size:var(--step-0);font-weight:600;font-variant-numeric:tabular-nums}
+/* Size is changeable from the cart, not just at the product page. */
+.line__size{display:inline-flex;position:relative}
+.line__size select{
+  appearance:none;min-height:2.75rem;padding:.5rem 1.9rem .5rem .85rem;
+  border:1px solid var(--line-strong);border-radius:var(--r-pill);background:transparent;
+  font-size:var(--step--1);font-weight:600;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;
+}
+.line__size::after{content:"";position:absolute;right:.7rem;top:50%;width:.35rem;height:.35rem;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.line__size select:focus{outline:none;border-color:var(--fg);box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 12%,transparent)}
+.line__size option{background:var(--bg);color:var(--fg)}
+.line__del{width:2.75rem;height:2.75rem;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--sale)}
 .line__del:hover{background:color-mix(in srgb,var(--sale) 10%,transparent)}
 .line__del svg{width:1.05rem;height:1.05rem}
 .totals{display:grid;gap:.5rem;font-size:var(--step--1)}
@@ -455,14 +505,16 @@ select.input{appearance:none;background-image:linear-gradient(45deg,transparent 
 @keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.08)}to{transform:scale(1);opacity:1}}
 
 /* ---------- toast ---------- */
-#toast{position:fixed;left:50%;bottom:calc(1.25rem + env(safe-area-inset-bottom));z-index:120;
-  transform:translate(-50%,1.5rem);opacity:0;pointer-events:none;
+/* Anchored to the top on every screen size. At the bottom it sat directly on
+   top of the cart's Checkout button and the sticky CTAs, hiding the very
+   control the message was telling you about. */
+#toast{position:fixed;left:50%;top:calc(var(--header-h) + .75rem);z-index:120;
+  transform:translate(-50%,-1.5rem);opacity:0;pointer-events:none;
   max-width:calc(100% - 2rem);padding:.85rem 1.25rem;border-radius:var(--r-pill);
   background:var(--accent);color:var(--accent-fg);font-size:var(--step--1);font-weight:500;
   box-shadow:var(--shadow-lg);transition:opacity .3s,transform .3s var(--ease);text-align:center}
 #toast.is-on{opacity:1;transform:translate(-50%,0)}
 #toast[data-tone=error]{background:var(--sale);color:#fff}
-@media(min-width:768px){#toast{bottom:auto;top:calc(var(--header-h) + 1rem);transform:translate(-50%,-1.5rem)}}
 
 /* ---------- footer ---------- */
 footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:var(--s6) var(--s4);margin-top:var(--s7)}
@@ -656,6 +708,11 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
           <div class="sizes" id="pdp-sizes"></div>
           <p class="err" id="pdp-size-err"></p>
         </div>
+        <div class="notice">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" style="flex:none;margin-top:1px"><path d="M12 3 5 6v5c0 4.6 2.9 8.5 7 10 4.1-1.5 7-5.4 7-10V6l-7-3Z"/><path d="m9.5 12 1.7 1.7 3.5-3.7"/></svg>
+          <span>Cash on delivery across Bangladesh. Delivery ৳60 inside Dhaka, ৳100 elsewhere.</span>
+        </div>
+        <!-- Kept last so the sticky buy bar stays pinned all the way down. -->
         <div class="pdp__actions">
           <div class="qty">
             <button id="qty-down" aria-label="Decrease quantity">−</button>
@@ -663,10 +720,6 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
             <button id="qty-up" aria-label="Increase quantity">+</button>
           </div>
           <button class="btn btn--primary btn--lg" id="pdp-add">Add to cart</button>
-        </div>
-        <div class="notice">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" style="flex:none;margin-top:1px"><path d="M12 3 5 6v5c0 4.6 2.9 8.5 7 10 4.1-1.5 7-5.4 7-10V6l-7-3Z"/><path d="m9.5 12 1.7 1.7 3.5-3.7"/></svg>
-          <span>Cash on delivery across Bangladesh. Delivery ৳60 inside Dhaka, ৳100 elsewhere.</span>
         </div>
       </div>
     </div>
