@@ -46,10 +46,10 @@
   color-scheme: light;
   --cream:#efe9dd; --cream-deep:#e6e1d6; --ink:#121212; --ink-soft:#1c1c1c;
   --bg:var(--cream); --bg-raise:#f7f4ec; --bg-sunk:var(--cream-deep);
-  --fg:#16130f; --fg-muted:#6b645a; --fg-faint:#9a9287;
-  --line:rgba(22,19,15,.12); --line-strong:rgba(22,19,15,.22);
+  --fg:#16130f; --fg-muted:#5a5446; --fg-faint:#6a6355;
+  --line:rgba(22,19,15,.16); --line-strong:rgba(22,19,15,.28);
   --accent:#16130f; --accent-fg:#faf8f4;
-  --sale:#b3261e; --ok:#2f6f4f; --warn:#8a5a00;
+  --sale:#a32219; --ok:#2a6547; --warn:#7d5200;
   --shadow-sm:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
   --shadow-md:0 4px 12px rgba(0,0,0,.07),0 12px 32px rgba(0,0,0,.07);
   --shadow-lg:0 12px 28px rgba(0,0,0,.10),0 32px 64px rgba(0,0,0,.12);
@@ -103,6 +103,7 @@ input,select,textarea{font:inherit;color:inherit}
 @media(min-width:768px){.wrap{padding-inline:var(--s5)}}
 .font-brand{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.02em}
 .eyebrow{font-size:var(--step--1);font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--fg-faint)}
+.rule{display:block;width:2.75rem;height:1px;background:var(--line-strong);margin:var(--s3) auto 0}
 .muted{color:var(--fg-muted)}
 
 /* ---------- buttons ---------- */
@@ -120,8 +121,6 @@ input,select,textarea{font:inherit;color:inherit}
 .btn--primary:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .btn--ghost{border-color:var(--line-strong);color:var(--fg)}
 .btn--ghost:hover{background:color-mix(in srgb,var(--fg) 7%,transparent);border-color:var(--fg)}
-.btn--onimage{border-color:rgba(255,255,255,.7);color:#fff;backdrop-filter:blur(6px);background:rgba(0,0,0,.18)}
-.btn--onimage:hover{background:rgba(255,255,255,.16);border-color:#fff}
 .btn--block{width:100%}
 .btn--lg{min-height:3.25rem;padding:1rem 1.75rem}
 .icon-btn{
@@ -158,8 +157,8 @@ input,select,textarea{font:inherit;color:inherit}
 .brand{display:flex;align-items:center;gap:.6rem;flex:none;min-height:2.75rem}
 .brand img{width:2rem;height:2rem;border-radius:var(--r-pill);object-fit:cover;border:1px solid var(--line)}
 .brand__word{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;font-size:1.4rem;
-  text-transform:uppercase;letter-spacing:.14em;line-height:1;white-space:nowrap}
-.brand__word i{font-style:normal;font-size:1.3em;line-height:.7}
+  text-transform:uppercase;letter-spacing:.1em;line-height:1;white-space:nowrap}
+.brand__word i{font-style:normal;font-size:1.55em;line-height:.62;vertical-align:-0.09em}
 .nav{display:none;gap:var(--s5);font-size:var(--step--1);font-weight:500}
 .nav a{position:relative;padding:.35rem 0;color:var(--fg-muted);transition:color .2s}
 .nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right .3s var(--ease)}
@@ -189,33 +188,25 @@ input,select,textarea{font:inherit;color:inherit}
 .section__head{margin-bottom:var(--s6)}
 .section__title{font-size:var(--step-3);text-transform:uppercase}
 
-/* ---------- hero ---------- */
-.hero{position:relative;isolation:isolate;min-height:min(78svh,40rem);
-  display:grid;grid-template-rows:1fr auto;overflow:hidden}
-.hero__media{position:absolute;inset:0;z-index:-2}
-.hero__media img{width:100%;height:100%;object-fit:cover;object-position:center 22%}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.18) 38%,color-mix(in srgb,var(--bg) 92%,transparent) 100%)}
-.hero__body{grid-row:2;padding:var(--s6) var(--s4) var(--s7);text-align:center;color:#fff;
-  display:grid;gap:var(--s4);justify-items:center}
-.hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;
-  text-shadow:0 2px 24px rgba(0,0,0,.4);max-width:14ch}
-.hero__sub{max-width:44ch;color:rgba(255,255,255,.86);text-shadow:0 1px 12px rgba(0,0,0,.5);text-wrap:pretty}
-@media(min-width:768px){.hero{min-height:min(88svh,48rem)}.hero__body{padding-bottom:var(--s8)}}
-
-/* On phones the brand image is a wide 2.4:1 banner. Cropping it to fill a tall
-   viewport (object-fit:cover) zooms it drastically and cuts off the artwork, so
-   show it whole and put the copy underneath instead of over it. */
-@media(max-width:767px){
-  .hero{min-height:0;display:block;overflow:visible}
-  .hero::after{display:none}
-  .hero__media{position:relative;inset:auto;z-index:0;background:var(--bg-sunk)}
-  .hero__media img{width:100%;height:auto;object-fit:contain;object-position:center}
-  .hero__body{grid-row:auto;color:var(--fg);padding:var(--s5) var(--s4) var(--s6);gap:var(--s3)}
-  .hero__title{text-shadow:none;max-width:none}
-  .hero__sub{color:var(--fg-muted);text-shadow:none}
-  .hero .btn--onimage{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);backdrop-filter:none;width:100%;max-width:22rem}
-}
+/* ---------- hero ----------
+   Hero photos are fully-designed banners (logo/wordmark/tagline baked in by
+   whoever shot them, unpredictable per admin upload) — so nothing from the
+   site is ever drawn on top of one. The image is shown whole (contain, inside
+   a fixed-ratio frame so multiple slides can crossfade without jumping), and
+   the headline/subcopy/CTA sit in a plain band underneath, on every screen
+   size. This also means a busy pre-designed banner and a plain photograph
+   both work safely with no per-image tuning. */
+.hero{position:relative;isolation:isolate}
+.hero__media{position:relative;width:100%;aspect-ratio:1940/810;background:var(--bg-sunk);overflow:hidden}
+.hero__img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
+  opacity:0;transition:opacity 1.1s ease}
+.hero__img.is-active{opacity:1}
+.hero__body{padding:var(--s6) var(--s4) var(--s7);text-align:center;color:var(--fg);
+  display:grid;gap:var(--s4);justify-items:center;max-width:min(100%,72rem);width:min(100%,72rem);margin-inline:auto;min-width:0}
+.hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;max-width:min(100%,14ch);min-width:0}
+.hero__sub{max-width:min(100%,44ch);color:var(--fg-muted);text-wrap:pretty}
+.hero .btn{width:100%;max-width:22rem}
+@media(min-width:768px){.hero__body{padding-block:var(--s7) var(--s8)}.hero .btn{width:auto}}
 
 /* ---------- story ---------- */
 .tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:var(--s5)}
@@ -249,7 +240,9 @@ input,select,textarea{font:inherit;color:inherit}
 .rail::-webkit-scrollbar{display:none}
 .frame{flex:0 0 82%;max-width:22rem;aspect-ratio:1.25;scroll-snap-align:center;
   border-radius:var(--r-md);overflow:hidden;background:#1a1a1a;border:1px solid rgba(255,255,255,.14)}
-.frame img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.frame img{width:100%;height:100%;object-fit:cover;opacity:0;
+  transition:opacity .4s ease,transform .8s var(--ease)}
+.frame img.is-ready{opacity:1}
 .frame:hover img{transform:scale(1.04)}
 @media(min-width:768px){
   .stage{padding:var(--s7) 0}
@@ -284,7 +277,7 @@ input,select,textarea{font:inherit;color:inherit}
   padding:.28rem .6rem;border-radius:var(--r-pill);backdrop-filter:blur(6px)}
 .flag--sale{background:var(--sale);color:#fff}
 .flag--out{background:rgba(20,20,20,.82);color:#fff}
-.flag--low{background:rgba(255,255,255,.9);color:#8a5a00}
+.flag--low{background:rgba(255,255,255,.9);color:#7d5200}
 .card__body{display:grid;gap:.35rem}
 .card__name{font-size:var(--step-0);font-weight:600;line-height:1.3}
 .price{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap}
@@ -345,6 +338,8 @@ input,select,textarea{font:inherit;color:inherit}
 .pdp__main img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
 .pdp__main img.is-ready{opacity:1}
 .pdp__info{display:grid;gap:var(--s4);align-content:start}
+.pdp-fabric{display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap;font-size:var(--step--1);color:var(--fg-muted)}
+.pdp-fabric b{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--fg-faint)}
 .pdp__title{font-size:var(--step-3);text-transform:uppercase}
 .pdp__price{font-size:var(--step-1)}
 .field{display:grid;gap:.7rem}
@@ -542,7 +537,9 @@ select.input option{background:var(--bg-raise);color:var(--fg)}
   background:var(--accent);color:var(--accent-fg);font-size:var(--step--1);font-weight:500;
   box-shadow:var(--shadow-lg);transition:opacity .3s,transform .3s var(--ease);text-align:center}
 #toast.is-on{opacity:1;transform:translate(-50%,0)}
-#toast[data-tone=error]{background:var(--sale);color:#fff}
+/* Fixed rather than token-driven: --sale is tuned light for legible text on a
+   dark background, which is too low-contrast as a solid fill behind white text. */
+#toast[data-tone=error]{background:#9c2a20;color:#fff}
 
 /* ---------- footer ---------- */
 footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:var(--s6) var(--s4);margin-top:var(--s7)}
@@ -585,7 +582,7 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
         <source srcset="Materials/uf.webp" type="image/webp">
         <img src="Materials/uf.jpg" alt="" width="32" height="32">
       </picture>
-      <span class="brand__word"><i>U</i>RBAN<i>F</i>IBER</span>
+      <span class="brand__word"><i>U</i>RBAN <i>F</i>IBER</span>
     </a>
     <nav class="nav" aria-label="Primary">
       <a href="/" data-nav="home">Home</a>
@@ -608,26 +605,27 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
 <!-- ============================ HOME ============================ -->
 <main id="view-home" class="view is-active">
   <section class="hero">
-    <div class="hero__media">
+    <div class="hero__media" id="hero-media">
       <picture>
         <source media="(max-width:767px)" srcset="brand-768.avif" type="image/avif">
         <source media="(max-width:767px)" srcset="brand-768.webp" type="image/webp">
         <source srcset="brand-1920.avif 1920w, brand-1280.avif 1280w" sizes="100vw" type="image/avif">
         <source srcset="brand-1920.webp 1920w, brand-1280.webp 1280w" sizes="100vw" type="image/webp">
-        <img id="hero-img" src="brand.jpg" alt="" width="1920" height="800" fetchpriority="high" decoding="async">
+        <img class="hero__img is-active" src="brand.jpg" alt="" width="1940" height="810" fetchpriority="high" decoding="async">
       </picture>
     </div>
     <div class="hero__body">
       <h1 class="hero__title" id="hero-title">Built for the city</h1>
       <p class="hero__sub" id="hero-sub">Premium oversized silhouettes in heavyweight cotton. Cash on delivery, anywhere in Bangladesh.</p>
-      <button class="btn btn--onimage btn--lg" data-nav="shop" id="hero-cta">Shop the collection</button>
+      <button class="btn btn--primary btn--lg" data-nav="shop" id="hero-cta">Shop the collection</button>
     </div>
   </section>
 
   <section class="wrap section" id="story">
     <div class="section__head" style="text-align:center">
       <p class="eyebrow">The making</p>
-      <h2 class="section__title">The fabric of the city</h2>
+      <span class="rule"></span>
+      <h2 class="section__title" style="margin-top:var(--s3)">The fabric of the city</h2>
       <p class="muted" style="max-width:48ch;margin:var(--s3) auto 0;text-wrap:pretty">Discover the architecture of our garments — fit, weight, movement, and the way a piece sits on the body.</p>
     </div>
     <div class="tabs" role="tablist" aria-label="Construction details">
@@ -654,8 +652,9 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
     <div class="stage">
       <div class="stage__head">
         <div>
-          <p class="eyebrow" style="color:rgba(255,255,255,.5)">The model edit</p>
-          <h2 class="font-brand" style="font-size:var(--step-3)">Worn in the city</h2>
+          <p class="eyebrow" style="color:rgba(255,255,255,.6)">The model edit</p>
+          <span class="rule" style="background:rgba(255,255,255,.24)"></span>
+          <h2 class="font-brand" style="font-size:var(--step-3);margin-top:var(--s3)">Worn in the city</h2>
         </div>
       </div>
       <div class="rail" id="rail"></div>
@@ -720,6 +719,7 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
         </div>
         <div class="price pdp__price" id="pdp-price"></div>
         <p class="muted" id="pdp-desc" style="text-wrap:pretty"></p>
+        <p class="pdp-fabric" id="pdp-fabric" hidden></p>
         <div id="pdp-stock"></div>
         <div class="field">
           <div class="field__head"><span class="field__label">Color</span><span class="muted" id="pdp-color-name" style="font-size:var(--step--1)"></span></div>
@@ -760,7 +760,7 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
             <source srcset="Materials/uf.avif" type="image/avif">
             <img src="Materials/uf.jpg" alt="" width="36" height="36" loading="lazy" style="width:2.25rem;height:2.25rem">
           </picture>
-          <span class="brand__word"><i>U</i>RBAN<i>F</i>IBER</span>
+          <span class="brand__word"><i>U</i>RBAN <i>F</i>IBER</span>
         </div>
         <p class="muted" style="max-width:38ch;font-size:var(--step--1);text-wrap:pretty">Premium oversized silhouettes engineered for the modern aesthetic. Designed in the city, woven for the world.</p>
       </div>
@@ -781,7 +781,7 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
       </div>
     </div>
     <div class="foot__bar">
-      <p>&copy; <span id="year"></span> UrbanFiber. All rights reserved.</p>
+      <p>&copy; <span id="year"></span> Urban Fiber. All rights reserved.</p>
       <p>Made in Bangladesh</p>
     </div>
   </div>
@@ -854,7 +854,6 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
       </div>
       <div style="display:grid;gap:.6rem;width:100%;max-width:22rem">
         <button class="btn btn--primary btn--block" id="inv-print">Save as PDF</button>
-        <button class="btn btn--ghost btn--block" id="inv-download">Download HTML copy</button>
         <button class="btn btn--ghost btn--block" id="co-continue">Continue shopping</button>
       </div>
     </div>

@@ -102,7 +102,8 @@ const IMG_SIZE = {
   card: { width: 400, height: 500, quality: 70 },
   pdp:  { width: 800, height: 1000, quality: 78 },
   line: { width: 160, height: 200, quality: 65 },
-  hero: { width: 1600, quality: 72 }
+  hero: { width: 1600, quality: 72 },
+  rail: { width: 880, height: 704, quality: 68 }
 };
 function sizedImg(url, preset) {
   const s = IMG_SIZE[preset];
@@ -351,13 +352,8 @@ function paintCategories() {
 function paintSettings() {
   const s = state.settings;
   if (!s) return;
-  if (s.hero_image_url) {
-    const img = $('#hero-img');
-    const pic = img.closest('picture');
-    // An admin-uploaded hero replaces the bundled responsive sources entirely.
-    $$('source', pic).forEach(el => el.remove());
-    img.src = sizedImg(imgUrl(s.hero_image_url), 'hero');
-  }
+  renderHero(Array.isArray(s.hero_images) ? s.hero_images.filter(Boolean) : []);
+  renderRail(Array.isArray(s.model_images) ? s.model_images.filter(Boolean) : []);
   if (s.hero_headline) $('#hero-title').textContent = s.hero_headline;
   if (s.hero_subcopy)  $('#hero-sub').textContent  = s.hero_subcopy;
   if (s.hero_cta_label) $('#hero-cta').textContent = s.hero_cta_label;
@@ -395,20 +391,60 @@ function paintAll() {
   }
 }
 
+/* -------------------------------- hero -------------------------------- */
+/* Bundled default lives in the static markup and is preloaded/fetchpriority
+   for LCP — heroKey starts pre-seeded to the empty-array state so the common
+   case (no admin override) never touches that element or re-triggers a load. */
+let heroTimer, heroSlides = [], heroIdx = 0, heroKey = '[]', defaultHeroHTML = null;
+function heroStart() {
+  clearInterval(heroTimer);
+  if (heroSlides.length < 2 || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  heroTimer = setInterval(() => {
+    heroSlides[heroIdx].classList.remove('is-active');
+    heroIdx = (heroIdx + 1) % heroSlides.length;
+    heroSlides[heroIdx].classList.add('is-active');
+  }, 5000);
+}
+function renderHero(urls) {
+  const key = JSON.stringify(urls);
+  if (key === heroKey) return;
+  heroKey = key;
+  const media = $('#hero-media');
+  if (defaultHeroHTML === null) defaultHeroHTML = media.innerHTML;
+  media.innerHTML = urls.length
+    ? urls.map((u, i) => `<img class="hero__img${i === 0 ? ' is-active' : ''}" src="${esc(sizedImg(u, 'hero'))}"
+        alt="" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async">`).join('')
+    : defaultHeroHTML;
+  heroSlides = [...media.querySelectorAll('.hero__img')];
+  heroIdx = 0;
+  heroStart();
+}
+
 /* -------------------------------- rail ------------------------------------ */
-function buildRail() {
+/* Bundled default (8 local photos) when the admin hasn't set any; otherwise
+   the admin-managed list from site_settings.model_images. */
+let railKey = null;
+function renderRail(urls) {
+  const key = JSON.stringify(urls);
+  if (key === railKey) return;
+  railKey = key;
   const rail = $('#rail');
-  rail.innerHTML = Array.from({ length: 8 }, (_, i) => {
-    const n = i + 1;
-    return `<div class="frame">
-      <picture>
-        <source media="(max-width:767px)" srcset="Materials/m${n}-440.avif" type="image/avif">
-        <source media="(max-width:767px)" srcset="Materials/m${n}-440.webp" type="image/webp">
-        <source srcset="Materials/m${n}-880.avif" type="image/avif">
-        <source srcset="Materials/m${n}-880.webp" type="image/webp">
-        <img src="Materials/m${n}.jpg" alt="UrbanFiber model ${n}" width="440" height="352" loading="lazy" decoding="async">
-      </picture></div>`;
-  }).join('');
+  rail.innerHTML = urls.length
+    ? urls.map((src, i) => `<div class="frame">
+        <img src="${esc(sizedImg(src, 'rail'))}" alt="UrbanFiber model ${i + 1}" loading="lazy" decoding="async" data-fade>
+      </div>`).join('')
+    : Array.from({ length: 8 }, (_, i) => {
+        const n = i + 1;
+        return `<div class="frame">
+          <picture>
+            <source media="(max-width:767px)" srcset="Materials/m${n}-440.avif" type="image/avif">
+            <source media="(max-width:767px)" srcset="Materials/m${n}-440.webp" type="image/webp">
+            <source srcset="Materials/m${n}-880.avif" type="image/avif">
+            <source srcset="Materials/m${n}-880.webp" type="image/webp">
+            <img src="Materials/m${n}.jpg" alt="UrbanFiber model ${n}" width="440" height="352" loading="lazy" decoding="async" data-fade>
+          </picture></div>`;
+      }).join('');
+  readyImages(rail);
 }
 
 let railTimer, railPaused = false;
@@ -521,6 +557,14 @@ function openProduct(id, { push = true } = {}) {
     : `<span class="price__now">${money(p.price_bdt)}</span>`;
   $('#pdp-desc').textContent = p.description || 'Crafted from heavyweight cotton with a considered drop shoulder and a relaxed, architectural silhouette.';
 
+  const fabricEl = $('#pdp-fabric');
+  if (p.fabric_type) {
+    fabricEl.innerHTML = `<b>Fabric</b><span>${esc(p.fabric_type)}</span>`;
+    fabricEl.hidden = false;
+  } else {
+    fabricEl.hidden = true;
+  }
+
   const stock = $('#pdp-stock');
   stock.innerHTML = isSoldOut(p)
     ? `<div class="notice" style="border-color:var(--sale);color:var(--sale)">This piece is currently sold out.</div>`
@@ -554,7 +598,7 @@ function openProduct(id, { push = true } = {}) {
 
   const chart = $('#pdp-chart');
   chart.style.display = p.size_chart_url ? '' : 'none';
-  chart.onclick = () => window.open(imgUrl(p.size_chart_url), '_blank', 'noopener');
+  chart.onclick = () => openLightbox(sizedImg(imgUrl(p.size_chart_url), 'pdp'), 'Size chart');
 
   showView('product');
   if (push) history.pushState({ v:'product', id:p.id }, '', `/?product=${encodeURIComponent(p.slug || p.id)}`);
@@ -873,7 +917,7 @@ function invoiceHtml(inv) {
   <div class="top">
     <div class="brandmark">
       <img src="data:image/jpeg;base64,${UF_LOGO_B64}" alt="UrbanFiber">
-      <div><div class="brand">UrbanFiber</div><div class="tag">Premium oversized essentials</div></div>
+      <div><div class="brand">Urban Fiber</div><div class="tag">Premium oversized essentials</div></div>
     </div>
     <div class="meta"><div class="lbl">Invoice</div><div class="num">${esc(o.order_number)}</div><div>${date}</div></div>
   </div>
@@ -893,19 +937,6 @@ function invoiceHtml(inv) {
   <div class="pay"><strong>Cash on delivery</strong><span>Pay ${money(o.total_bdt)} in cash when your order arrives.</span></div>
   <div class="foot"><span>UrbanFiber · urban-fiber.com</span><span>This invoice was generated automatically and is valid without a signature.</span></div>
 </main></body></html>`;
-}
-
-function downloadInvoice() {
-  const html = invoiceHtml(window.__UF_INVOICE__);
-  if (!html) return toast('Invoice unavailable.', 'error');
-  const blob = new Blob([html], { type:'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `UrbanFiber-${window.__UF_INVOICE__.order.order_number}.html`;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-  toast('Invoice downloaded');
 }
 
 function printInvoice() {
@@ -1012,7 +1043,6 @@ function wire() {
     if (t.closest('#cart-shop'))   { closeCart(); navigate('shop'); return; }
     if (t.closest('#go-checkout')) { openCheckout(); return; }
     if (t.closest('#co-close') || t.closest('#co-scrim') || t.closest('#co-continue')) { closeCheckout(); return; }
-    if (t.closest('#inv-download')) { downloadInvoice(); return; }
     if (t.closest('#inv-print'))    { printInvoice(); return; }
     if (t.closest('.pdp__main')) {
       const img = $('#pdp-img');
@@ -1128,7 +1158,7 @@ function boot() {
     DISTRICTS.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
 
   loadCart();
-  buildRail();
+  renderRail([]);
   wire();
   railStart();
   storyStart();

@@ -54,8 +54,11 @@ async function upload(file, folder = 'products') {
   if (!/^image\//.test(file.type)) throw new Error(`"${file.name}" is not an image.`);
   const safe = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, '-');
   const path = `${folder}/${crypto.randomUUID()}-${safe}`;
+  // Every upload gets a fresh UUID-prefixed path, so a URL is never reused —
+  // safe to cache for a year; replacing an image just mints a new URL rather
+  // than risking a stale cached copy of the old one.
   const { error } = await sb.storage.from('product-images')
-    .upload(path, file, { contentType: file.type, upsert: false });
+    .upload(path, file, { contentType: file.type, upsert: false, cacheControl: '31536000' });
   if (error) throw new Error('Upload failed: ' + error.message);
   return sb.storage.from('product-images').getPublicUrl(path).data.publicUrl;
 }
@@ -244,7 +247,7 @@ function productForm(p) {
   const v = $('#view');
   const x = p || { name:'', slug:'', category:'Oversized', price_bdt:'', sale_price_bdt:'',
     image_url:'', variants:{}, sizes:['S','M','L','XL'], active:true, is_featured:false,
-    stock_status:'in_stock', description:'', size_chart_url:'' };
+    stock_status:'in_stock', description:'', fabric_type:'', size_chart_url:'' };
   const sale = x.sale_price_bdt ?? '';
 
   v.innerHTML = `
@@ -264,6 +267,9 @@ function productForm(p) {
             <input class="in" name="category" value="${esc(x.category)}" placeholder="Oversized" list="cats">
             <datalist id="cats">${[...new Set(state.products.map(q=>q.category).filter(Boolean))]
               .map(c=>`<option value="${esc(c)}">`).join('')}</datalist></label>
+          <label class="f"><span>Fabric — optional</span>
+            <input class="in" name="fabric_type" value="${esc(x.fabric_type||'')}" placeholder="e.g. 220 GSM heavyweight cotton">
+            <span class="hint">Shown on the product page when filled in.</span></label>
           <label class="f" style="grid-column:1/-1"><span>Description</span>
             <textarea class="in" name="description" placeholder="Tell customers about the fabric, fit and feel.">${esc(x.description||'')}</textarea></label>
         </div>
@@ -381,6 +387,7 @@ async function saveProduct(e, existing) {
       sale_price_bdt: sale,
       stock_status: fd.get('stock_status') || 'in_stock',
       description: String(fd.get('description') || '').trim() || null,
+      fabric_type: String(fd.get('fabric_type') || '').trim() || null,
       size_chart_url: chart || null,
       image_url: Object.values(variants)[0],
       variants, sizes,
@@ -536,13 +543,11 @@ async function viewAppearance(v) {
       </div>
 
       <div class="card">
-        <h3 style="font-size:.95rem;margin-bottom:.3rem">Hero</h3>
-        <p class="hint" style="margin-bottom:.8rem">The big picture at the top of your homepage. Use a wide photo (about 1920×800) for the sharpest result.</p>
-        <img id="hero-prev" src="${esc(s.hero_image_url ? imgUrl(s.hero_image_url) : 'brand.jpg')}"
-          alt="" style="width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:.6rem;margin-bottom:.8rem;background:#222">
-        <label class="f"><span>Replace hero image</span>
-          <input class="in" type="file" id="hero-file" accept="image/*">
-          <span class="hint">Leave empty to keep the current picture.</span></label>
+        <h3 style="font-size:.95rem;margin-bottom:.3rem">Hero images</h3>
+        <p class="hint" style="margin-bottom:.8rem">The photo (or photos) at the top of your homepage. With two or more, they crossfade automatically. Leave empty to use the default UrbanFiber banner. The image is shown whole — nothing from the store is drawn on top of it — so headline/button text below is safe with any photo, including ones with their own logo or text baked in.</p>
+        <div id="hero-images"></div>
+        <label class="f" style="margin-top:.6rem"><span>Add a hero image</span>
+          <input class="in" type="file" id="hero-add" accept="image/*"></label>
         <div class="grid g2" style="margin-top:.85rem">
           <label class="f" style="grid-column:1/-1"><span>Headline</span>
             <input class="in" name="hero_headline" maxlength="60" value="${esc(s.hero_headline||'')}" placeholder="Built for the city"></label>
@@ -551,6 +556,14 @@ async function viewAppearance(v) {
           <label class="f"><span>Button text</span>
             <input class="in" name="hero_cta_label" maxlength="30" value="${esc(s.hero_cta_label||'Shop the collection')}"></label>
         </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:.95rem;margin-bottom:.3rem">"Worn in the City" photos</h3>
+        <p class="hint" style="margin-bottom:.8rem">Photos shown in the auto-scrolling model rail on the homepage. Leave empty to use the default photos.</p>
+        <div id="model-images"></div>
+        <label class="f" style="margin-top:.6rem"><span>Add a photo</span>
+          <input class="in" type="file" id="model-add" accept="image/*"></label>
       </div>
 
       <div class="card">
@@ -567,11 +580,43 @@ async function viewAppearance(v) {
       </div>
     </form>`;
 
-  $('#hero-file').addEventListener('change', e => {
-    const f = e.target.files[0]; if (!f) return;
-    $('#hero-prev').src = URL.createObjectURL(f);
-  });
+  populateImageList($('#hero-images'), s.hero_images);
+  populateImageList($('#model-images'), s.model_images);
+  wireImageAdd($('#hero-add'), $('#hero-images'), 'products/hero');
+  wireImageAdd($('#model-add'), $('#model-images'), 'products/models');
   $('#sform').addEventListener('submit', saveSettings);
+}
+
+/** One removable thumbnail row, reusing the same .row markup as the product list. */
+function imageRow(container, url) {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.dataset.url = url;
+  row.innerHTML = `
+    <img class="row__img" src="${esc(imgUrl(url))}" alt="" loading="lazy">
+    <div class="row__b"><div class="row__t">${esc(decodeURIComponent(url.split('/').pop() || ''))}</div></div>
+    <div class="row__a"><button type="button" class="btn btn--d btn--sm" data-remove>Remove</button></div>`;
+  $('[data-remove]', row).addEventListener('click', () => row.remove());
+  container.appendChild(row);
+}
+function populateImageList(container, urls) {
+  container.innerHTML = '';
+  (urls || []).forEach(u => imageRow(container, u));
+}
+function wireImageAdd(input, container, folder) {
+  input.addEventListener('change', async () => {
+    const f = input.files[0]; if (!f) return;
+    input.disabled = true;
+    try {
+      const url = await upload(f, folder);
+      imageRow(container, url);
+    } catch (ex) {
+      toast(ex.message || 'Upload failed.', 'err');
+    } finally {
+      input.disabled = false;
+      input.value = '';
+    }
+  });
 }
 
 async function saveSettings(e) {
@@ -582,13 +627,13 @@ async function saveSettings(e) {
   err.hidden = true; btn.disabled = true; btn.textContent = 'Saving…';
   try {
     const fd = new FormData(form);
-    let hero = state.settings?.hero_image_url || '';
-    const file = $('#hero-file').files[0];
-    if (file) { btn.textContent = 'Uploading…'; hero = await upload(file, 'products/hero'); }
+    const heroImages  = [...$('#hero-images').children].map(r => r.dataset.url);
+    const modelImages = [...$('#model-images').children].map(r => r.dataset.url);
 
     const freeRaw = String(fd.get('free_delivery_over_bdt') || '').trim();
     const payload = {
-      hero_image_url: hero || null,
+      hero_images: heroImages,
+      model_images: modelImages,
       hero_headline: String(fd.get('hero_headline') || '').trim(),
       hero_subcopy: String(fd.get('hero_subcopy') || '').trim(),
       hero_cta_label: String(fd.get('hero_cta_label') || '').trim(),
