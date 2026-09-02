@@ -398,7 +398,6 @@ function heroStart() {
   heroSlides = [...$('#hero-media').querySelectorAll('.hero__img')];
   const dots = [...$('#hero-dots').children];
   if (heroSlides.length < 2) { $('#hero-dots').hidden = true; return; }
-  if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   let heroIdx = 0;
   heroTimer = setInterval(() => {
     heroSlides[heroIdx].classList.remove('is-active');
