@@ -43,6 +43,7 @@
    Tokens -> primitives -> components. Mobile-first; every breakpoint is min-width.
    ========================================================================== */
 :root{
+  color-scheme: light;
   --cream:#efe9dd; --cream-deep:#e6e1d6; --ink:#121212; --ink-soft:#1c1c1c;
   --bg:var(--cream); --bg-raise:#f7f4ec; --bg-sunk:var(--cream-deep);
   --fg:#16130f; --fg-muted:#6b645a; --fg-faint:#9a9287;
@@ -66,6 +67,7 @@
   --step-4:clamp(2.4rem,1.7rem + 3.4vw,4.6rem);
 }
 [data-theme=dark]{
+  color-scheme: dark;
   --bg:var(--ink); --bg-raise:#1b1b1b; --bg-sunk:#0d0d0d;
   --fg:#f2ede4; --fg-muted:#a09a90; --fg-faint:#6f6960;
   --line:rgba(255,255,255,.12); --line-strong:rgba(255,255,255,.24);
@@ -241,7 +243,7 @@ input,select,textarea{font:inherit;color:inherit}
   padding:var(--s6) 0;background:#121212;color:#f2ede4}
 .stage::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.16;
   background:url('Materials/rack.jpg') center/cover}
-.stage__head{display:grid;gap:var(--s3);padding-inline:var(--s4);margin-bottom:var(--s5)}
+.stage__head{display:grid;gap:var(--s3);padding-inline:var(--s4);margin-bottom:var(--s5);justify-items:center;text-align:center}
 .rail{display:flex;gap:var(--s3);overflow-x:auto;scroll-snap-type:x mandatory;
   padding-inline:var(--s4);padding-bottom:var(--s2);scrollbar-width:none;scroll-behavior:smooth}
 .rail::-webkit-scrollbar{display:none}
@@ -251,7 +253,7 @@ input,select,textarea{font:inherit;color:inherit}
 .frame:hover img{transform:scale(1.04)}
 @media(min-width:768px){
   .stage{padding:var(--s7) 0}
-  .stage__head{grid-template-columns:1fr auto;align-items:end;padding-inline:var(--s6)}
+  .stage__head{padding-inline:var(--s6)}
   .rail{padding-inline:var(--s6)}
   .frame{flex-basis:24rem}
 }
@@ -263,7 +265,7 @@ input,select,textarea{font:inherit;color:inherit}
 .carousel{display:flex;gap:var(--s3);overflow-x:auto;scroll-snap-type:x mandatory;
   padding-bottom:var(--s3);margin-inline:calc(var(--s4)*-1);padding-inline:var(--s4);scrollbar-width:none}
 .carousel::-webkit-scrollbar{display:none}
-.carousel>.card{flex:0 0 68%;max-width:20rem;scroll-snap-align:start}
+.carousel>.card{flex:0 0 78%;max-width:19rem;scroll-snap-align:center}
 @media(min-width:640px){.carousel>.card{flex-basis:40%}}
 @media(min-width:1024px){
   .carousel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s5);
@@ -292,10 +294,10 @@ input,select,textarea{font:inherit;color:inherit}
 .price--sale .price__now{color:var(--sale)}
 .dots{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.15rem}
 .dot{position:relative;width:1.4rem;height:1.4rem;border-radius:var(--r-pill);border:2px solid transparent;
-  box-shadow:0 0 0 1px var(--line-strong);transition:transform .2s var(--ease),box-shadow .2s}
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.16),0 0 0 1px var(--line-strong);transition:transform .2s var(--ease),box-shadow .2s}
 .dot::after{content:"";position:absolute;inset:-0.35rem;border-radius:var(--r-pill)}
 .dot:hover{transform:scale(1.14)}
-.dot[aria-pressed=true]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--fg);transform:scale(1.08)}
+.dot[aria-pressed=true]{box-shadow:inset 0 0 0 1px rgba(0,0,0,.16),0 0 0 2px var(--bg),0 0 0 4px var(--fg);transform:scale(1.08)}
 /* Touch devices get visibly bigger dots rather than invisible overflow, so the
    target is both large enough (>=44px) and obvious. Gaps stay wider than the
    expanded areas so neighbouring swatches never steal each other's taps. */
@@ -339,7 +341,7 @@ input,select,textarea{font:inherit;color:inherit}
 /* ---------- product detail ---------- */
 .pdp{display:grid;gap:var(--s5)}
 .pdp__gallery{display:grid;gap:var(--s2)}
-.pdp__main{aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;background:var(--bg-sunk)}
+.pdp__main{aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;background:var(--bg-sunk);cursor:zoom-in;position:relative}
 .pdp__main img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
 .pdp__main img.is-ready{opacity:1}
 .pdp__info{display:grid;gap:var(--s4);align-content:start}
@@ -352,9 +354,9 @@ input,select,textarea{font:inherit;color:inherit}
 .link-btn:hover{border-color:var(--fg)}
 .swatches{display:flex;gap:.6rem;flex-wrap:wrap}
 .swatch{width:2.75rem;height:2.75rem;border-radius:var(--r-pill);border:2px solid transparent;
-  box-shadow:0 0 0 1px var(--line-strong);transition:transform .2s var(--ease),box-shadow .2s}
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.16),0 0 0 1px var(--line-strong);transition:transform .2s var(--ease),box-shadow .2s}
 .swatch:hover{transform:translateY(-2px)}
-.swatch[aria-pressed=true]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--fg)}
+.swatch[aria-pressed=true]{box-shadow:inset 0 0 0 1px rgba(0,0,0,.16),0 0 0 2px var(--bg),0 0 0 4px var(--fg)}
 .sizes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem}
 .size{min-height:3rem;border:1px solid var(--line-strong);border-radius:var(--r-pill);
   font-size:var(--step--1);font-weight:600;text-transform:uppercase;
@@ -427,9 +429,11 @@ input,select,textarea{font:inherit;color:inherit}
 .line:last-child{border-bottom:0}
 .line__img{aspect-ratio:4/5;border-radius:var(--r-sm);overflow:hidden;background:var(--bg-sunk)}
 .line__img img{width:100%;height:100%;object-fit:cover;transition:opacity .2s}
-.line__body{display:grid;gap:.4rem;min-width:0}
-.line__name{font-weight:600;font-size:var(--step--1);line-height:1.3}
-.line__meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-size:var(--step--1);color:var(--fg-muted)}
+.line__body{display:grid;gap:.45rem;min-width:0}
+.line__name{font-weight:600;font-size:var(--step-0);line-height:1.3}
+.line__meta{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;font-size:var(--step--1);color:var(--fg-muted)}
+.line__group{display:inline-flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.line__label{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--fg-faint)}
 .line__dots{display:flex;gap:.55rem}
 .line__dots .dot{width:1.15rem;height:1.15rem}
 @media(pointer:coarse){
@@ -478,6 +482,13 @@ input,select,textarea{font:inherit;color:inherit}
     border-radius:var(--r-lg);transform:translate(-50%,-46%) scale(.97);opacity:0}
   .modal.is-open{transform:translate(-50%,-50%);opacity:1}
 }
+.co-review{display:grid;gap:.6rem;margin-bottom:var(--s5);padding-bottom:var(--s4);border-bottom:1px solid var(--line)}
+.co-review__row{display:grid;grid-template-columns:3rem 1fr auto;gap:.7rem;align-items:center}
+.co-review__img{width:3rem;aspect-ratio:4/5;border-radius:.45rem;overflow:hidden;background:var(--bg-sunk)}
+.co-review__img img{width:100%;height:100%;object-fit:cover}
+.co-review__name{font-size:var(--step--1);font-weight:600;line-height:1.3}
+.co-review__meta{font-size:.72rem;color:var(--fg-muted);text-transform:capitalize;margin-top:.15rem}
+.co-review__amt{font-size:var(--step--1);font-weight:600;white-space:nowrap}
 .form{display:grid;gap:var(--s4)}
 .form__grid{display:grid;gap:var(--s3)}
 @media(min-width:600px){.form__grid{grid-template-columns:1fr 1fr}.form__grid .col-2{grid-column:1/-1}}
@@ -485,14 +496,15 @@ input,select,textarea{font:inherit;color:inherit}
 .input-label>span{font-size:var(--step--1);font-weight:600;color:var(--fg-muted)}
 .input{
   width:100%;min-height:3.1rem;padding:.8rem 1rem;border:1px solid var(--line-strong);
-  border-radius:var(--r-md);background:color-mix(in srgb,var(--fg) 3%,transparent);
-  transition:border-color .2s,box-shadow .2s;
+  border-radius:var(--r-md);background:var(--bg-raise);color:var(--fg);
+  transition:border-color .2s,box-shadow .2s,background-color .2s;
 }
 .input:focus{outline:none;border-color:var(--fg);box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 12%,transparent)}
 .input[aria-invalid=true]{border-color:var(--sale)}
 textarea.input{min-height:5.5rem;resize:vertical}
 select.input{appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
   background-position:calc(100% - 1.15rem) 55%,calc(100% - .85rem) 55%;background-size:.35rem .35rem,.35rem .35rem;background-repeat:no-repeat;padding-right:2.5rem}
+select.input option{background:var(--bg-raise);color:var(--fg)}
 .err{font-size:var(--step--1);color:var(--sale);min-height:1.1rem}
 .pay{display:flex;gap:.75rem;align-items:flex-start;padding:var(--s4);
   border:1px solid var(--line);border-radius:var(--r-md);background:var(--bg-raise)}
@@ -503,6 +515,22 @@ select.input{appearance:none;background-image:linear-gradient(45deg,transparent 
 .success__tick{width:3.5rem;height:3.5rem;border-radius:99px;background:var(--accent);color:var(--accent-fg);
   display:grid;place-items:center;animation:pop .5s var(--ease)}
 @keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.08)}to{transform:scale(1);opacity:1}}
+.invoice-preview{width:100%;max-width:26rem;border:1px solid var(--line);border-radius:var(--r-md);
+  overflow:hidden;background:#fff;box-shadow:var(--shadow-sm)}
+.invoice-preview iframe{width:100%;height:min(50svh,24rem);border:0;display:block}
+
+/* ---------- lightbox ---------- */
+.lightbox{position:fixed;inset:0;z-index:110;background:rgba(10,10,10,.94);
+  display:grid;place-items:center;padding:var(--s6) var(--s5);
+  opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease,visibility .3s}
+.lightbox.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.lightbox img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  border-radius:var(--r-md);transform:scale(.96);transition:transform .35s var(--ease)}
+.lightbox.is-open img{transform:scale(1)}
+.lightbox__close{position:absolute;top:var(--s4);right:var(--s4);width:2.75rem;height:2.75rem;
+  border-radius:var(--r-pill);background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;
+  backdrop-filter:blur(6px);transition:background-color .2s}
+.lightbox__close:hover{background:rgba(255,255,255,.22)}
 
 /* ---------- toast ---------- */
 /* Anchored to the top on every screen size. At the bottom it sat directly on
@@ -629,9 +657,6 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
           <p class="eyebrow" style="color:rgba(255,255,255,.5)">The model edit</p>
           <h2 class="font-brand" style="font-size:var(--step-3)">Worn in the city</h2>
         </div>
-        <button class="icon-btn" id="rail-toggle" aria-pressed="true" aria-label="Pause auto-scroll" style="border-color:rgba(255,255,255,.28);color:#fff">
-          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="5" width="3.5" height="14" rx="1"/><rect x="13.5" y="5" width="3.5" height="14" rx="1"/></svg>
-        </button>
       </div>
       <div class="rail" id="rail"></div>
     </div>
@@ -793,6 +818,7 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
     </button>
   </div>
   <div class="drawer__body" id="co-body">
+    <div class="co-review" id="co-review"></div>
     <form class="form" id="co-form" novalidate>
       <div class="form__grid">
         <label class="input-label col-2"><span>Full name</span>
@@ -823,14 +849,24 @@ footer{background:var(--bg-sunk);border-top:1px solid var(--line);padding-block:
         <h3 class="font-brand" style="font-size:var(--step-3);margin-top:.3rem">Thank you</h3>
       </div>
       <p class="muted" id="co-success-msg" style="max-width:38ch;text-wrap:pretty"></p>
+      <div class="invoice-preview" id="invoice-preview">
+        <iframe id="invoice-frame" title="Your invoice"></iframe>
+      </div>
       <div style="display:grid;gap:.6rem;width:100%;max-width:22rem">
-        <button class="btn btn--primary btn--block" id="inv-download">Download invoice</button>
-        <button class="btn btn--ghost btn--block" id="inv-print">Print / save as PDF</button>
+        <button class="btn btn--primary btn--block" id="inv-print">Save as PDF</button>
+        <button class="btn btn--ghost btn--block" id="inv-download">Download HTML copy</button>
         <button class="btn btn--ghost btn--block" id="co-continue">Continue shopping</button>
       </div>
     </div>
   </div>
 </section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" aria-hidden="true">
+  <button class="lightbox__close" id="lightbox-close" aria-label="Close preview">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="">
+</div>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
