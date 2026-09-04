@@ -214,13 +214,10 @@ input,select,textarea{font:inherit;color:inherit}
 .hero__dots span.is-active{background:rgba(255,255,255,.92)}
 .hero__body{padding:var(--s6) var(--s4) 0;text-align:center;color:var(--fg);
   display:grid;gap:var(--s4);justify-items:center;max-width:min(100%,72rem);width:min(100%,72rem);margin-inline:auto;min-width:0}
-.hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;max-width:min(100%,14ch);min-width:0;
-  opacity:0;transform:translateY(.7rem);animation:heroTitleReveal 1.5s var(--ease) .35s forwards}
-@keyframes heroTitleReveal{to{opacity:1;transform:none}}
+.hero__title{font-size:var(--step-4);text-transform:uppercase;text-wrap:balance;max-width:min(100%,14ch);min-width:0}
 .hero__sub{max-width:min(100%,44ch);color:var(--fg-muted);text-wrap:pretty}
 .hero .btn{width:100%;max-width:22rem}
 @media(min-width:768px){.hero__body{padding-top:var(--s7)}.hero .btn{width:auto}}
-@media(prefers-reduced-motion:reduce){.hero__title{opacity:1;transform:none;animation:none}}
 
 /* ---------- story ---------- */
 .tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:var(--s5)}
