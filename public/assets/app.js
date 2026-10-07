@@ -99,16 +99,11 @@ const IMG_SIZE = {
   line: { width: 160, height: 200, quality: 65 },
   rail: { width: 880, height: 704, quality: 68 }
 };
+
 function sizedImg(url, preset) {
-  const s = IMG_SIZE[preset];
-  if (!s || !url) return url;
-  const m = /^(.*\/storage\/v1\/)object\/(public\/.+)$/.exec(url);
-  if (!m) return url;
-  const params = new URLSearchParams({ quality: String(s.quality) });
-  if (s.width) params.set('width', String(s.width));
-  if (s.height) { params.set('height', String(s.height)); params.set('resize', 'cover'); }
-  return `${m[1]}render/image/${m[2]}?${params}`;
+  return url;
 }
+
 const variantImg = (p, color, preset = 'card') => sizedImg(imgUrl(variantsOf(p)[color] || p?.image_url || ''), preset);
 
 /* Warms the service worker's image cache with every product photo and size
